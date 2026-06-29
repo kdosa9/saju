@@ -27,7 +27,7 @@ self.addEventListener('fetch', event => {
   const url = new URL(event.request.url)
 
   // index.html / 루트: 항상 네트워크 우선 → 실패 시 캐시
-  if (url.pathname === '/' || url.pathname === '/index.html') {
+  if (url.pathname === '/saju/' || url.pathname === '/saju/index.html') {
     event.respondWith(
       fetch(event.request)
         .then(response => {
@@ -35,7 +35,7 @@ self.addEventListener('fetch', event => {
           caches.open(CACHE_NAME).then(cache => cache.put(event.request, clone))
           return response
         })
-        .catch(() => caches.match('/index.html'))
+        .catch(() => caches.match('/saju/index.html'))
     )
     return
   }
