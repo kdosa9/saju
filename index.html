@@ -1015,13 +1015,27 @@ function calculate(){
 
   const{daeuns,su,isForward}=calcDaeun(sy,sm,sd,gender)
   document.getElementById('daeun-title').textContent=`대운 — 대운수 ${su}세 시작 | ${isForward?'순행 →':'← 역행'}`
-  document.getElementById('daeun-scroll').innerHTML=daeuns.map(de=>`
-    <div class="daeun-card">
+
+  // 만나이 계산 (KST 기준)
+  const nowKst = new Date(new Date().getTime() + 9*60*60*1000)
+  const ty2=nowKst.getUTCFullYear(), tm2=nowKst.getUTCMonth()+1, td2=nowKst.getUTCDate()
+  let manAge = ty2 - sy
+  if (tm2 < sm || (tm2===sm && td2 < sd)) manAge--
+
+  document.getElementById('daeun-scroll').innerHTML=daeuns.map(de=>{
+    // 이 대운이 현재 만나이에 해당하는지 확인
+    const nextAge = de.startAge + 10
+    const isCurrent = manAge >= de.startAge && manAge < nextAge
+    const cardStyle = isCurrent
+      ? 'border:3px solid #111;box-shadow:0 0 0 1px #111;background:#fffdf5;'
+      : ''
+    return `
+    <div class="daeun-card" style="${cardStyle}">
       <div class="daeun-age">${de.startAge}세~</div>
       <div class="daeun-hanja" style="color:${OH_COL_CG[de.cg]}">${CG[de.cg]}</div>
       <div class="daeun-hanja" style="color:${OH_COL_JJ[de.jj]}">${JJ[de.jj]}</div>
       <div class="daeun-hangul">${CGH[de.cg]}${JJH[de.jj]}</div>
-    </div>`).join('')
+    </div>`}).join('')
 
   document.getElementById('result-area').style.display='block'
 
