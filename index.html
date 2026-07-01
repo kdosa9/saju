@@ -47,6 +47,23 @@ h1{font-size:20px;font-weight:600;margin-bottom:6px;color:#222}
 .radio-row label{font-size:14px;color:#111;display:flex;align-items:center;gap:6px;cursor:pointer;font-weight:500}
 .gk-tab{padding:5px 11px;border:1.5px solid #c0392b;border-radius:14px;background:#fff;color:#c0392b;font-size:12px;font-weight:600;cursor:pointer;font-family:inherit;transition:all 0.15s}
 .gk-tab.active,.gk-tab:hover{background:#c0392b;color:#fff}
+/* ── 바이오리듬 버튼 ── */
+.bio-btn{width:100%;height:46px;background:linear-gradient(135deg,#1a7a4a,#27ae60);border:none;border-radius:10px;font-size:15px;color:#fff;cursor:pointer;font-family:inherit;font-weight:600;letter-spacing:0.5px;box-shadow:0 3px 12px rgba(39,174,96,0.25);transition:all 0.2s;margin-top:10px}
+.bio-btn:hover{background:linear-gradient(135deg,#145f38,#1e8449);box-shadow:0 4px 16px rgba(39,174,96,0.35)}
+.bio-panel{display:none;margin-top:16px;border:1px solid #d5ead9;border-radius:14px;padding:16px;background:#f6fdf8}
+.bio-panel-title{font-size:13px;font-weight:700;color:#1a7a4a;margin-bottom:4px}
+.bio-legend{display:flex;gap:14px;margin-bottom:12px;flex-wrap:wrap}
+.bio-legend-item{display:flex;align-items:center;gap:5px;font-size:12px;color:#555}
+.bio-legend-line{width:22px;height:3px;border-radius:2px;display:inline-block}
+.bio-chart-wrap{position:relative;width:100%;height:220px}
+.bio-today-label{font-size:11px;color:#888;text-align:center;margin-top:4px}
+.bio-text-card{margin-top:14px;background:#fff;border:1px solid #d5ead9;border-radius:10px;padding:13px 14px}
+.bio-text-scores{display:flex;gap:8px;margin-bottom:10px;flex-wrap:wrap}
+.bio-score-badge{font-size:11px;font-weight:700;padding:3px 9px;border-radius:12px;border:1.5px solid transparent}
+.bio-score-body{background:#e8f8ee;color:#1a7a4a;border-color:#a3d9b1}
+.bio-score-emotion{background:#fdecea;color:#c0392b;border-color:#f5a9a3}
+.bio-score-intel{background:#ede8fb;color:#5c52c8;border-color:#b3a8e8}
+.bio-text-content{font-size:13px;line-height:1.85;color:#333}
 .calc-btn{width:100%;height:42px;background:#5c52c8;border:none;border-radius:10px;font-size:15px;color:#fff;cursor:pointer;margin-top:6px;font-family:inherit;font-weight:500}
 .calc-btn:hover{background:#4a41b0}
 .result-area{margin-top:24px}
@@ -282,6 +299,25 @@ h1{font-size:20px;font-weight:600;margin-bottom:6px;color:#222}
     <button class="personality-btn" onclick="showGuikok()" style="background:linear-gradient(135deg,#8B4513,#c0392b)">
       ☯ 귀곡산명술
     </button>
+  </div>
+  <!-- 바이오리듬 버튼 -->
+  <button class="bio-btn" onclick="toggleBio()">🌿 바이오리듬 보기</button>
+  <!-- 바이오리듬 패널 -->
+  <div id="bio-panel" class="bio-panel">
+    <div class="bio-panel-title" id="bio-panel-title">바이오리듬 — 14일 흐름</div>
+    <div class="bio-legend">
+      <div class="bio-legend-item"><span class="bio-legend-line" style="background:#1baf7a"></span>신체</div>
+      <div class="bio-legend-item"><span class="bio-legend-line" style="background:#e34948"></span>감성</div>
+      <div class="bio-legend-item"><span class="bio-legend-line" style="background:#5c52c8"></span>지성</div>
+    </div>
+    <div class="bio-chart-wrap">
+      <canvas id="bio-chart" role="img" aria-label="바이오리듬 14일 곡선 그래프"></canvas>
+    </div>
+    <div class="bio-today-label" id="bio-today-label"></div>
+    <div class="bio-text-card">
+      <div class="bio-text-scores" id="bio-text-scores"></div>
+      <div class="bio-text-content" id="bio-text-content"></div>
+    </div>
   </div>
 </div>
 
@@ -991,6 +1027,11 @@ function calculate(){
 
   // 귀곡산명술용 사주 데이터 저장
   _guikokSaju = { yg, mg, dg, gender }
+
+  // 바이오리듬용 생년월일 저장
+  _birthYear=sy; _birthMonth=sm; _birthDay=sd
+  _bioPanelOpen=false
+  document.getElementById('bio-panel').style.display='none'
 }
 // ── 오늘의 일진 표시 ──────────────────────────────────────────────
 function showTodayIljin() {
@@ -1288,6 +1329,129 @@ function renderGuikok(menu) {
     `<p style="line-height:2">${text}</p>`
 }
 
+// ── 바이오리듬 ──────────────────────────────────────────────────
+let _birthYear = null, _birthMonth = null, _birthDay = null
+let _bioChartInstance = null, _bioPanelOpen = false
+
+const BIO_DATA = {
+"B111":"세 가지 리듬이 모두 저조한 날이에요. 솔직히 말하면, 오늘은 뭘 해도 잘 안 풀릴 수 있는 날이거든요. 새로운 걸 시작하거나 무리하게 밀어붙이는 건 오늘만큼은 잠깐 내려놓는 게 좋아요. 몸도 에너지가 바닥 근처라 쉽게 지치고 피곤함을 느낄 수 있어요. 감정도 예민해져 있어서 가까운 사람과 괜히 부딪힐 수 있으니까, 오늘은 말 한마디도 한 템포 천천히 생각하고 꺼내는 게 좋아요. 머리도 잘 안 돌아가는 날이라 중요한 결정이나 시험, 발표는 가능하면 다른 날로 미루는 게 현명해요. 그냥 오늘은 나한테 쉬는 날을 선물해줘요.",
+"B112":"신체랑 감성 리듬은 좀 가라앉아 있지만, 지성 리듬만큼은 살아나고 있는 날이에요. 오늘은 몸을 쓰거나 사람들과 활발하게 어울리는 것보다, 혼자 조용히 집중하는 시간이 더 잘 맞아요. 독서나 공부, 오랫동안 미뤄뒀던 자료 정리 같은 것들을 하기에 딱 좋은 날이랄까요?",
+"B113":"지성 리듬은 최고조에 가깝지만, 신체랑 감성은 많이 가라앉아 있는 날이에요. 몸은 피곤하고 기분도 그다지 신나지 않지만, 머릿속만큼은 반짝반짝 돌아가고 있어요. 오늘 갑자기 번쩍이는 아이디어가 떠오른다면 꼭 메모해두세요!",
+"B121":"신체랑 지성 리듬이 저조한 가운데, 그나마 감성은 정상을 유지하고 있는 날이에요. 몸이 무겁고 머리도 잘 안 돌아가다 보니 실수를 하거나 일이 뜻대로 안 풀릴 수 있어요. 오늘은 성과를 내는 날보다 사람과의 관계를 돌보는 날로 삼는 게 어떨까요?",
+"B122":"신체 리듬만 살짝 가라앉아 있고, 감성이랑 지성은 정상적으로 잘 유지되고 있는 날이에요. 오늘은 머리도 잘 돌아가고 기분도 나쁘지 않아서 생각보다 알찬 하루가 될 수 있어요. 단, 몸 컨디션이 좀 떨어져 있다 보니 운동이나 야외 활동은 오늘은 조심하는 게 좋아요.",
+"B123":"지성 리듬이 확실히 살아있고, 감성도 잘 유지되고 있어요. 신체 리듬이 살짝 부족하지만 오늘은 전반적으로 꽤 괜찮은 날이에요. 특히 공부나 자기계발 측면에서 오늘 정말 잘 맞는 날이에요!",
+"B131":"감성 리듬은 고조되어 있는데, 신체랑 지성이 모두 저조한 날이에요. 기분은 들떠 있고 뭔가 하고 싶은 마음은 넘치는데, 몸이 안 따라주고 판단력도 평소보다 흐릿한 상태예요. 이럴 때 충동적으로 큰 결정을 내리거나 말을 앞뒤 재지 않고 꺼냈다가는 나중에 후회할 수 있어요.",
+"B132":"감성 리듬이 최고조에 달한 날이에요! 사람들과의 관계에서 따뜻하고 매력적인 면이 자연스럽게 흘러나오는 날이라, 대인관계가 중요한 미팅이나 소개팅, 친목 자리가 있다면 오늘이 딱이에요!",
+"B133":"감성이랑 지성 리듬이 동시에 최고조인 대박 날이에요! 신체 리듬이 조금 부족하지만, 이 두 가지가 올라와 있으면 정말 많은 걸 잘해낼 수 있어요. 시험이나 발표, 면접 같은 중요한 이벤트가 있다면 오늘 정말 잘 할 수 있어요.",
+"B211":"신체 리듬만 정상이고 감성이랑 지성이 모두 저조한 날이에요. 몸은 그럭저럭 괜찮은데 감정적으로 좀 무뎌진 느낌이 들고, 머리도 생각만큼 잘 안 돌아가는 날이에요. 에너지가 있으니 가벼운 산책이나 스트레칭으로 몸을 풀어봐요.",
+"B212":"신체 리듬은 정상이고 지성도 괜찮은데, 감성 리듬이 좀 가라앉아 있는 날이에요. 이유 없이 기분이 가라앉거나 우울한 느낌이 든다면 그게 다 감성 리듬 때문이에요. 신체랑 지성은 살아있으니 몸 쓰는 활동이나 공부, 업무는 평소대로 잘할 수 있어요.",
+"B213":"신체랑 지성 리듬은 높은데, 감성만 좀 저조한 날이에요. 몸도 활기차고 머리도 잘 돌아가서 일이나 공부에서는 꽤 좋은 성과를 낼 수 있는 날이에요. 오늘은 특히 연인이나 가까운 친구와의 대화에서 한 번 더 생각하고 말하는 습관을 들여봐요.",
+"B221":"지성 리듬만 살짝 낮고 신체랑 감성은 정상적인 날이에요. 대인관계는 원만하게 잘 유지될 수 있고, 다만 오늘은 집중력이 살짝 흐트러지고 아이디어가 잘 안 떠오를 수 있어요.",
+"B222":"세 가지 리듬이 모두 평범하고 안정적인 날이에요. 특별히 잘 되는 것도 없지만, 크게 나쁜 일이 생기는 것도 없는 무난한 하루예요. 오늘은 엄청난 성과보다는 꾸준함이 빛을 발하는 날이에요.",
+"B223":"지성 리듬이 확실히 높이 올라와 있고, 신체랑 감성도 안정적인 좋은 날이에요. 오늘은 특히 공부나 자기계발, 일에서 정말 두각을 나타낼 수 있는 날이에요.",
+"B231":"감성 리듬이 고조되어 있고 신체도 정상인데, 지성만 살짝 낮은 날이에요. 감성이 올라와 있으니 연애나 대인관계에서는 정말 좋은 날이에요! 다만 중요한 결정이나 계약은 조금 신중하게 접근해봐요.",
+"B232":"감성 리듬이 확실히 올라와 있고 신체 리듬도 좋은 날이에요! 활력도 넘치고 감성도 풍부해서 주변 사람들이 나한테 유독 끌리는 느낌이 드는 날이거든요.",
+"B233":"감성이랑 지성이 모두 고조되어 있는 날이에요! 공부도 잘 되고, 사람들과의 관계도 부드럽게 잘 풀리고, 아이디어도 풍부하게 떠오르는 날이거든요.",
+"B311":"신체 리듬만 높고 감성이랑 지성이 저조한 날이에요. 활력이 넘치니 운동이나 몸 쓰는 활동을 하기엔 좋은 날이지만, 그 에너지만 믿고 무턱대고 일을 벌이면 나중에 후회할 수 있어요.",
+"B312":"신체 리듬은 올라와 있는데 감성이 저조한 날이에요. 자기 방식만 고집하거나 말이 거칠게 나올 수 있거든요. 신체 에너지가 좋으니 혼자 할 수 있는 운동이나 야외 활동을 즐기는 건 딱 좋아요.",
+"B313":"신체랑 지성 리듬은 높은데, 감성만 좀 저조한 날이에요. 활력도 넘치고 머리도 잘 돌아가서 일이나 공부, 자기계발 면에서는 정말 좋은 성과를 낼 수 있는 날이에요.",
+"B321":"신체 리듬이 올라와 있고 감성도 정상인데, 지성이 살짝 낮은 날이에요. 에너지가 있으니 가벼운 운동하거나 사람들과 만나서 시간을 보내는 건 좋아요.",
+"B322":"신체 리듬이 확실히 고조기에 들어와 있고 감성이랑 지성도 정상적인 날이에요. 활력이 넘치고 전체적인 컨디션이 좋은 날이라, 그동안 미뤄두었던 일을 처리하기에 딱 좋아요.",
+"B323":"신체랑 지성 리듬이 동시에 고조기에 들어온 날이에요! 활력이 넘치고 머리도 잘 돌아가니, 원하던 일을 추진하기에 정말 좋은 타이밍이에요.",
+"B331":"신체랑 감성 리듬이 모두 올라와 있는데, 지성만 조금 아쉬운 날이에요. 몸도 활기차고 기분도 좋아서 운동, 야외 활동, 친목 모임 같은 것들은 오늘 정말 잘 맞아요.",
+"B332":"신체랑 감성 리듬이 모두 고조기에 올라와 있는 최고의 날이에요! 에너지도 넘치고 감성도 풍부해서 정말 활기차고 매력적인 하루를 보낼 수 있어요.",
+"B333":"세 가지 리듬이 모두 최고조에 올라 있는 역대급 날이에요! 몸도 최상이고, 감성도 넘치고, 머리도 잘 돌아가니 오늘 하는 거의 모든 일이 잘 될 수 있어요. 오늘 마음껏 빛나봐요!"
+}
+
+function calcBioValue(totalDays, cycle) { return Math.sin(2 * Math.PI * totalDays / cycle) }
+function bioToScore(val) { return val < -0.33 ? 1 : val <= 0.33 ? 2 : 3 }
+function getDaysBetween(y1,m1,d1,y2,m2,d2) {
+  return Math.round((new Date(y2,m2-1,d2) - new Date(y1,m1-1,d1)) / 86400000)
+}
+function getBioKey(b,e,i) { return 'B'+b+e+i }
+
+function toggleBio() {
+  if (_birthYear === null) return
+  const panel = document.getElementById('bio-panel')
+  _bioPanelOpen = !_bioPanelOpen
+  if (_bioPanelOpen) { panel.style.display='block'; renderBioChart() }
+  else panel.style.display='none'
+}
+
+function renderBioChart() {
+  if (_birthYear === null) return
+  const now = new Date()
+  const kstParts = new Intl.DateTimeFormat('ko-KR', {
+    timeZone:'Asia/Seoul', year:'numeric', month:'2-digit', day:'2-digit'
+  }).formatToParts(now)
+  const ty=parseInt(kstParts.find(p=>p.type==='year').value)
+  const tm=parseInt(kstParts.find(p=>p.type==='month').value)
+  const td=parseInt(kstParts.find(p=>p.type==='day').value)
+
+  const labels=[], bodyData=[], emotionData=[], intellData=[]
+  const todayIdx=3
+  for (let i=-3; i<=10; i++) {
+    const d=new Date(ty,tm-1,td+i)
+    const dy=d.getFullYear(), dm=d.getMonth()+1, dd=d.getDate()
+    const elapsed=getDaysBetween(_birthYear,_birthMonth,_birthDay,dy,dm,dd)
+    bodyData.push(parseFloat(calcBioValue(elapsed,23).toFixed(3)))
+    emotionData.push(parseFloat(calcBioValue(elapsed,28).toFixed(3)))
+    intellData.push(parseFloat(calcBioValue(elapsed,33).toFixed(3)))
+    const mmdd=(dm<10?'0'+dm:''+dm)+'/'+(dd<10?'0'+dd:''+dd)
+    labels.push(i===0?'오늘\n'+mmdd:mmdd)
+  }
+  const elapsedToday=getDaysBetween(_birthYear,_birthMonth,_birthDay,ty,tm,td)
+  const todayBody=bioToScore(calcBioValue(elapsedToday,23))
+  const todayEmotion=bioToScore(calcBioValue(elapsedToday,28))
+  const todayIntell=bioToScore(calcBioValue(elapsedToday,33))
+  const bioKey=getBioKey(todayBody,todayEmotion,todayIntell)
+  const scoreLabel=['','저조','보통','고조']
+
+  document.getElementById('bio-panel-title').textContent=`바이오리듬 — ${ty}.${tm}.${td} 기준 14일`
+  document.getElementById('bio-today-label').textContent=`▲ 오늘(${ty}.${tm}.${td}) 기준 — 전 3일 / 후 10일`
+  document.getElementById('bio-text-scores').innerHTML=`
+    <span class="bio-score-badge bio-score-body">신체 ${scoreLabel[todayBody]}</span>
+    <span class="bio-score-badge bio-score-emotion">감성 ${scoreLabel[todayEmotion]}</span>
+    <span class="bio-score-badge bio-score-intel">지성 ${scoreLabel[todayIntell]}</span>`
+  document.getElementById('bio-text-content').textContent=BIO_DATA[bioKey]||'해당 데이터를 찾을 수 없어요.'
+
+  if (typeof Chart === 'undefined') return
+  if (_bioChartInstance) { _bioChartInstance.destroy(); _bioChartInstance=null }
+
+  const todayLinePlugin = {
+    id:'todayLine',
+    afterDraw(chart) {
+      const ctx=chart.ctx, x=chart.scales.x.getPixelForValue(todayIdx)
+      const top=chart.chartArea.top, bottom=chart.chartArea.bottom
+      ctx.save(); ctx.beginPath(); ctx.moveTo(x,top); ctx.lineTo(x,bottom)
+      ctx.strokeStyle='rgba(192,57,43,0.45)'; ctx.lineWidth=1.5
+      ctx.setLineDash([4,3]); ctx.stroke(); ctx.restore()
+    }
+  }
+  _bioChartInstance = new Chart(document.getElementById('bio-chart'), {
+    type:'line', plugins:[todayLinePlugin],
+    data:{ labels, datasets:[
+      {label:'신체',data:bodyData,borderColor:'#1baf7a',borderWidth:2.5,pointRadius:3,pointHoverRadius:5,pointBackgroundColor:'#1baf7a',pointBorderColor:'#fff',pointBorderWidth:1.5,tension:0.4,fill:false},
+      {label:'감성',data:emotionData,borderColor:'#e34948',borderWidth:2.5,pointRadius:3,pointHoverRadius:5,pointBackgroundColor:'#e34948',pointBorderColor:'#fff',pointBorderWidth:1.5,tension:0.4,fill:false},
+      {label:'지성',data:intellData,borderColor:'#5c52c8',borderWidth:2.5,pointRadius:3,pointHoverRadius:5,pointBackgroundColor:'#5c52c8',pointBorderColor:'#fff',pointBorderWidth:1.5,tension:0.4,fill:false}
+    ]},
+    options:{
+      responsive:true, maintainAspectRatio:false,
+      interaction:{mode:'index',intersect:false},
+      plugins:{
+        legend:{display:false},
+        tooltip:{backgroundColor:'rgba(20,20,20,0.88)',titleColor:'#fff',bodyColor:'#ddd',padding:10,
+          callbacks:{label:ctx=>{const v=ctx.parsed.y;const s=v>0.33?'고조':v<-0.33?'저조':'보통';return ` ${ctx.dataset.label}: ${s} (${v>0?'+':''}${v.toFixed(2)})`}}}
+      },
+      scales:{
+        x:{ticks:{font:{size:10},color:'#888',maxRotation:0,autoSkip:false},grid:{color:'rgba(0,0,0,0.06)'}},
+        y:{min:-1.2,max:1.2,ticks:{stepSize:0.5,callback:v=>v===1?'고조':v===0?'보통':v===-1?'저조':'',color:'#888',font:{size:10}},
+          grid:{color:ctx=>ctx.tick.value===0?'rgba(0,0,0,0.2)':'rgba(0,0,0,0.06)'}}
+      }
+    }
+  })
+}
+
 // ── PWA 설치 배너 ──────────────────────────────────────────────
 let deferredPrompt = null
 const installBanner = document.getElementById('install-banner')
@@ -1338,5 +1502,7 @@ if ('serviceWorker' in navigator) {
   })
 }
 </script>
+<!-- Chart.js (바이오리듬 그래프) -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
 </body>
 </html>
