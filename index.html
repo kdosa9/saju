@@ -153,6 +153,8 @@ h1{font-size:20px;font-weight:600;margin-bottom:6px;color:#222}
 }
 .fortune-btn:hover{background:linear-gradient(135deg,#a93226,#cb4335);box-shadow:0 4px 16px rgba(192,57,43,0.35)}
 .btn-row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.jm-tab{padding:5px 11px;border:1.5px solid #b8860b;border-radius:14px;background:#fff;color:#b8860b;font-size:12px;font-weight:600;cursor:pointer;font-family:inherit;transition:all 0.15s}
+.jm-tab.active,.jm-tab:hover{background:#b8860b;color:#fff}
 
 /* 모달 */
 .modal-overlay{
@@ -300,6 +302,9 @@ h1{font-size:20px;font-weight:600;margin-bottom:6px;color:#222}
     <button class="personality-btn" onclick="showGuikok()" style="background:linear-gradient(135deg,#8B4513,#c0392b)">
       ☯ 귀곡산명술
     </button>
+    <button class="personality-btn" onclick="showJami()" style="background:linear-gradient(135deg,#8b0000,#daa520)">
+      🀄 중국정통점성술
+    </button>
   </div>
   <!-- 바이오리듬 버튼 -->
   <button class="bio-btn" onclick="toggleBio()">🌿 바이오리듬 보기</button>
@@ -345,6 +350,37 @@ h1{font-size:20px;font-weight:600;margin-bottom:6px;color:#222}
     <div id="guikok-body" class="modal-body" style="font-size:14px;line-height:1.9;color:#333;padding:16px 20px"></div>
     <div class="modal-footer">
       <button class="modal-close-btn" onclick="closeGuikok()">닫기</button>
+    </div>
+  </div>
+</div>
+
+<!-- 중국정통점성술(자미두수) 모달 -->
+<div id="jami-modal" class="modal-overlay" style="display:none" onclick="closeJamiOutside(event)">
+  <div class="modal-box" style="max-width:560px">
+    <div class="modal-header">
+      <div class="modal-title-row">
+        <span class="modal-title">🀄 중국정통점성술</span>
+      </div>
+      <button class="modal-close" onclick="closeJami()">✕</button>
+    </div>
+    <!-- 메뉴 탭 -->
+    <div style="display:flex;flex-wrap:wrap;gap:6px;padding:12px 16px 0;border-bottom:1px solid #f0ede6">
+      <button class="jm-tab active" onclick="selectJami('성격')">성격</button>
+      <button class="jm-tab" onclick="selectJami('형제')">형제운</button>
+      <button class="jm-tab" onclick="selectJami('부부')">부부운</button>
+      <button class="jm-tab" onclick="selectJami('자녀')">자녀운</button>
+      <button class="jm-tab" onclick="selectJami('재물')">재물운</button>
+      <button class="jm-tab" onclick="selectJami('질병')">질병운</button>
+      <button class="jm-tab" onclick="selectJami('이동')">이동운</button>
+      <button class="jm-tab" onclick="selectJami('우정')">우정운</button>
+      <button class="jm-tab" onclick="selectJami('관록')">관록운</button>
+      <button class="jm-tab" onclick="selectJami('주택')">주택운</button>
+      <button class="jm-tab" onclick="selectJami('복덕')">복덕운</button>
+      <button class="jm-tab" onclick="selectJami('부모')">부모운</button>
+    </div>
+    <div id="jami-body" class="modal-body" style="font-size:14px;line-height:1.9;color:#333;padding:16px 20px"></div>
+    <div class="modal-footer">
+      <button class="modal-close-btn" onclick="closeJami()">닫기</button>
     </div>
   </div>
 </div>
@@ -485,7 +521,12 @@ function closeModalOutside(e) {
   if (e.target === document.getElementById('personality-modal')) closeModal()
 }
 
-document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal() })
+document.addEventListener('keydown', e => {
+  if (e.key !== 'Escape') return
+  closeModal()
+  if (document.getElementById('guikok-modal').style.display !== 'none') closeGuikok()
+  if (document.getElementById('jami-modal').style.display !== 'none') closeJami()
+})
 document.querySelector('input[name="caltype"][value="lunar"]').addEventListener('change',()=>{
   document.getElementById('lunar-leaprow').style.display='block'
 })
@@ -848,6 +889,36 @@ function lunarToSolar(year,month,day,isLeap){
   return{year:r.getFullYear(),month:r.getMonth()+1,day:r.getDate()}
 }
 
+// 양력 → 음력 변환 (자미두수 명궁/자미성 계산용)
+function solarToLunar(y,m,d){
+  if(y<1900||y>2030)return null
+  const base=new Date(1900,0,31)
+  const target=new Date(y,m-1,d)
+  const offset=Math.round((target-base)/86400000)
+  if(offset<0)return null
+  let ly=1900
+  for(let yr=1900;yr<=2030;yr++){
+    const t=LUNAR_TABLE[yr]
+    if(!t)continue
+    if(t[0]<=offset)ly=yr
+    else break
+  }
+  const t=LUNAR_TABLE[ly]
+  if(!t)return null
+  const [baseOffset,leapMonth,leapDays,months]=t
+  let day=offset-baseOffset
+  for(let mIdx=0;mIdx<12;mIdx++){
+    const monLen=months[mIdx]
+    if(day<monLen)return{year:ly,month:mIdx+1,day:day+1,isLeap:false}
+    day-=monLen
+    if(leapMonth===mIdx+1){
+      if(day<leapDays)return{year:ly,month:mIdx+1,day:day+1,isLeap:true}
+      day-=leapDays
+    }
+  }
+  return null
+}
+
 const BASE_MS=new Date(1900,0,1).getTime()
 function dayGanji(y,m,d){
   const diff=Math.round((new Date(y,m-1,d).getTime()-BASE_MS)/86400000)
@@ -1042,6 +1113,10 @@ function calculate(){
 
   // 귀곡산명술용 사주 데이터 저장
   _guikokSaju = { yg, mg, dg, gender }
+
+  // 중국정통점성술(자미두수) 코드 계산·저장
+  _jamiIdx = computeJamiIdx(sy, sm, sd, yg.cg, mg.jj, hg.jj)
+  _jamiMenu = '성격'
 
   // 바이오리듬용 생년월일 저장
   _birthYear=sy; _birthMonth=sm; _birthDay=sd
@@ -1278,6 +1353,123 @@ function calcUnsung(ilgan, jiji) {
 
 let _guikokSaju = null
 let _guikokMenu = 'Character'
+
+// ── 중국정통점성술(자미두수) ──────────────────────────────────────
+// MI(월지)·SI(시지)·YG(연간)는 화신 앱이 이미 계산한 사주 값을 그대로 재사용
+// (원본 get_MI/get_SI 로직과 beforeJeolgi 기반 monthGanji/hourGanji가 수학적으로 동일함을 확인함)
+const JAMI_OHENG_TABLE=["","水","火","木","土","金","火","","火","土","金","木","水","土","","土","木","水","金","火","木","","木","金","火","水","土","金","","金","水","土","火","木","水"]
+const JAMI_TABLE=[2,3,3,4,4,5,5,6,6,7,7,8,8,9,9,10,10,11,11,12,12,1,1,2,2,3,3,4,4,5,10,7,12,5,2,3,11,8,1,6,3,4,12,9,2,7,4,5,1,10,3,8,5,6,2,11,4,9,6,7,5,2,3,6,3,4,7,4,5,8,5,6,9,6,7,10,7,8,11,8,9,12,9,10,1,10,11,2,11,12,12,5,2,3,1,6,3,4,2,7,4,5,3,8,5,6,4,9,6,7,5,10,7,8,6,11,8,9,7,12,7,12,5,2,3,8,1,6,3,4,9,2,7,4,5,10,3,8,5,6,11,4,9,6,7,12,5,10,7,8]
+const JAMI_OHENG_KEY={'水':1,'火':2,'木':3,'金':4,'土':5}
+
+function jamiMod(n,m){ return ((n%m)+m)%m }
+
+// sy,sm,sd: 양력 생년월일 / ygCg: 연간(0~9) / mgJj: 월지(0~11, 기존 사주 값) / hgJj: 시지(0~11, 기존 사주 값)
+function computeJamiIdx(sy,sm,sd,ygCg,mgJj,hgJj){
+  const lunar = solarToLunar(sy,sm,sd)
+  if(!lunar) return null
+  const mDay = lunar.day   // 음력 일 (1~30)
+
+  const MI0 = mgJj   // 월지 (0-based)
+  const SI0 = hgJj   // 시지 (0-based)
+
+  // 명궁 (raw, 1~12)
+  let rawMyung = jamiMod(MI0-SI0+13,12)
+  if(rawMyung===0) rawMyung=12
+
+  // 명국오행
+  const i1 = Math.floor((rawMyung+1)/2)
+  let j1 = ygCg+1   // 1-based 천간
+  if(j1>5) j1-=5
+  j1-=1
+  const ohang = JAMI_OHENG_TABLE[j1*7+i1]
+  const j2 = JAMI_OHENG_KEY[ohang]
+  if(!j2) return null
+
+  // 자미성 (raw, 1~12)
+  const rawJami = JAMI_TABLE[(j2-1)*30+mDay-1]
+
+  // 최종 코드 폴딩 (자미 6그룹 × 명궁 12위치 = 72가지)
+  let finalJami, finalMyung
+  if(rawJami>6){
+    finalJami = rawJami-6
+    finalMyung = jamiMod(rawMyung+6,12)
+    if(finalMyung===0) finalMyung=12
+  } else {
+    finalJami = rawJami
+    finalMyung = rawMyung
+  }
+
+  const pad=n=>String(n).padStart(2,'0')
+  return 'JM'+pad(finalJami)+pad(finalMyung)
+}
+
+const JAMI_CATEGORIES=[
+  {key:'성격',label:'성격'},
+  {key:'형제',label:'형제운'},
+  {key:'부부',label:'부부운'},
+  {key:'자녀',label:'자녀운'},
+  {key:'재물',label:'재물운'},
+  {key:'질병',label:'질병운'},
+  {key:'이동',label:'이동운'},
+  {key:'우정',label:'우정운'},
+  {key:'관록',label:'관록운'},
+  {key:'주택',label:'주택운'},
+  {key:'복덕',label:'복덕운'},
+  {key:'부모',label:'부모운'},
+]
+let _jamiIdx = null
+let _jamiMenu = '성격'
+const _jamiCache = {}
+
+async function fetchJamiContent(idx, category){
+  const cacheKey = idx+'_'+category
+  if(_jamiCache[cacheKey] !== undefined) return _jamiCache[cacheKey]
+  const res = await fetch(
+    `${SUPABASE_URL}/rest/v1/jamidoosu_content?idx=eq.${encodeURIComponent(idx)}&category=eq.${encodeURIComponent(category)}&select=content`,
+    { headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` } }
+  )
+  const data = await res.json()
+  const content = data && data.length>0 ? data[0].content : null
+  _jamiCache[cacheKey]=content
+  return content
+}
+
+function showJami(){
+  if(!_jamiIdx){
+    alert('먼저 사주팔자를 확인하세요.')
+    return
+  }
+  document.getElementById('jami-modal').style.display='flex'
+  document.body.style.overflow='hidden'
+  renderJami(_jamiMenu)
+}
+
+function closeJami(){
+  document.getElementById('jami-modal').style.display='none'
+  document.body.style.overflow=''
+}
+
+function closeJamiOutside(e){
+  if(e.target===document.getElementById('jami-modal')) closeJami()
+}
+
+function selectJami(cat){
+  _jamiMenu=cat
+  document.querySelectorAll('.jm-tab').forEach(b=>b.classList.remove('active'))
+  event.target.classList.add('active')
+  renderJami(cat)
+}
+
+async function renderJami(cat){
+  const body=document.getElementById('jami-body')
+  body.innerHTML='<p style="color:#aaa;text-align:center">불러오는 중...</p>'
+  const label=(JAMI_CATEGORIES.find(c=>c.key===cat)||{}).label||cat
+  const content=await fetchJamiContent(_jamiIdx, cat)
+  const text=content||'준비 중입니다.'
+  body.innerHTML=
+    `<p style="margin-bottom:10px;font-size:12px;color:#999">🀄 중국정통점성술 — ${label}</p>`+
+    `<p style="line-height:2">${text}</p>`
+}
 
 function showGuikok() {
   if (!_guikokSaju) {
