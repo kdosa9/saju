@@ -1787,6 +1787,17 @@ async function fetchJuyukContent(idx){
 const JUYUK_HYO_NAMES = ['초효','이효','삼효','사효','오효','상효']
 const _juyukProgress = {}   // { cat: [0/1, 0/1, ...] } - 진행 중인(아직 6개 안 채워진) 던지기 기록
 
+// 효(爻) 막대 표시 — 양효(1)=끊기지 않은 막대, 음효(0)=가운데 끊어진 막대
+function hyoBarHtml(v){
+  if (v) {
+    return `<div style="width:58px;height:11px;background:#3a3a3a;border-radius:2px"></div>`
+  }
+  return `<div style="display:flex;gap:9px;width:58px">
+    <div style="flex:1;height:11px;background:#3a3a3a;border-radius:2px"></div>
+    <div style="flex:1;height:11px;background:#3a3a3a;border-radius:2px"></div>
+  </div>`
+}
+
 // 카테고리 탭 화면 렌더링: 완성된 결과가 있으면 결과, 없으면(진행중 포함) 던지기 화면
 async function renderJuyukTab(cat){
   const state = _juyukState[cat]
@@ -1799,9 +1810,9 @@ async function renderJuyukTab(cat){
   const label = JUYUK_CATEGORY_NAMES[cat]
   // 초효(index0)가 맨 아래, 상효(index5)가 맨 위 — DOM은 초효부터 순서대로 넣고 column-reverse로 뒤집음
   const coinsHtml = state.flips.map((v,i) =>
-    `<div style="display:flex;align-items:center;gap:10px">
+    `<div style="display:flex;align-items:center;gap:12px">
       <img src="${v ? COIN_FRONT : COIN_BACK}" alt="${v?'양':'음'}" style="width:36px;height:36px;flex-shrink:0">
-      <span style="font-size:13px;font-weight:700;color:${v?'#c0392b':'#3d3a7a'}">${v?'양':'음'}</span>
+      ${hyoBarHtml(v)}
       <span style="font-size:11px;color:#bbb">${JUYUK_HYO_NAMES[i]}</span>
     </div>`
   ).join('')
@@ -1835,9 +1846,9 @@ function renderJuyukTossUI(cat){
   const slotsHtml = JUYUK_HYO_NAMES.map((posName, i) => {
     if (i < progress.length) {
       const v = progress[i]
-      return `<div style="display:flex;align-items:center;gap:10px">
+      return `<div style="display:flex;align-items:center;gap:12px">
         <img src="${v?COIN_FRONT:COIN_BACK}" alt="${v?'양':'음'}" style="width:36px;height:36px;flex-shrink:0">
-        <span style="font-size:13px;font-weight:700;color:${v?'#c0392b':'#3d3a7a'}">${v?'양':'음'}</span>
+        ${hyoBarHtml(v)}
         <span style="font-size:11px;color:#bbb">${posName}</span>
       </div>`
     } else if (i === progress.length) {
