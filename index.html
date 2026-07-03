@@ -323,7 +323,7 @@ h1{font-size:20px;font-weight:600;margin-bottom:6px;color:#222}
       📚 자평명리 진로운
     </button>
     <button class="personality-btn" onclick="showJuyuk()" style="background:linear-gradient(135deg,#3d3a7a,#6c63b5)">
-      🪙 주역점
+      📜 주역점
     </button>
     <button class="personality-btn" onclick="showDangsaju()" style="background:linear-gradient(135deg,#a0651f,#d9a441)">
       🎋 당사주
@@ -445,7 +445,7 @@ h1{font-size:20px;font-weight:600;margin-bottom:6px;color:#222}
   <div class="modal-box" style="max-width:520px">
     <div class="modal-header">
       <div class="modal-title-row">
-        <span class="modal-title">🪙 주역점</span>
+        <span class="modal-title">📜 주역점</span>
       </div>
       <button class="modal-close" onclick="closeJuyuk()">✕</button>
     </div>
@@ -1798,6 +1798,19 @@ function hyoBarHtml(v){
   </div>`
 }
 
+// 64괘 이름표 (한량님이 제공한 표 기준 — 상괘/하괘 조합, index = (상괘-1)*8+하괘, 1~64)
+// 표의 설명 문구(저작물)는 제외하고 괘명만 사용
+const HEXAGRAM_NAMES = ['',
+  '건위천','천택리','천화동인','천뇌무망','천풍구','천수송','천산둔','천지비',
+  '택천쾌','태위택','택화혁','택뇌수','택풍대과','택수곤','택산함','택지췌',
+  '화천대유','화택규','리위화','화뇌서합','화풍정','화수미제','화산려','화지진',
+  '뇌천대장','뇌택귀매','뇌화풍','진위뇌','뇌풍항','뇌수해','뇌산소과','뇌지예',
+  '풍천소축','풍택중부','풍화가인','풍뇌익','손위풍','풍수환','풍산점','풍지관',
+  '수천수','수택절','수화기제','수뢰둔','수풍정','감위수','수산건','수지비',
+  '산천대축','산택손','산화비','산뢰이','산풍고','산수몽','간위산','산지박',
+  '지천태','지택림','지화명이','지뢰복','지풍승','지수사','지산겸','곤위지'
+]
+
 // 카테고리 탭 화면 렌더링: 완성된 결과가 있으면 결과, 없으면(진행중 포함) 던지기 화면
 async function renderJuyukTab(cat){
   const state = _juyukState[cat]
@@ -1807,7 +1820,6 @@ async function renderJuyukTab(cat){
   }
 
   const body = document.getElementById('juyuk-body')
-  const label = JUYUK_CATEGORY_NAMES[cat]
   // 초효(index0)가 맨 아래, 상효(index5)가 맨 위 — DOM은 초효부터 순서대로 넣고 column-reverse로 뒤집음
   const coinsHtml = state.flips.map((v,i) =>
     `<div style="display:flex;align-items:center;gap:12px">
@@ -1817,14 +1829,13 @@ async function renderJuyukTab(cat){
     </div>`
   ).join('')
 
+  const hexName = HEXAGRAM_NAMES[state.hexNum] || ''
+
   body.innerHTML = `
-    <div style="display:flex;flex-direction:column-reverse;align-items:center;gap:6px;margin-bottom:16px">${coinsHtml}</div>
-    <div style="text-align:center;font-size:15px;font-weight:700;color:#333;margin-bottom:12px">
-      상괘 ${state.sangwae} · 하괘 ${state.hawae} (${state.hexNum}번 괘)
-    </div>
-    <p style="margin-bottom:10px;font-size:12px;color:#999;text-align:center">🪙 주역점 — ${label}</p>
-    <p id="juyuk-content-slot" style="color:#aaa;text-align:center">불러오는 중...</p>
-    <div style="text-align:center;margin-top:16px">
+    <div style="display:flex;flex-direction:column-reverse;align-items:center;gap:6px;margin-bottom:2px">${coinsHtml}</div>
+    <p style="text-align:center;font-size:14px;font-weight:700;color:#a83264;margin:6px 0 2px">점괘명: ${hexName}</p>
+    <p id="juyuk-content-slot" style="color:#aaa;text-align:center;margin-top:2px">불러오는 중...</p>
+    <div style="text-align:center;margin-top:14px">
       <button class="ju-tab" onclick="retryJuyukCategory('${cat}')" style="border-color:#999;color:#999">🔄 다시 던지기</button>
     </div>`
 
@@ -1833,14 +1844,13 @@ async function renderJuyukTab(cat){
   const text = content || '해당 데이터가 없습니다.'
   const slot = document.getElementById('juyuk-content-slot')
   // 로딩 중 다른 탭으로 넘어갔거나 재던지기 했다면 slot이 이미 사라졌을 수 있음 → 그 경우 조용히 무시
-  if (slot) slot.outerHTML = `<p style="line-height:2;color:#333">${text}</p>`
+  if (slot) slot.outerHTML = `<p style="line-height:1.9;color:#333;margin-top:2px">${text}</p>`
 }
 
 // 진행 중인(또는 아직 시작 안 한) 던지기 화면 — 동전 1개씩 순서대로 클릭해서 채워나감
 // 초효(아래)부터 상효(위)까지 세로로 쌓임 — DOM 순서는 초효부터, column-reverse로 시각적 반전
 function renderJuyukTossUI(cat){
   const body = document.getElementById('juyuk-body')
-  const label = JUYUK_CATEGORY_NAMES[cat]
   const progress = _juyukProgress[cat] || []
 
   const slotsHtml = JUYUK_HYO_NAMES.map((posName, i) => {
@@ -1867,9 +1877,9 @@ function renderJuyukTossUI(cat){
   }).join('')
 
   body.innerHTML = `
-    <p style="text-align:center;font-size:13px;color:#777;margin-bottom:18px;line-height:1.7">
-      <strong>${label}</strong> — 동전을 하나씩 눌러 괘를 완성합니다 (${progress.length}/6)<br>
-      <span style="font-size:12px;color:#aaa">마음속으로 묻고 싶은 것을 떠올리며 눌러주세요</span>
+    <p style="text-align:center;font-size:13px;color:#777;margin-bottom:8px;line-height:1.6">
+      동전을 한번씩 총 6번을 던져 괘를 완성합니다.<br>
+      <span style="font-size:12px;color:#aaa">마음속으로 묻고 싶은 것을 떠올리며 클릭해 주세요</span>
     </p>
     <div style="display:flex;flex-direction:column-reverse;align-items:center;gap:6px">${slotsHtml}</div>`
 }
