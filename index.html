@@ -422,6 +422,27 @@ h1{font-size:20px;font-weight:600;margin-bottom:6px;color:#222}
 <div style="border-bottom:1.5px solid #e8e6df;margin-bottom:18px"></div>
 
 <div class="section-title" id="calc-form">입력 방식</div>
+
+<!-- 저장된 프로필 바 (localStorage 기반, 저장된 프로필이 있을 때만 표시) -->
+<div id="profile-bar" style="display:none;margin-bottom:14px;position:relative">
+  <div onclick="toggleProfileDropdown()" style="display:flex;align-items:center;justify-content:space-between;padding:10px 14px;background:#faf6ef;border:1px solid #ece4d8;border-radius:10px;cursor:pointer">
+    <span style="font-size:13px;color:#333"><b id="profile-current-label" style="color:#a83264">-</b> 보는 중</span>
+    <span style="font-size:12px;color:#999">전환 ▾</span>
+  </div>
+  <div id="profile-dropdown" style="display:none;position:absolute;top:calc(100% + 4px);left:0;right:0;background:#fff;border:1px solid #ece4d8;border-radius:10px;box-shadow:0 6px 20px rgba(0,0,0,0.1);padding:8px;z-index:50">
+    <div id="profile-dropdown-list"></div>
+    <div style="display:flex;gap:6px;margin-top:6px;border-top:1px solid #f0ede6;padding-top:8px">
+      <button type="button" onclick="newTempProfile()" style="flex:1;padding:8px;border:1px solid #ece4d8;border-radius:6px;background:#fff;font-size:12px;color:#333;cursor:pointer">+ 다른 사람 보기</button>
+      <button type="button" onclick="goToDefaultProfile()" style="flex:1;padding:8px;border:1px solid #ece4d8;border-radius:6px;background:#fff;font-size:12px;color:#333;cursor:pointer">내 정보로</button>
+    </div>
+  </div>
+</div>
+
+<div class="input-group" style="margin-bottom:12px">
+  <label>닉네임</label>
+  <input type="text" id="nickname" placeholder="예) 한량" maxlength="12">
+</div>
+
 <div class="radio-row">
   <label><input type="radio" name="caltype" value="solar" checked> 양력</label>
   <label><input type="radio" name="caltype" value="lunar"> 음력</label>
@@ -997,6 +1018,121 @@ document.querySelector('input[name="caltype"][value="lunar"]').addEventListener(
 document.querySelector('input[name="caltype"][value="solar"]').addEventListener('change',()=>{
   document.getElementById('lunar-leaprow').style.display='none'
 })
+
+// ============================================================
+// 프로필 저장 (닉네임 기반, localStorage — 로그인 없이 이 브라우저에만 저장됨)
+// ============================================================
+const PROFILE_KEY = 'hwashin_profiles_v1'
+
+function loadProfileStore(){
+  try{
+    const raw = localStorage.getItem(PROFILE_KEY)
+    return raw ? JSON.parse(raw) : {profiles:[], activeId:null}
+  }catch(e){ return {profiles:[], activeId:null} }
+}
+function saveProfileStore(store){
+  try{ localStorage.setItem(PROFILE_KEY, JSON.stringify(store)) }catch(e){}
+}
+
+// 계산 성공 직후 호출됨 — 닉네임이 입력돼 있으면 자동 저장/갱신
+function saveCurrentAsProfile(){
+  const nickname = document.getElementById('nickname').value.trim()
+  if(!nickname) return
+  const data = {
+    nickname,
+    caltype: document.querySelector('input[name="caltype"]:checked').value,
+    y: document.getElementById('year').value,
+    m: document.getElementById('month').value,
+    d: document.getElementById('day').value,
+    hour: document.getElementById('hour').value,
+    gender: document.getElementById('gender').value,
+    isLeap: document.getElementById('leapmonth').checked
+  }
+  const store = loadProfileStore()
+  let existing = store.profiles.find(p=>p.nickname===nickname)
+  if(existing){
+    Object.assign(existing, data)
+  }else{
+    data.id = 'p_'+Date.now()
+    data.isDefault = store.profiles.length===0   // 맨 처음 저장되는 프로필이 기본값
+    store.profiles.push(data)
+    existing = data
+  }
+  store.activeId = existing.id
+  saveProfileStore(store)
+  renderProfileBar()
+}
+
+function applyProfileToForm(p){
+  document.getElementById('nickname').value = p.nickname
+  document.querySelector(`input[name="caltype"][value="${p.caltype}"]`).checked = true
+  document.getElementById('lunar-leaprow').style.display = p.caltype==='lunar' ? 'block' : 'none'
+  document.getElementById('year').value = p.y
+  document.getElementById('month').value = p.m
+  document.getElementById('day').value = p.d
+  document.getElementById('hour').value = p.hour
+  document.getElementById('gender').value = p.gender
+  document.getElementById('leapmonth').checked = !!p.isLeap
+}
+
+function switchProfile(id){
+  const store = loadProfileStore()
+  const p = store.profiles.find(x=>x.id===id)
+  if(!p) return
+  store.activeId = id
+  saveProfileStore(store)
+  applyProfileToForm(p)
+  calculate()
+  renderProfileBar()
+  document.getElementById('profile-dropdown').style.display='none'
+}
+
+function deleteProfile(id){
+  const store = loadProfileStore()
+  store.profiles = store.profiles.filter(x=>x.id!==id)
+  if(store.activeId===id) store.activeId = (store.profiles.find(p=>p.isDefault)||store.profiles[0])?.id || null
+  saveProfileStore(store)
+  renderProfileBar()
+}
+
+function goToDefaultProfile(){
+  const store = loadProfileStore()
+  const def = store.profiles.find(x=>x.isDefault) || store.profiles[0]
+  if(def) switchProfile(def.id)
+}
+
+// "다른 사람 보기" — 저장된 기본 정보는 그대로 두고, 폼만 비워서 임시로 다른 생일을 조회
+// (계산 후 닉네임을 입력해 저장하면 그 사람도 프로필 목록에 추가됨)
+function newTempProfile(){
+  document.getElementById('nickname').value=''
+  document.getElementById('year').value=''
+  document.getElementById('month').value=''
+  document.getElementById('day').value=''
+  document.getElementById('result-area').style.display='none'
+  document.getElementById('profile-dropdown').style.display='none'
+  document.getElementById('nickname').focus()
+}
+
+function toggleProfileDropdown(){
+  const dd = document.getElementById('profile-dropdown')
+  dd.style.display = dd.style.display==='none' ? 'block' : 'none'
+}
+
+function renderProfileBar(){
+  const store = loadProfileStore()
+  const bar = document.getElementById('profile-bar')
+  if(!store.profiles.length){ bar.style.display='none'; return }
+  bar.style.display='block'
+  const active = store.profiles.find(p=>p.id===store.activeId) || store.profiles[0]
+  document.getElementById('profile-current-label').textContent = active ? active.nickname : '프로필'
+  document.getElementById('profile-dropdown-list').innerHTML = store.profiles.map(p => `
+    <div style="display:flex;align-items:center;justify-content:space-between;padding:8px 10px;border-radius:6px;${p.id===store.activeId?'background:#faf3ee':''}">
+      <span style="cursor:pointer;font-size:13px;color:#333" onclick="switchProfile('${p.id}')">${p.nickname}${p.isDefault?' <span style="color:#999;font-size:11px">(기본)</span>':''}</span>
+      ${p.isDefault?'':`<button type="button" onclick="deleteProfile('${p.id}')" style="border:none;background:none;color:#c0392b;font-size:12px;cursor:pointer">삭제</button>`}
+    </div>`).join('')
+}
+
+// 재방문 시 저장된 프로필 자동 로드는 파일 맨 끝(모든 변수 선언 이후)에서 실행됨 — initProfileOnLoad() 참고
 
 const CG=['甲','乙','丙','丁','戊','己','庚','辛','壬','癸']
 const CGH=['갑','을','병','정','무','기','경','신','임','계']
@@ -1593,6 +1729,9 @@ function calculate(){
   _birthYear=sy; _birthMonth=sm; _birthDay=sd
   _bioPanelOpen=false
   document.getElementById('bio-panel').style.display='none'
+
+  // 닉네임이 입력돼 있으면 이 정보를 프로필로 자동 저장/갱신 (localStorage)
+  saveCurrentAsProfile()
 }
 // ── 오늘의 일진 표시 ──────────────────────────────────────────────
 function showTodayIljin() {
@@ -2103,41 +2242,40 @@ async function renderJuyukTab(cat){
   if (slot) slot.outerHTML = `<p style="line-height:1.9;color:#333;margin-top:2px">${text}</p>`
 }
 
-// 진행 중인(또는 아직 시작 안 한) 던지기 화면 — 동전 1개씩 순서대로 클릭해서 채워나감
-// 초효(아래)부터 상효(위)까지 세로로 쌓임 — DOM 순서는 초효부터, column-reverse로 시각적 반전
+// 진행 중인(또는 아직 시작 안 한) 던지기 화면
+// 중앙에 큰 동전(항상 같은 위치, 스크롤 문제 없음) + 오른쪽에 완료된 효가 작게 쌓임(초효 아래→상효 위)
 function renderJuyukTossUI(cat){
   const body = document.getElementById('juyuk-body')
   const progress = _juyukProgress[cat] || []
+  const nextIdx = progress.length
+  const posName = JUYUK_HYO_NAMES[nextIdx] || ''
 
-  const slotsHtml = JUYUK_HYO_NAMES.map((posName, i) => {
-    if (i < progress.length) {
-      const v = progress[i]
-      return `<div style="display:flex;align-items:center;gap:12px">
-        <img src="${v?COIN_FRONT:COIN_BACK}" alt="${v?'양':'음'}" style="width:36px;height:36px;flex-shrink:0">
-        ${hyoBarHtml(v)}
-        <span style="font-size:11px;color:#bbb">${posName}</span>
-      </div>`
-    } else if (i === progress.length) {
-      return `<div style="display:flex;align-items:center;gap:10px">
-        <img id="juyuk-active-coin" src="${COIN_SPIN}" alt="던지기"
-          onclick="flipJuyukCoin('${cat}')" style="width:44px;height:44px;flex-shrink:0;cursor:pointer">
-        <span style="font-size:12px;color:#a83264;font-weight:700">눌러서 던지기</span>
-        <span style="font-size:11px;color:#bbb">${posName}</span>
-      </div>`
-    } else {
-      return `<div style="display:flex;align-items:center;gap:10px;opacity:0.2">
-        <div style="width:36px;height:36px;border-radius:50%;border:1.5px dashed #ccc;flex-shrink:0"></div>
-        <span style="font-size:11px;color:#ccc">${posName}</span>
-      </div>`
-    }
-  }).join('')
+  // 완료된 효 — 나중에 던진 것이 위로 오도록 column-reverse로 쌓음 (초효가 맨 아래)
+  const doneHtml = progress.map((v,i) => `
+    <div style="display:flex;align-items:center;gap:8px">
+      <img src="${v?COIN_FRONT:COIN_BACK}" alt="${v?'양':'음'}" style="width:26px;height:26px;flex-shrink:0">
+      ${hyoBarHtml(v)}
+      <span style="font-size:11px;color:#999;width:24px">${JUYUK_HYO_NAMES[i]}</span>
+    </div>`).join('')
 
   body.innerHTML = `
-    <p style="text-align:center;font-size:13px;color:#777;margin-bottom:8px;line-height:1.6">
-      동전을 한번씩 총 6번을 던져 괘를 완성합니다.<br>
-      <span style="font-size:12px;color:#aaa">마음속으로 묻고 싶은 것을 떠올리며 클릭해 주세요</span>
+    <p style="text-align:center;font-size:13px;color:#222;font-weight:700;margin-bottom:4px;line-height:1.7">
+      동전을 한 번씩 총 6번 던져 괘를 완성합니다.
     </p>
-    <div style="display:flex;flex-direction:column-reverse;align-items:center;gap:6px">${slotsHtml}</div>`
+    <p style="text-align:center;font-size:12px;color:#333;margin-bottom:20px">
+      마음속으로 묻고 싶은 것을 떠올리며 눌러 주세요
+    </p>
+    <div style="display:flex;align-items:flex-start;justify-content:center;gap:26px">
+      <div style="display:flex;flex-direction:column;align-items:center;gap:10px;min-width:110px">
+        <img id="juyuk-active-coin" src="${COIN_SPIN}" alt="던지기"
+          onclick="flipJuyukCoin('${cat}')" style="width:90px;height:90px;cursor:pointer">
+        <span style="font-size:13px;color:#a83264;font-weight:700;text-align:center">${nextIdx+1}번째 · ${posName}<br>눌러서 던지기</span>
+        <span style="font-size:11px;color:#999">${nextIdx}/6</span>
+      </div>
+      <div style="display:flex;flex-direction:column-reverse;align-items:flex-start;gap:8px;min-height:120px;justify-content:flex-end;border-left:1px solid #f0ede6;padding-left:20px">
+        ${doneHtml || '<span style="font-size:11px;color:#ccc">아직 던진 동전이 없습니다</span>'}
+      </div>
+    </div>`
 }
 
 // 동전 1개 클릭 → 회전(gif 자체 애니메이션) → 착지(양/음 확정) → 쌓기 → 6개 다 채워지면 결과 계산
@@ -2864,6 +3002,21 @@ if ('serviceWorker' in navigator) {
       .catch(err => console.log('SW error:', err))
   })
 }
+
+// ── 저장된 프로필 자동 로드 (재방문 시 재입력 없이 바로 결과 표시) ──
+// 모든 상태 변수(let _guikokSaju 등)가 위에서 이미 선언된 뒤이므로 여기서 안전하게 calculate() 호출 가능
+function initProfileOnLoad(){
+  const store = loadProfileStore()
+  if(!store.profiles.length) return
+  renderProfileBar()
+  const active = store.profiles.find(p=>p.id===store.activeId) || store.profiles.find(p=>p.isDefault) || store.profiles[0]
+  if(active){
+    applyProfileToForm(active)
+    calculate()
+  }
+}
+initProfileOnLoad()
+
 </script>
 <!-- Chart.js (바이오리듬 그래프) -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
