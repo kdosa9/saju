@@ -156,26 +156,20 @@ h1{font-size:20px;font-weight:600;margin-bottom:6px;color:#222}
 }
 .fortune-btn:hover{background:linear-gradient(135deg,#a93226,#cb4335);box-shadow:0 4px 16px rgba(192,57,43,0.35)}
 .btn-row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-.quick-tool-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:16px 0}
-/* 모바일 전용 — "매일 보는 운세" 4개 강조 줄 (PC는 사이드바로 대체되므로 1024px 이상에서 숨김) */
-.daily-quick-row{margin:16px 0 4px}
-.daily-quick-label{font-size:12px;font-weight:700;color:#a83264;margin-bottom:8px;letter-spacing:0.3px}
-.daily-quick-items{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
-.daily-quick-item{
-  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;
-  aspect-ratio:1/1;border:none;border-radius:14px;cursor:pointer;font-family:inherit;
-  color:#fff;font-size:11.5px;font-weight:700;text-align:center;padding:6px 4px;
-  box-shadow:0 3px 12px rgba(0,0,0,0.16);
+/* 대운 바로 아래, 하얀 카드형 결과 바로가기 그리드 — 모바일/PC 공통 */
+.result-tool-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin:12px 0 4px}
+.result-tool-card{
+  display:block;text-align:left;background:#fff;border:1px solid #ece4d8;border-radius:14px;
+  padding:16px;cursor:pointer;font-family:inherit;transition:transform .15s,box-shadow .15s;
 }
-.daily-quick-item span{font-size:23px;line-height:1}
-.quick-tool-card{
-  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;
-  aspect-ratio:1/1;border:none;border-radius:14px;cursor:pointer;font-family:inherit;
-  color:#fff;font-size:11px;font-weight:700;text-align:center;padding:6px 4px;
-  box-shadow:0 3px 10px rgba(0,0,0,0.12);transition:transform .15s;
+.result-tool-card:hover{transform:translateY(-2px);box-shadow:0 6px 16px rgba(0,0,0,0.08)}
+.result-tool-card:active{transform:scale(0.98)}
+.result-tool-icon{
+  width:38px;height:38px;border-radius:10px;display:flex;align-items:center;justify-content:center;
+  font-size:18px;margin-bottom:10px;
 }
-.quick-tool-card:active{transform:scale(0.96)}
-.quick-tool-card .qt-icon{font-size:22px;line-height:1}
+.result-tool-title{font-size:14px;font-weight:700;color:#222;margin-bottom:5px}
+.result-tool-desc{font-size:11.5px;color:#777;line-height:1.55}
 .jm-tab{padding:5px 11px;border:1.5px solid #b8860b;border-radius:14px;background:#fff;color:#b8860b;font-size:12px;font-weight:600;cursor:pointer;font-family:inherit;transition:all 0.15s}
 .jm-tab.active,.jm-tab:hover{background:#b8860b;color:#fff}
 .jp-tab{padding:5px 11px;border:1.5px solid #1a6b5c;border-radius:14px;background:#fff;color:#1a6b5c;font-size:12px;font-weight:600;cursor:pointer;font-family:inherit;transition:all 0.15s}
@@ -259,8 +253,8 @@ h1{font-size:20px;font-weight:600;margin-bottom:6px;color:#222}
   .site-header{
     position:sticky;top:0;z-index:500;
     display:flex;align-items:center;justify-content:space-between;
-    padding:0 24px;height:60px;gap:24px;
-    background:rgba(245,240,232,0.92);backdrop-filter:blur(8px);
+    padding:0 24px;height:72px;gap:24px;
+    background:rgba(245,240,232,0.96);backdrop-filter:blur(8px);
     border-bottom:1px solid var(--hairline);
   }
   .site-brand{display:flex;align-items:center;gap:8px;text-decoration:none;flex-shrink:0}
@@ -272,10 +266,14 @@ h1{font-size:20px;font-weight:600;margin-bottom:6px;color:#222}
   }
   .site-brand-word{font-family:'Noto Serif KR',serif;font-weight:700;font-size:17px;color:var(--ink);white-space:nowrap}
   .site-brand-word span{color:var(--cinnabar)}
-  .site-nav{display:flex;gap:16px;overflow-x:auto;scrollbar-width:none}
+  .site-nav{display:flex;gap:8px;overflow-x:auto;scrollbar-width:none}
   .site-nav::-webkit-scrollbar{display:none}
-  .site-nav a{font-size:13px;color:var(--ink-soft);text-decoration:none;font-weight:500;transition:color .15s;white-space:nowrap}
-  .site-nav a:hover{color:var(--cinnabar)}
+  .site-nav a{
+    font-size:14px;font-weight:700;color:var(--ink);text-decoration:none;white-space:nowrap;
+    padding:9px 15px;border:1.5px solid var(--hairline);border-radius:8px;
+    background:#fff;transition:all .15s;
+  }
+  .site-nav a:hover{border-color:var(--cinnabar);color:var(--cinnabar);background:#fdf3f1}
   .site-nav-cta{
     padding:9px 20px;background:var(--ink);color:#fdf6ee!important;border-radius:20px;
     font-weight:600!important;
@@ -385,9 +383,6 @@ h1{font-size:20px;font-weight:600;margin-bottom:6px;color:#222}
   }
   .site-footer a{color:var(--ink-soft)}
 
-  /* 모바일 전용 "매일 보는 운세" 줄은 PC에서 숨김 — 왼쪽 사이드바가 같은 역할을 함 */
-  .daily-quick-row{display:none}
-
   /* 모바일 전용 h1은 헤더가 대신하므로 숨김 */
   .page-shell .container > h1{display:none}
 }
@@ -405,17 +400,17 @@ h1{font-size:20px;font-weight:600;margin-bottom:6px;color:#222}
     <span class="site-brand-word"><span>화신</span> 사주명리학</span>
   </a>
   <nav class="site-nav">
-    <a href="#calc-form">오늘의 운세</a>
-    <a href="#calc-form">바이오리듬</a>
-    <a href="#calc-form">나의 영화캐릭터</a>
-    <a href="#calc-form">자평진로운</a>
-    <a href="#calc-form">주역동전점</a>
-    <a href="#calc-form">당사주</a>
-    <a href="#calc-form">토정비결</a>
+    <a href="javascript:void(0)" onclick="showFortune()">오늘의 운세</a>
+    <a href="javascript:void(0)" onclick="toggleBio()">바이오리듬</a>
+    <a href="javascript:void(0)" onclick="showPersonality()">나의 영화캐릭터</a>
+    <a href="javascript:void(0)" onclick="showJapyung()">자평진로운</a>
+    <a href="javascript:void(0)" onclick="showJuyuk()">주역동전점</a>
+    <a href="javascript:void(0)" onclick="showDangsaju()">당사주</a>
+    <a href="javascript:void(0)" onclick="showTojung()">토정비결</a>
     <a href="javascript:void(0)" onclick="showDream()">꿈해몽</a>
-    <a href="#calc-form">궁합</a>
-    <a href="#calc-form">귀곡산명술</a>
-    <a href="#calc-form">자미두수</a>
+    <a href="javascript:void(0)" onclick="showGunghap()">궁합</a>
+    <a href="javascript:void(0)" onclick="showGuikok()">귀곡산명술</a>
+    <a href="javascript:void(0)" onclick="showJami()">자미두수</a>
   </nav>
 </header>
 
@@ -455,10 +450,10 @@ h1{font-size:20px;font-weight:600;margin-bottom:6px;color:#222}
 <aside class="side-panel">
   <div class="side-title" style="font-size:16px">매일 보는 운세</div>
   <div class="side-tool-list">
-    <a href="#calc-form" class="side-tool-item" style="font-size:15px;padding:13px 10px;font-weight:600"><span class="side-tool-dot" style="background:#c0392b;width:10px;height:10px"></span>오늘의 운세</a>
-    <a href="#calc-form" class="side-tool-item" style="font-size:15px;padding:13px 10px;font-weight:600"><span class="side-tool-dot" style="background:#1a7a4a;width:10px;height:10px"></span>바이오리듬</a>
+    <a href="javascript:void(0)" onclick="showFortune()" class="side-tool-item" style="font-size:15px;padding:13px 10px;font-weight:600"><span class="side-tool-dot" style="background:#c0392b;width:10px;height:10px"></span>오늘의 운세</a>
+    <a href="javascript:void(0)" onclick="toggleBio()" class="side-tool-item" style="font-size:15px;padding:13px 10px;font-weight:600"><span class="side-tool-dot" style="background:#1a7a4a;width:10px;height:10px"></span>바이오리듬</a>
     <a href="javascript:void(0)" onclick="showDream()" class="side-tool-item" style="font-size:15px;padding:13px 10px;font-weight:600"><span class="side-tool-dot" style="background:#2c4a6b;width:10px;height:10px"></span>꿈해몽</a>
-    <a href="#calc-form" class="side-tool-item" style="font-size:15px;padding:13px 10px;font-weight:600"><span class="side-tool-dot" style="background:#3d3a7a;width:10px;height:10px"></span>주역동전점</a>
+    <a href="javascript:void(0)" onclick="showJuyuk()" class="side-tool-item" style="font-size:15px;padding:13px 10px;font-weight:600"><span class="side-tool-dot" style="background:#3d3a7a;width:10px;height:10px"></span>주역동전점</a>
   </div>
 </aside>
 
@@ -556,58 +551,71 @@ h1{font-size:20px;font-weight:600;margin-bottom:6px;color:#222}
   <div class="section-title">사주 명식표</div>
   <div class="pillar-grid" id="pillar-grid"></div>
 
-  <!-- 모바일 전용: 매일 보는 운세 4개 강조 (PC에서는 왼쪽 사이드바가 같은 역할) -->
-  <div class="daily-quick-row">
-    <div class="daily-quick-label">매일 보는 운세</div>
-    <div class="daily-quick-items">
-      <button class="daily-quick-item" onclick="showFortune()" style="background:linear-gradient(135deg,#c0392b,#e74c3c)"><span>☀️</span>오늘의 운세</button>
-      <button class="daily-quick-item" onclick="toggleBio()" style="background:linear-gradient(135deg,#1a7a4a,#3aa17e)"><span>🌿</span>바이오리듬</button>
-      <button class="daily-quick-item" onclick="showDream()" style="background:linear-gradient(135deg,#2c4a6b,#5a8bc0)"><span>🌙</span>꿈해몽</button>
-      <button class="daily-quick-item" onclick="showJuyuk()" style="background:linear-gradient(135deg,#3d3a7a,#6c63b5)"><span>📜</span>주역동전점</button>
-    </div>
-  </div>
-
-  <!-- 9가지 풀이방식 + 오늘의 운세 + 바이오리듬 = 11개, 사주 바로 아래 사각 아이콘으로 통합 -->
-  <div class="quick-tool-grid">
-    <button class="quick-tool-card" onclick="showFortune()" id="extra-tools" style="background:linear-gradient(135deg,#c0392b,#e74c3c)">
-      <span class="qt-icon">☀️</span>오늘의 운세
-    </button>
-    <button class="quick-tool-card" onclick="toggleBio()" style="background:linear-gradient(135deg,#1a7a4a,#3aa17e)">
-      <span class="qt-icon">🌿</span>바이오리듬
-    </button>
-    <button class="quick-tool-card" onclick="showPersonality()" style="background:linear-gradient(135deg,#5c52c8,#7c6fcd)">
-      <span class="qt-icon">🎬</span>영화캐릭터
-    </button>
-    <button class="quick-tool-card" onclick="showJapyung()" style="background:linear-gradient(135deg,#1a6b5c,#3aa17e)">
-      <span class="qt-icon">📚</span>자평진로운
-    </button>
-    <button class="quick-tool-card" onclick="showJuyuk()" style="background:linear-gradient(135deg,#3d3a7a,#6c63b5)">
-      <span class="qt-icon">📜</span>주역동전점
-    </button>
-    <button class="quick-tool-card" onclick="showDangsaju()" style="background:linear-gradient(135deg,#a0651f,#d9a441)">
-      <span class="qt-icon">🎋</span>당사주
-    </button>
-    <button class="quick-tool-card" onclick="showTojung()" style="background:linear-gradient(135deg,#6b2d5c,#b0578f)">
-      <span class="qt-icon">🎍</span>토정비결
-    </button>
-    <button class="quick-tool-card" onclick="showDream()" style="background:linear-gradient(135deg,#2c4a6b,#5a8bc0)">
-      <span class="qt-icon">🌙</span>꿈해몽
-    </button>
-    <button class="quick-tool-card" onclick="showGunghap()" style="background:linear-gradient(135deg,#a83264,#e0729c)">
-      <span class="qt-icon">💞</span>궁합
-    </button>
-    <button class="quick-tool-card" onclick="showGuikok()" style="background:linear-gradient(135deg,#8B4513,#c0392b)">
-      <span class="qt-icon">☯</span>귀곡산명술
-    </button>
-    <button class="quick-tool-card" onclick="showJami()" style="background:linear-gradient(135deg,#8b0000,#daa520)">
-      <span class="qt-icon">🀄</span>자미두수
-    </button>
-  </div>
-
   <div class="divider"></div>
   <div class="daeun-title" id="daeun-title"></div>
   <div class="daeun-scroll" id="daeun-scroll"></div>
   <div class="divider"></div>
+
+  <!-- 9가지 풀이방식 + 오늘의 운세 + 바이오리듬 = 11개, 대운 바로 아래 카드형으로 배치 (실제 결과로 바로 연결) -->
+  <div class="section-title">더 자세히 보기</div>
+  <div class="result-tool-grid">
+    <button class="result-tool-card" onclick="showFortune()" id="extra-tools">
+      <div class="result-tool-icon" style="background:#fdecea">☀️</div>
+      <div class="result-tool-title">오늘의 운세</div>
+      <div class="result-tool-desc">일진과 사주를 대조해 오늘 하루의 흐름을 짚어드립니다.</div>
+    </button>
+    <button class="result-tool-card" onclick="toggleBio()">
+      <div class="result-tool-icon" style="background:#e6f3ef">🌿</div>
+      <div class="result-tool-title">바이오리듬</div>
+      <div class="result-tool-desc">신체·감성·지성 리듬을 14일 그래프로 보여드립니다.</div>
+    </button>
+    <button class="result-tool-card" onclick="showPersonality()">
+      <div class="result-tool-icon" style="background:#eae8fb">🎬</div>
+      <div class="result-tool-title">나의 영화캐릭터</div>
+      <div class="result-tool-desc">사주 기질을 영화 캐릭터에 빗대어 재미있게 풀어드립니다.</div>
+    </button>
+    <button class="result-tool-card" onclick="showJapyung()">
+      <div class="result-tool-icon" style="background:#e6f3ef">📚</div>
+      <div class="result-tool-title">자평진로운</div>
+      <div class="result-tool-desc">십신과 오행 균형으로 적성과 진로 방향을 분석합니다.</div>
+    </button>
+    <button class="result-tool-card" onclick="showJuyuk()">
+      <div class="result-tool-icon" style="background:#eae8fb">📜</div>
+      <div class="result-tool-title">주역동전점</div>
+      <div class="result-tool-desc">동전을 던져 얻은 괘로 지금 상황의 조언을 구합니다.</div>
+    </button>
+    <button class="result-tool-card" onclick="showDangsaju()">
+      <div class="result-tool-icon" style="background:#f5ead9">🎋</div>
+      <div class="result-tool-title">당사주</div>
+      <div class="result-tool-desc">태어난 별자리를 기준으로 한 전통 민간 사주풀이입니다.</div>
+    </button>
+    <button class="result-tool-card" onclick="showTojung()">
+      <div class="result-tool-icon" style="background:#f3e6ef">🎍</div>
+      <div class="result-tool-title">토정비결</div>
+      <div class="result-tool-desc">한 해의 흐름을 월별로 상세하게 풀어보는 정통 토정비결.</div>
+    </button>
+    <button class="result-tool-card" onclick="showDream()">
+      <div class="result-tool-icon" style="background:#e7edf3">🌙</div>
+      <div class="result-tool-title">꿈해몽</div>
+      <div class="result-tool-desc">꿈에 등장한 상징을 사주와 함께 해석해드립니다.</div>
+    </button>
+    <button class="result-tool-card" onclick="showGunghap()">
+      <div class="result-tool-icon" style="background:#f7e5ec">💞</div>
+      <div class="result-tool-title">궁합</div>
+      <div class="result-tool-desc">두 사람의 사주를 비교해 궁합과 상성을 살펴봅니다.</div>
+    </button>
+    <button class="result-tool-card" onclick="showGuikok()">
+      <div class="result-tool-icon" style="background:#f2e4d8">☯</div>
+      <div class="result-tool-title">귀곡산명술</div>
+      <div class="result-tool-desc">귀곡자의 산명술로 여덟 갈래의 인생 국면을 짚어드립니다.</div>
+    </button>
+    <button class="result-tool-card" onclick="showJami()">
+      <div class="result-tool-icon" style="background:#f6e3e3">🀄</div>
+      <div class="result-tool-title">자미두수</div>
+      <div class="result-tool-desc">중국 정통 점성술로 12궁의 별자리 배치를 풀이합니다.</div>
+    </button>
+  </div>
+
   <!-- 바이오리듬 패널 -->
   <div id="bio-panel" class="bio-panel">
     <div class="bio-panel-title" id="bio-panel-title">바이오리듬 — 14일 흐름</div>
