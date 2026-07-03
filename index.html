@@ -155,6 +155,18 @@ h1{font-size:20px;font-weight:600;margin-bottom:6px;color:#222}
 .btn-row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
 .jm-tab{padding:5px 11px;border:1.5px solid #b8860b;border-radius:14px;background:#fff;color:#b8860b;font-size:12px;font-weight:600;cursor:pointer;font-family:inherit;transition:all 0.15s}
 .jm-tab.active,.jm-tab:hover{background:#b8860b;color:#fff}
+.jp-tab{padding:5px 11px;border:1.5px solid #1a6b5c;border-radius:14px;background:#fff;color:#1a6b5c;font-size:12px;font-weight:600;cursor:pointer;font-family:inherit;transition:all 0.15s}
+.jp-tab.active,.jp-tab:hover{background:#1a6b5c;color:#fff}
+.ju-tab{padding:5px 11px;border:1.5px solid #3d3a7a;border-radius:14px;background:#fff;color:#3d3a7a;font-size:12px;font-weight:600;cursor:pointer;font-family:inherit;transition:all 0.15s}
+.ju-tab.active,.ju-tab:hover{background:#3d3a7a;color:#fff}
+.dj-tab{padding:5px 11px;border:1.5px solid #a0651f;border-radius:14px;background:#fff;color:#a0651f;font-size:12px;font-weight:600;cursor:pointer;font-family:inherit;transition:all 0.15s}
+.dj-tab.active,.dj-tab:hover{background:#a0651f;color:#fff}
+.tj-tab{padding:5px 11px;border:1.5px solid #6b2d5c;border-radius:14px;background:#fff;color:#6b2d5c;font-size:12px;font-weight:600;cursor:pointer;font-family:inherit;transition:all 0.15s}
+.tj-tab.active,.tj-tab:hover{background:#6b2d5c;color:#fff}
+.dm-tab{padding:6px 13px;border:1.5px solid #2c4a6b;border-radius:14px;background:#fff;color:#2c4a6b;font-size:12.5px;font-weight:600;cursor:pointer;font-family:inherit;transition:all 0.15s;white-space:nowrap}
+.dm-tab:hover{background:#2c4a6b;color:#fff}
+.gh-tab{padding:5px 11px;border:1.5px solid #a83264;border-radius:14px;background:#fff;color:#a83264;font-size:12px;font-weight:600;cursor:pointer;font-family:inherit;transition:all 0.15s}
+.gh-tab.active,.gh-tab:hover{background:#a83264;color:#fff}
 
 /* 모달 */
 .modal-overlay{
@@ -305,6 +317,24 @@ h1{font-size:20px;font-weight:600;margin-bottom:6px;color:#222}
     <button class="personality-btn" onclick="showJami()" style="background:linear-gradient(135deg,#8b0000,#daa520)">
       🀄 중국정통점성술
     </button>
+    <button class="personality-btn" onclick="showJapyung()" style="background:linear-gradient(135deg,#1a6b5c,#3aa17e)">
+      📚 자평명리 진로운
+    </button>
+    <button class="personality-btn" onclick="showJuyuk()" style="background:linear-gradient(135deg,#3d3a7a,#6c63b5)">
+      🪙 주역점
+    </button>
+    <button class="personality-btn" onclick="showDangsaju()" style="background:linear-gradient(135deg,#a0651f,#d9a441)">
+      🎋 당사주
+    </button>
+    <button class="personality-btn" onclick="showTojung()" style="background:linear-gradient(135deg,#6b2d5c,#b0578f)">
+      🎍 프리미엄토정비결
+    </button>
+    <button class="personality-btn" onclick="showDream()" style="background:linear-gradient(135deg,#2c4a6b,#5a8bc0)">
+      🌙 꿈해몽
+    </button>
+    <button class="personality-btn" onclick="showGunghap()" style="background:linear-gradient(135deg,#a83264,#e0729c)">
+      💞 궁합
+    </button>
   </div>
   <!-- 바이오리듬 버튼 -->
   <button class="bio-btn" onclick="toggleBio()">🌿 바이오리듬 보기</button>
@@ -385,6 +415,182 @@ h1{font-size:20px;font-weight:600;margin-bottom:6px;color:#222}
   </div>
 </div>
 
+
+<!-- 자평명리 진로운 모달 -->
+<div id="japyung-modal" class="modal-overlay" style="display:none" onclick="closeJapyungOutside(event)">
+  <div class="modal-box" style="max-width:520px">
+    <div class="modal-header">
+      <div class="modal-title-row">
+        <span class="modal-title">📚 자평명리 진로운</span>
+      </div>
+      <button class="modal-close" onclick="closeJapyung()">✕</button>
+    </div>
+    <!-- 메뉴 탭 -->
+    <div style="display:flex;flex-wrap:wrap;gap:6px;padding:12px 16px 0;border-bottom:1px solid #f0ede6">
+      <button class="jp-tab active" onclick="selectJapyung('zajuk')">적성운</button>
+      <button class="jp-tab" onclick="selectJapyung('zajin')">진학운</button>
+      <button class="jp-tab" onclick="selectJapyung('zachui')">취업운</button>
+    </div>
+    <div id="japyung-body" class="modal-body" style="font-size:14px;line-height:1.9;color:#333;padding:16px 20px"></div>
+    <div class="modal-footer">
+      <button class="modal-close-btn" onclick="closeJapyung()">닫기</button>
+    </div>
+  </div>
+</div>
+
+<!-- 주역점 모달 -->
+<div id="juyuk-modal" class="modal-overlay" style="display:none" onclick="closeJuyukOutside(event)">
+  <div class="modal-box" style="max-width:520px">
+    <div class="modal-header">
+      <div class="modal-title-row">
+        <span class="modal-title">🪙 주역점</span>
+      </div>
+      <button class="modal-close" onclick="closeJuyuk()">✕</button>
+    </div>
+
+    <!-- 메뉴 탭: 항목마다 별도로 동전을 던집니다 -->
+    <div style="display:flex;flex-wrap:wrap;gap:6px;padding:12px 16px 0;border-bottom:1px solid #f0ede6">
+      <button class="ju-tab active" onclick="selectJuyuk('01')">일반점</button>
+      <button class="ju-tab" onclick="selectJuyuk('02')">재물점</button>
+      <button class="ju-tab" onclick="selectJuyuk('03')">연애점</button>
+      <button class="ju-tab" onclick="selectJuyuk('04')">소망점</button>
+      <button class="ju-tab" onclick="selectJuyuk('05')">여행점</button>
+      <button class="ju-tab" onclick="selectJuyuk('06')">학업점</button>
+      <button class="ju-tab" onclick="selectJuyuk('07')">건강점</button>
+    </div>
+
+    <div id="juyuk-body" class="modal-body" style="padding:20px"></div>
+
+    <div class="modal-footer">
+      <button class="modal-close-btn" onclick="closeJuyuk()">닫기</button>
+    </div>
+  </div>
+</div>
+
+<!-- 당사주 모달 -->
+<div id="dangsaju-modal" class="modal-overlay" style="display:none" onclick="closeDangsajuOutside(event)">
+  <div class="modal-box" style="max-width:520px">
+    <div class="modal-header">
+      <div class="modal-title-row">
+        <span class="modal-title">🎋 당사주</span>
+      </div>
+      <button class="modal-close" onclick="closeDangsaju()">✕</button>
+    </div>
+    <!-- 메뉴 탭 -->
+    <div style="display:flex;flex-wrap:wrap;gap:6px;padding:12px 16px 0;border-bottom:1px solid #f0ede6">
+      <button class="dj-tab active" onclick="selectDangsaju('Djun')">전생록</button>
+      <button class="dj-tab" onclick="selectDangsaju('Dcho')">초년운</button>
+      <button class="dj-tab" onclick="selectDangsaju('Djung')">중년운</button>
+      <button class="dj-tab" onclick="selectDangsaju('Dmal')">말년운</button>
+      <button class="dj-tab" onclick="selectDangsaju('Dchong')">총운</button>
+      <button class="dj-tab" onclick="selectDangsaju('Djob')">직업운</button>
+      <button class="dj-tab" onclick="selectDangsaju('Dbubu')">부부궁</button>
+      <button class="dj-tab" onclick="selectDangsaju('Dhealth')">건강운</button>
+    </div>
+    <div id="dangsaju-body" class="modal-body" style="font-size:14px;line-height:1.9;color:#333;padding:16px 20px"></div>
+    <div class="modal-footer">
+      <button class="modal-close-btn" onclick="closeDangsaju()">닫기</button>
+    </div>
+  </div>
+</div>
+
+<!-- 프리미엄토정비결 모달 -->
+<div id="tojung-modal" class="modal-overlay" style="display:none" onclick="closeTojungOutside(event)">
+  <div class="modal-box" style="max-width:520px">
+    <div class="modal-header">
+      <div class="modal-title-row">
+        <span class="modal-title">🎍 프리미엄토정비결</span>
+      </div>
+      <button class="modal-close" onclick="closeTojung()">✕</button>
+    </div>
+
+    <!-- 보는 연도 선택 -->
+    <div style="display:flex;align-items:center;justify-content:center;gap:10px;padding:14px 16px 0">
+      <button class="tj-tab" onclick="changeTojungYear(-1)" style="padding:5px 13px">◀</button>
+      <span id="tojung-year-label" style="font-size:15px;font-weight:700;color:#333;min-width:80px;text-align:center"></span>
+      <button class="tj-tab" onclick="changeTojungYear(1)" style="padding:5px 13px">▶</button>
+    </div>
+
+    <!-- 메뉴 탭 -->
+    <div style="display:flex;flex-wrap:wrap;gap:6px;padding:12px 16px 0;border-bottom:1px solid #f0ede6">
+      <button class="tj-tab active" onclick="selectTojung('money')">재물운</button>
+      <button class="tj-tab" onclick="selectTojung('love')">연애운</button>
+    </div>
+    <div id="tojung-body" class="modal-body" style="font-size:14px;line-height:1.9;color:#333;padding:16px 20px"></div>
+    <div class="modal-footer">
+      <button class="modal-close-btn" onclick="closeTojung()">닫기</button>
+    </div>
+  </div>
+</div>
+
+<!-- 꿈해몽 모달 -->
+<div id="dream-modal" class="modal-overlay" style="display:none" onclick="closeDreamOutside(event)">
+  <div class="modal-box" style="max-width:520px">
+    <div class="modal-header">
+      <div class="modal-title-row">
+        <span class="modal-title">🌙 꿈해몽</span>
+      </div>
+      <button class="modal-close" onclick="closeDream()">✕</button>
+    </div>
+
+    <div style="padding:14px 16px 0">
+      <div style="display:flex;gap:6px;margin-bottom:10px">
+        <input id="dream-search-input" type="text" placeholder="꿈 내용 검색 (예: 뱀, 이빨, 물)"
+          style="flex:1;padding:8px 10px;border:1px solid #ddd;border-radius:8px;font-size:13px;font-family:inherit"
+          onkeydown="if(event.key==='Enter')searchDream()">
+        <button class="dm-tab" onclick="searchDream()">🔍 검색</button>
+      </div>
+      <div style="display:flex;gap:6px">
+        <select id="dream-theme-select" style="flex:1;padding:8px;border:1px solid #ddd;border-radius:8px;font-size:13px;font-family:inherit"></select>
+        <button class="dm-tab" onclick="browseDreamTheme()">보기</button>
+      </div>
+    </div>
+
+    <div id="dream-body" class="modal-body" style="font-size:14px;line-height:1.9;color:#333;padding:14px 20px"></div>
+
+    <div class="modal-footer">
+      <button class="modal-close-btn" onclick="closeDream()">닫기</button>
+    </div>
+  </div>
+</div>
+
+<!-- 궁합 4종 모달 -->
+<div id="gunghap-modal" class="modal-overlay" style="display:none" onclick="closeGunghapOutside(event)">
+  <div class="modal-box" style="max-width:520px">
+    <div class="modal-header">
+      <div class="modal-title-row">
+        <span class="modal-title">💞 궁합</span>
+      </div>
+      <button class="modal-close" onclick="closeGunghap()">✕</button>
+    </div>
+    <!-- 메뉴 탭 -->
+    <div style="display:flex;flex-wrap:wrap;gap:6px;padding:12px 16px 0;border-bottom:1px solid #f0ede6">
+      <button class="gh-tab active" onclick="selectGunghap('Kjung')">정통궁합</button>
+      <button class="gh-tab" onclick="selectGunghap('Ksin')">신세대궁합</button>
+      <button class="gh-tab" onclick="selectGunghap('Kos')">오성술궁합</button>
+      <button class="gh-tab" onclick="selectGunghap('Ksta')">점성술궁합</button>
+    </div>
+
+    <!-- 상대방 정보 입력 (정통/신세대/오성술 궁합에서만 표시) -->
+    <div id="gunghap-partner-form" style="padding:12px 16px 0">
+      <p style="font-size:12px;color:#999;margin-bottom:6px">상대방 생년월일을 입력하세요 (양력 기준, 음력이면 체크)</p>
+      <div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap">
+        <input id="gunghap-p-year" type="number" placeholder="년" style="width:72px;padding:6px;border:1px solid #ddd;border-radius:6px;font-family:inherit">
+        <input id="gunghap-p-month" type="number" placeholder="월" style="width:52px;padding:6px;border:1px solid #ddd;border-radius:6px;font-family:inherit">
+        <input id="gunghap-p-day" type="number" placeholder="일" style="width:52px;padding:6px;border:1px solid #ddd;border-radius:6px;font-family:inherit">
+        <label style="font-size:12px;color:#666;display:flex;align-items:center;gap:3px">
+          <input id="gunghap-p-lunar" type="checkbox"> 음력
+        </label>
+        <button class="gh-tab" onclick="calcGunghap()">궁합보기</button>
+      </div>
+    </div>
+
+    <div id="gunghap-body" class="modal-body" style="font-size:14px;line-height:1.9;color:#333;padding:16px 20px"></div>
+    <div class="modal-footer">
+      <button class="modal-close-btn" onclick="closeGunghap()">닫기</button>
+    </div>
+  </div>
+</div>
 
 <div id="install-banner" class="install-banner">
   <div class="install-banner-icon">🌞</div>
@@ -1118,6 +1324,13 @@ function calculate(){
   _jamiIdx = computeJamiIdx(sy, sm, sd, yg.cg, mg.jj, hg.jj)
   _jamiMenu = '성격'
 
+  // 당사주 8개 항목 idx 계산·저장
+  _dangsajuIdx = calcDangsaju(sy, sm, sd, yg.cg, yg.jj, mg.jj, hg.jj)
+
+  // 프리미엄토정비결 계산용 양력 생년월일 전역 저장 (target_year 바뀔 때마다 재계산에 사용)
+  _birthSolar = { sy, sm, sd }
+  _tojungResult = null   // 사주 다시 계산하면 이전 target_year 결과 초기화
+
   // 바이오리듬용 생년월일 저장
   _birthYear=sy; _birthMonth=sm; _birthDay=sd
   _bioPanelOpen=false
@@ -1446,6 +1659,702 @@ async function renderGuikok(menu) {
   document.getElementById('guikok-body').innerHTML =
     `<p style="margin-bottom:10px;font-size:12px;color:#999">☯ 귀곡산명술 — ${menuNames[menu]}</p>` +
     `<p style="line-height:2">${text}</p>`
+}
+
+// ── 자평명리 진로운 (japyung_content) ──────────────────────────────
+// 귀곡산명술과 동일한 십신 엔진(calcSipshin, JI_TO_GAN) 재사용
+let _japyungMenu = 'zajuk'
+
+function showJapyung() {
+  if (!_guikokSaju) {
+    alert('먼저 사주팔자를 확인하세요.')
+    return
+  }
+  document.getElementById('japyung-modal').style.display = 'flex'
+  renderJapyung(_japyungMenu)
+}
+
+function closeJapyung() {
+  document.getElementById('japyung-modal').style.display = 'none'
+}
+
+function closeJapyungOutside(e) {
+  if (e.target === document.getElementById('japyung-modal')) closeJapyung()
+}
+
+function selectJapyung(menu) {
+  _japyungMenu = menu
+  document.querySelectorAll('.jp-tab').forEach(b => b.classList.remove('active'))
+  event.target.classList.add('active')
+  renderJapyung(menu)
+}
+
+const _japyungCache = {}
+async function fetchJapyungContent(idx){
+  if(_japyungCache[idx] !== undefined) return _japyungCache[idx]
+  const res = await fetch(
+    `${SUPABASE_URL}/rest/v1/japyung_content?idx=eq.${idx}&select=content`,
+    { headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` } }
+  )
+  const data = await res.json()
+  const content = data && data.length>0 ? data[0].content : null
+  _japyungCache[idx]=content
+  return content
+}
+
+async function renderJapyung(menu) {
+  const s = _guikokSaju
+  if (!s) return
+
+  const ilgan = s.dg.cg   // 일간 (0~9)
+  const wiji  = s.mg.jj   // 월지
+  const ilji  = s.dg.jj   // 일지
+
+  const wiji_gan = JI_TO_GAN[wiji]  // 월지 지장간 본기
+  const ilji_gan = JI_TO_GAN[ilji]  // 일지 지장간 본기
+
+  let idxNum = 1
+  if (menu === 'zajuk') {
+    idxNum = ilgan + 1                        // 일간을 1~10으로 변환 (0-based → 1-based)
+  } else if (menu === 'zajin') {
+    idxNum = calcSipshin(ilgan, ilji_gan)     // 일지 지장간 십신 (귀곡 배우자운과 동일 계산)
+  } else if (menu === 'zachui') {
+    idxNum = calcSipshin(ilgan, wiji_gan)     // 월지 지장간 십신 (귀곡 성격 계산과 동일)
+  }
+
+  const menuNames = {zajuk:'적성운', zajin:'진학운', zachui:'취업운'}
+  const idx = menu + idxNum
+  document.getElementById('japyung-body').innerHTML = '<p style="color:#aaa;text-align:center">불러오는 중...</p>'
+  const content = await fetchJapyungContent(idx)
+  const text = content || '해당 데이터가 없습니다.'
+  document.getElementById('japyung-body').innerHTML =
+    `<p style="margin-bottom:10px;font-size:12px;color:#999">📚 자평명리 — ${menuNames[menu]}</p>` +
+    `<p style="line-height:2">${text}</p>`
+}
+
+// ── 주역점 (juyuk_daily_content) ──────────────────────────────
+// 생년월일 무관 — 동전 6회(초효~상효)로 괘를 뽑는 독립적인 점법
+// 하괘=동전1~3(초효~삼효), 상괘=동전4~6(사효~상효), 양=1 음=0
+// 총평(juyuk_coin_content)은 7항목의 '총운'과 사실상 동일해 화면에서는 생략하고
+// 7항목(일반점/재물점/연애점/소망점/여행점/학업점/건강점 — DB category값은 총운/재물운/연애운/소망/여행운/학업운/건강운)만 사용하기로 확정.
+// ※ 항목마다 별도로 동전을 던짐(질문 하나 = 던지기 한 번). 던진 결과는 모달 내에서 기억되며,
+//   "다시 던지기"를 누르기 전까지는 탭을 오가도 같은 결과가 다시 표시됨. 던지기 횟수 제한 없음.
+let _juyukMenu = '01'
+const _juyukState = {}  // { '01': {hexNum, sangwae, hawae, flips}, ... } - 카테고리별 독립 저장
+const JUYUK_CATEGORY_NAMES = {'01':'일반점','02':'재물점','03':'연애점','04':'소망점','05':'여행점','06':'학업점','07':'건강점'}
+
+function showJuyuk(){
+  document.getElementById('juyuk-modal').style.display='flex'
+  renderJuyukTab(_juyukMenu)
+}
+
+function closeJuyuk(){
+  document.getElementById('juyuk-modal').style.display='none'
+}
+
+function closeJuyukOutside(e){
+  if(e.target===document.getElementById('juyuk-modal')) closeJuyuk()
+}
+
+function selectJuyuk(cat){
+  _juyukMenu=cat
+  document.querySelectorAll('.ju-tab').forEach(b=>b.classList.remove('active'))
+  event.target.classList.add('active')
+  renderJuyukTab(cat)
+}
+
+const _juyukCache={}
+async function fetchJuyukContent(idx){
+  if(_juyukCache[idx]!==undefined) return _juyukCache[idx]
+  const res = await fetch(
+    `${SUPABASE_URL}/rest/v1/juyuk_daily_content?idx=eq.${idx}&select=content`,
+    { headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` } }
+  )
+  const data = await res.json()
+  const content = data && data.length>0 ? data[0].content : null
+  _juyukCache[idx]=content
+  return content
+}
+
+// 해당 카테고리에 대해 동전 6개를 새로 던짐 (재던지기 포함, 횟수 제한 없음)
+async function tossJuyukCategory(cat){
+  const flips=[]
+  for(let i=0;i<6;i++) flips.push(Math.random()<0.5 ? 1:0)  // 1=양, 0=음
+
+  const hawae   = 8 - (flips[0]*4 + flips[1]*2 + flips[2]*1)   // 하괘: 초효~삼효
+  const sangwae = 8 - (flips[3]*4 + flips[4]*2 + flips[5]*1)   // 상괘: 사효~상효
+  const hexNum  = (sangwae-1)*8 + hawae
+
+  _juyukState[cat] = { hexNum, sangwae, hawae, flips }
+  await renderJuyukTab(cat)
+}
+
+// 카테고리 탭 화면 렌더링: 아직 안 던졌으면 던지기 화면, 던졌으면 결과+다시던지기 버튼
+async function renderJuyukTab(cat){
+  const body = document.getElementById('juyuk-body')
+  const label = JUYUK_CATEGORY_NAMES[cat]
+  const state = _juyukState[cat]
+
+  if(!state){
+    body.innerHTML = `
+      <p style="color:#777;font-size:13px;line-height:1.7;margin-bottom:18px;text-align:center">
+        <strong>${label}</strong> — 마음속으로 묻고 싶은 것을 떠올리며<br>동전 6개를 던져 괘를 얻습니다.
+      </p>
+      <div style="text-align:center">
+        <button class="fortune-btn" onclick="tossJuyukCategory('${cat}')" style="max-width:220px;margin:0 auto">🪙 동전 던지기</button>
+      </div>`
+    return
+  }
+
+  const coinsHtml = state.flips.map(v=>
+    `<span style="display:inline-flex;align-items:center;justify-content:center;width:30px;height:30px;
+      border-radius:50%;font-weight:700;font-size:12px;color:#fff;
+      background:${v?'#c0392b':'#3d3a7a'}">${v?'양':'음'}</span>`
+  ).join('')
+
+  body.innerHTML = `
+    <div style="display:flex;justify-content:center;gap:6px;margin-bottom:14px">${coinsHtml}</div>
+    <div style="text-align:center;font-size:15px;font-weight:700;color:#333;margin-bottom:12px">
+      상괘 ${state.sangwae} · 하괘 ${state.hawae} (${state.hexNum}번 괘)
+    </div>
+    <p style="margin-bottom:10px;font-size:12px;color:#999;text-align:center">🪙 주역점 — ${label}</p>
+    <p id="juyuk-content-slot" style="color:#aaa;text-align:center">불러오는 중...</p>
+    <div style="text-align:center;margin-top:16px">
+      <button class="ju-tab" onclick="tossJuyukCategory('${cat}')" style="border-color:#999;color:#999">🔄 다시 던지기</button>
+    </div>`
+
+  const idx = 'JU'+String(state.hexNum).padStart(2,'0')+cat
+  const content = await fetchJuyukContent(idx)
+  const text = content || '해당 데이터가 없습니다.'
+  const slot = document.getElementById('juyuk-content-slot')
+  // 로딩 중 다른 탭으로 넘어갔거나 재던지기 했다면 slot이 이미 사라졌을 수 있음 → 그 경우 조용히 무시
+  if (slot) slot.outerHTML = `<p style="line-height:2;color:#333">${text}</p>`
+}
+
+// ── 당사주 (dangsaju_content) — 원본: dang_logic.asp ──────────────────
+// Gan2num(천간→1~10)/Gi2num(지지→1~12)은 0-based 사주값에 +1 하면 됨
+let _dangsajuIdx = null
+let _dangsajuMenu = 'Djun'
+
+function mod12(n){ let r = n % 12; if (r <= 0) r += 12; return r }
+
+// 서양 12별자리 판정 (건강운/Dhealth용, 양력 월/일 기준) — 1=양자리 ~ 12=물고기자리
+function getByul2(m, d){
+  const md = m*100 + d
+  if (md>=321 && md<=419) return 1   // 양자리
+  if (md>=420 && md<=520) return 2   // 황소자리
+  if (md>=521 && md<=621) return 3   // 쌍둥이자리
+  if (md>=622 && md<=722) return 4   // 게자리
+  if (md>=723 && md<=822) return 5   // 사자자리
+  if (md>=823 && md<=922) return 6   // 처녀자리
+  if (md>=923 && md<=1022) return 7  // 천칭자리
+  if (md>=1023 && md<=1122) return 8 // 전갈자리
+  if (md>=1123 && md<=1221) return 9 // 사수자리
+  if (md>=1222 || md<=119) return 10 // 염소자리
+  if (md>=120 && md<=218) return 11  // 물병자리
+  return 12                          // 물고기자리 (219~320)
+}
+
+// sy,sm,sd: 양력 생년월일 / ygCg:년간(0~9) / ygJj:년지(0~11) / mgJj:월지(0~11) / hgJj:시지(0~11)
+function calcDangsaju(sy, sm, sd, ygCg, ygJj, mgJj, hgJj){
+  const X = ygJj + 1   // Gi2num(년지) 1~12
+  const Y = mgJj + 1   // Gi2num(월지) 1~12
+
+  const Dcho = X   // 초년운: B = Gi2num(년지)
+
+  const Zjung = mod12(X + Y + 9)
+  const Djung = Zjung   // 중년운
+
+  const lunar = solarToLunar(sy, sm, sd)
+  const M = lunar ? lunar.day : sd   // 음력 출생일(1~30), 변환 실패시 양력일로 폴백
+  const Wmal = mod12(Zjung + M)
+  const Dmal = Wmal   // 말년운
+
+  const S = hgJj + 1   // Gi2num(시지) 1~12
+  const Dchong = mod12(Wmal + S)   // 총운
+
+  const Djun = mod12(X - Y + 12)   // 전생록
+
+  const X2 = ygCg + 1   // Gan2num(년간) 1~10
+  const Djob = mod12(X2 + Y)   // 직업운
+
+  let T
+  if ([1,5,9].includes(X)) T = 10        // 자진신 → 水局
+  else if ([2,6,10].includes(X)) T = 1   // 축사유 → 金局
+  else if ([3,7,11].includes(X)) T = 4   // 인오술 → 火局
+  else T = 7                             // 묘미해 → 木局
+  const Dbubu = mod12(T + Y + 9)   // 부부궁
+
+  const Dhealth = getByul2(sm, sd)   // 건강운
+
+  return { Djun, Dcho, Djung, Dmal, Dchong, Djob, Dbubu, Dhealth }
+}
+
+const DANGSAJU_LABELS = { Djun:'전생록', Dcho:'초년운', Djung:'중년운', Dmal:'말년운', Dchong:'총운', Djob:'직업운', Dbubu:'부부궁', Dhealth:'건강운' }
+
+function showDangsaju(){
+  if (!_dangsajuIdx) {
+    alert('먼저 사주팔자를 확인하세요.')
+    return
+  }
+  document.getElementById('dangsaju-modal').style.display = 'flex'
+  renderDangsaju(_dangsajuMenu)
+}
+
+function closeDangsaju(){
+  document.getElementById('dangsaju-modal').style.display = 'none'
+}
+
+function closeDangsajuOutside(e){
+  if (e.target === document.getElementById('dangsaju-modal')) closeDangsaju()
+}
+
+function selectDangsaju(key){
+  _dangsajuMenu = key
+  document.querySelectorAll('.dj-tab').forEach(b => b.classList.remove('active'))
+  event.target.classList.add('active')
+  renderDangsaju(key)
+}
+
+const _dangsajuCache = {}
+async function fetchDangsajuContent(idx){
+  if (_dangsajuCache[idx] !== undefined) return _dangsajuCache[idx]
+  const res = await fetch(
+    `${SUPABASE_URL}/rest/v1/dangsaju_content?idx=eq.${idx}&select=content`,
+    { headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` } }
+  )
+  const data = await res.json()
+  const content = data && data.length>0 ? data[0].content : null
+  _dangsajuCache[idx] = content
+  return content
+}
+
+async function renderDangsaju(key){
+  if (!_dangsajuIdx) return
+  const num = _dangsajuIdx[key]
+  const idx = key + num
+  const label = DANGSAJU_LABELS[key]
+  document.getElementById('dangsaju-body').innerHTML = '<p style="color:#aaa;text-align:center">불러오는 중...</p>'
+  const content = await fetchDangsajuContent(idx)
+  const text = content || '해당 데이터가 없습니다.'
+  document.getElementById('dangsaju-body').innerHTML =
+    `<p style="margin-bottom:10px;font-size:12px;color:#999">🎋 당사주 — ${label}</p>` +
+    `<p style="line-height:2">${text}</p>`
+}
+
+// ── 프리미엄토정비결 (tmoney_content / tlove_content) — 원본: tojung.asp ──────
+// 선천수/후천수 표는 tojung.asp 자체에는 없고 saju_logic.asp에서 가져다 씀(확인됨).
+// 후천수(tohuchunsu)는 표만 정의되고 실제 Tsang/Tjung/Tha 계산식에는 쓰이지 않음(원본 그대로).
+const CG_HANJA = ['甲','乙','丙','丁','戊','己','庚','辛','壬','癸']   // 갑을병정무기경신임계 (0~9)
+const JJ_HANJA = ['子','丑','寅','卯','辰','巳','午','未','申','酉','戌','亥']  // 자축인묘진사오미신유술해 (0~11)
+
+const TOJUNGCHUNSU_MAP = {
+  '甲':11,'己':11,'辰':11,'戌':11,'丑':11,'未':11,
+  '乙':10,'庚':10,'申':10,'酉':10,
+  '丙':9,'辛':9,'亥':9,'子':9,
+  '丁':8,'壬':8,'寅':8,'卯':8,
+  '戊':7,'癸':7,'巳':7,'午':7
+}
+function tojungchunsu(hanja){ return TOJUNGCHUNSU_MAP[hanja] }
+
+const TOSUNCHUNSU_MAP = {   // 선천수
+  '甲':9,'己':9,'子':9,'午':9,
+  '乙':8,'庚':8,'丑':8,'未':8,
+  '丙':7,'辛':7,'寅':7,'申':7,
+  '丁':6,'壬':6,'卯':6,'酉':6,
+  '戊':5,'癸':5,'辰':5,'戌':5,
+  '巳':4,'亥':4
+}
+function tosunchunsu(hanja){ return TOSUNCHUNSU_MAP[hanja] }
+
+// 참고: 후천수(tohuchunsu) — 원본 계산식에 실사용은 안 되지만 명세서에 표가 있어 참고용으로 보존
+const TOHUCHUNSU_MAP = {
+  '壬':1,'子':1, '丁':2,'巳':2, '甲':3,'寅':3, '辛':4,'酉':4, '戊':5,'辰':5,'戌':5,
+  '癸':6,'亥':6, '丙':7,'午':7, '乙':8,'卯':8, '庚':9,'申':9, '丑':10,'未':10, '己':100
+}
+
+function modWrap(n, N){ const r = ((n % N) + N) % N; return r === 0 ? N : r }
+
+let _birthSolar = null
+let _tojungResult = null
+let _tojungYear = new Date().getFullYear()
+let _tojungMenu = 'money'
+
+// target_year 기준 Tsang(상괘)·Tjung(중괘)·Tha(하괘) 계산 → idx="T"+Tsang+Tjung+Tha
+function calcTojung(target_year, sy, sm, sd){
+  const lunarBirth = solarToLunar(sy, sm, sd)
+  if (!lunarBirth) return null
+  const bMonth = lunarBirth.month
+  const bDay = lunarBirth.day
+  const bIsLeap = lunarBirth.isLeap
+
+  // target_year의 년간·년지 (입춘 경계를 피해 6월 15일로 조회)
+  const tyG = yearGanji(target_year, 6, 15, 12, 0)
+  const tyGanHanja = CG_HANJA[tyG.cg]
+  const tyJiHanja = JJ_HANJA[tyG.jj]
+
+  // Taesesu, Tsang(상괘)
+  const taesesu = tojungchunsu(tyGanHanja) + tojungchunsu(tyJiHanja)
+  const age = target_year - sy + 1   // 한국식 나이 (출생연도는 양력 기준)
+  const Tsang = modWrap(age + taesesu, 8)
+
+  // Walgunsu, Tjung(중괘)
+  const ES = JJ_HANJA[bMonth - 1]                       // atengi3(내 태어난 월)
+  const G = modWrap(tojungchunsu(tyGanHanja), 5)
+  let H = tojungchunsu(ES) - 2
+  if (H === 0) H = 12
+  else if (H === -1) H = 11
+  let I = modWrap((G * 12) - (12 - H), 10) + 2
+  if (I === 11) I = 1
+  else if (I === 12) I = 2
+  const Walgunsu = tosunchunsu(ES) + tosunchunsu(CG_HANJA[I - 1])
+
+  const lt = LUNAR_TABLE[lunarBirth.year]
+  const monthDays = bIsLeap ? lt[2] : lt[3][bMonth - 1]   // 태어난 음력월의 그 해 일수(29 or 30)
+  const Tjung = modWrap(monthDays + Walgunsu, 6)
+
+  // Iljinsu, Tha(하괘)
+  const tj = lunarToSolar(target_year, bMonth, bDay, bIsLeap)
+  let Tha
+  if (tj) {
+    const dg = dayGanji(tj.year, tj.month, tj.day)
+    const Iljinsu = tosunchunsu(CG_HANJA[dg.cg]) + tojungchunsu(JJ_HANJA[dg.jj])
+    Tha = modWrap(bDay + Iljinsu, 3)
+  } else {
+    Tha = modWrap(bDay, 3)   // target_year가 1900~2030 범위를 벗어난 극히 드문 경우의 폴백
+  }
+
+  const idx = 'T' + Tsang + Tjung + Tha
+  return { idx, Tsang, Tjung, Tha, age, target_year }
+}
+
+function showTojung(){
+  if (!_birthSolar) {
+    alert('먼저 사주팔자를 확인하세요.')
+    return
+  }
+  document.getElementById('tojung-modal').style.display = 'flex'
+  ensureTojungResult()
+  renderTojung()
+}
+
+function closeTojung(){
+  document.getElementById('tojung-modal').style.display = 'none'
+}
+
+function closeTojungOutside(e){
+  if (e.target === document.getElementById('tojung-modal')) closeTojung()
+}
+
+function changeTojungYear(delta){
+  _tojungYear += delta
+  _tojungResult = null
+  ensureTojungResult()
+  renderTojung()
+}
+
+function selectTojung(menu){
+  _tojungMenu = menu
+  document.querySelectorAll('.tj-tab').forEach(b => b.classList.remove('active'))
+  event.target.classList.add('active')
+  renderTojung()
+}
+
+function ensureTojungResult(){
+  if (!_tojungResult || _tojungResult.target_year !== _tojungYear) {
+    _tojungResult = calcTojung(_tojungYear, _birthSolar.sy, _birthSolar.sm, _birthSolar.sd)
+  }
+}
+
+const _tojungCache = {}
+async function fetchTojungContent(table, idx){
+  const cacheKey = table + '_' + idx
+  if (_tojungCache[cacheKey] !== undefined) return _tojungCache[cacheKey]
+  const res = await fetch(
+    `${SUPABASE_URL}/rest/v1/${table}?idx=eq.${idx}&select=content`,
+    { headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` } }
+  )
+  const data = await res.json()
+  const content = data && data.length>0 ? data[0].content : null
+  _tojungCache[cacheKey] = content
+  return content
+}
+
+async function renderTojung(){
+  document.getElementById('tojung-year-label').textContent = _tojungYear + '년'
+  const body = document.getElementById('tojung-body')
+
+  if (!_tojungResult) {
+    body.innerHTML = '<p style="color:#c0392b;text-align:center">해당 연도는 계산 범위를 벗어났습니다 (1900~2030).</p>'
+    return
+  }
+
+  const table = _tojungMenu === 'money' ? 'tmoney_content' : 'tlove_content'
+  const label = _tojungMenu === 'money' ? '재물운' : '연애운'
+  body.innerHTML = '<p style="color:#aaa;text-align:center">불러오는 중...</p>'
+  const content = await fetchTojungContent(table, _tojungResult.idx)
+  const text = content || '해당 데이터가 없습니다.'
+  body.innerHTML =
+    `<p style="margin-bottom:10px;font-size:12px;color:#999">🎍 프리미엄토정비결 — ${_tojungYear}년 ${label} (${_tojungResult.age}세)</p>` +
+    `<p style="line-height:2">${text}</p>`
+}
+
+// ── 꿈해몽 (dream_content) — 계산 로직 없음, 순수 검색/브라우징 ──────────
+const DREAM_THEMES = [
+  ['10','인물'], ['11','출산결혼'], ['20','감정'], ['21','폭력범죄'], ['22','언행소통'],
+  ['30','기후'], ['31','흙땅'], ['40','신체'], ['41','질병'], ['50,51','동물'],
+  ['52','과일'], ['60','재물'], ['70','의복'], ['71','가옥'], ['80','비행']
+]
+let _dreamLastItems = []
+let _dreamLastHeader = ''
+
+function dreamPlaceholderHtml(){
+  return '<p style="color:#999;text-align:center;padding:20px 0">검색어를 입력하거나 카테고리를 선택하세요.</p>'
+}
+
+function populateDreamThemeSelectOnce(){
+  const sel = document.getElementById('dream-theme-select')
+  if (sel.options.length > 0) return
+  const optAll = document.createElement('option')
+  optAll.value = ''
+  optAll.textContent = '카테고리 선택...'
+  sel.appendChild(optAll)
+  DREAM_THEMES.forEach(([code,label])=>{
+    const opt = document.createElement('option')
+    opt.value = code
+    opt.textContent = label
+    sel.appendChild(opt)
+  })
+}
+
+function showDream(){
+  document.getElementById('dream-modal').style.display = 'flex'
+  populateDreamThemeSelectOnce()
+  if (_dreamLastItems.length > 0) {
+    renderDreamList(_dreamLastItems, _dreamLastHeader)
+  } else {
+    document.getElementById('dream-body').innerHTML = dreamPlaceholderHtml()
+  }
+}
+
+function closeDream(){
+  document.getElementById('dream-modal').style.display = 'none'
+}
+
+function closeDreamOutside(e){
+  if (e.target === document.getElementById('dream-modal')) closeDream()
+}
+
+async function searchDream(){
+  const kw = document.getElementById('dream-search-input').value.trim()
+  if (!kw) return
+  const body = document.getElementById('dream-body')
+  body.innerHTML = '<p style="color:#aaa;text-align:center">검색 중...</p>'
+  const res = await fetch(
+    `${SUPABASE_URL}/rest/v1/dream_content?title=ilike.*${encodeURIComponent(kw)}*&select=idx,title&order=idx&limit=50`,
+    { headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` } }
+  )
+  const data = await res.json()
+  renderDreamList(data, `"${kw}" 검색 결과 ${data.length}건`)
+}
+
+async function browseDreamTheme(){
+  const code = document.getElementById('dream-theme-select').value
+  if (!code) return
+  const body = document.getElementById('dream-body')
+  body.innerHTML = '<p style="color:#aaa;text-align:center">불러오는 중...</p>'
+  const filter = code.includes(',') ? `theme_code=in.(${code})` : `theme_code=eq.${code}`
+  const res = await fetch(
+    `${SUPABASE_URL}/rest/v1/dream_content?${filter}&select=idx,title&order=idx`,
+    { headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` } }
+  )
+  const data = await res.json()
+  const label = (DREAM_THEMES.find(t=>t[0]===code) || [null,''])[1]
+  renderDreamList(data, `${label} (${data.length}건)`)
+}
+
+function renderDreamList(items, headerText){
+  _dreamLastItems = items
+  _dreamLastHeader = headerText
+  const body = document.getElementById('dream-body')
+  if (!items || items.length===0) {
+    body.innerHTML = '<p style="color:#999;text-align:center;padding:20px 0">검색 결과가 없습니다.</p>'
+    return
+  }
+  const listHtml = items.map(it =>
+    `<div onclick="viewDreamDetail('${it.idx}')" style="padding:10px 6px;border-bottom:1px solid #f0ede6;font-size:13.5px;color:#333;cursor:pointer">${it.title}</div>`
+  ).join('')
+  body.innerHTML = `<p style="font-size:12px;color:#999;margin-bottom:8px">${headerText}</p><div style="max-height:340px;overflow-y:auto">${listHtml}</div>`
+}
+
+function backToDreamList(){
+  if (_dreamLastItems.length > 0) renderDreamList(_dreamLastItems, _dreamLastHeader)
+  else document.getElementById('dream-body').innerHTML = dreamPlaceholderHtml()
+}
+
+const _dreamDetailCache = {}
+async function viewDreamDetail(idx){
+  const body = document.getElementById('dream-body')
+  body.innerHTML = '<p style="color:#aaa;text-align:center">불러오는 중...</p>'
+  let item = _dreamDetailCache[idx]
+  if (!item) {
+    const res = await fetch(
+      `${SUPABASE_URL}/rest/v1/dream_content?idx=eq.${idx}&select=title,content`,
+      { headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` } }
+    )
+    const data = await res.json()
+    item = (data && data.length>0) ? data[0] : {title:'', content:'해당 데이터가 없습니다.'}
+    _dreamDetailCache[idx] = item
+  }
+  body.innerHTML = `
+    <button class="dm-tab" onclick="backToDreamList()" style="margin-bottom:12px">◀ 목록으로</button>
+    <p style="font-size:15px;font-weight:700;color:#333;margin-bottom:8px">🌙 ${item.title}</p>
+    <p style="line-height:2;font-size:14px;color:#333">${item.content}</p>`
+}
+
+// ── 궁합 4종 (gunghap4_content) — 원본: gung_logic.asp ──────────────────
+const TEMP61 = ["","甲子","戊辰","丙子","丙寅","庚午","乙丑","己巳","丁丑","丁卯","辛未",
+  "甲午","戊戌","丙午","丙申","庚子","乙未","己亥","丁未","丁酉","辛丑",
+  "壬申","壬午","甲申","甲戌","戊寅","癸酉","癸未","乙酉","乙亥","己卯",
+  "壬寅","壬子","甲寅","甲辰","戊申","癸卯","癸丑","乙卯","乙巳","己酉",
+  "庚辰","庚寅","壬辰","戊子","丙戌","辛巳","辛卯","癸巳","己丑","丁亥",
+  "庚戌","庚申","壬戌","戊午","丙辰","辛亥","辛酉","癸亥","己未","丁巳"]
+
+// 납음오행 그룹(1~5) — 60갑자를 temp61 순서(표준 순서 아님, 원본 그대로)로 찾아 5로 나눈 나머지
+function napOhaeng(y, m, d){
+  const yg = yearGanji(y, m, d, 12, 0)
+  const Z = CG_HANJA[yg.cg] + JJ_HANJA[yg.jj]
+  const K = TEMP61.indexOf(Z)
+  return modWrap(K, 5)
+}
+
+// 구성(九星) 1~9 — 서기연도 뒤 2자리 기준
+function kUsung(year){
+  const c = ((year % 100) + 100) % 100
+  return 10 - modWrap(c, 9)
+}
+
+// 궁합 전용 서양 별자리 판정(당사주의 getByul2와 경계일이 다름 — 원본 그대로 별도 유지)
+function getByulGunghap(m, d){
+  const md = m*100 + d
+  if (md>=321 && md<=420) return 1
+  if (md>=421 && md<=521) return 2
+  if (md>=522 && md<=621) return 3
+  if (md>=622 && md<=723) return 4
+  if (md>=724 && md<=823) return 5
+  if (md>=824 && md<=923) return 6
+  if (md>=924 && md<=1023) return 7
+  if (md>=1024 && md<=1122) return 8
+  if (md>=1123 && md<=1222) return 9
+  if (md>=121 && md<=219) return 11
+  if (md>=220 && md<=320) return 12
+  return 10   // 그 외(12/23~1/20) = 염소자리
+}
+
+const GUNGHAP_LABELS = { Kjung:'정통궁합', Ksin:'신세대궁합', Kos:'오성술궁합', Ksta:'점성술궁합' }
+let _gunghapMenu = 'Kjung'
+
+function showGunghap(){
+  if (!_birthSolar) {
+    alert('먼저 사주팔자를 확인하세요.')
+    return
+  }
+  document.getElementById('gunghap-modal').style.display = 'flex'
+  renderGunghapTab()
+}
+
+function closeGunghap(){
+  document.getElementById('gunghap-modal').style.display = 'none'
+}
+
+function closeGunghapOutside(e){
+  if (e.target === document.getElementById('gunghap-modal')) closeGunghap()
+}
+
+function selectGunghap(menu){
+  _gunghapMenu = menu
+  document.querySelectorAll('#gunghap-modal .gh-tab').forEach(b => b.classList.remove('active'))
+  event.target.classList.add('active')
+  renderGunghapTab()
+}
+
+function renderGunghapTab(){
+  const formEl = document.getElementById('gunghap-partner-form')
+  const body = document.getElementById('gunghap-body')
+  if (_gunghapMenu === 'Ksta') {
+    formEl.style.display = 'none'
+    renderGunghapKsta()
+  } else {
+    formEl.style.display = 'block'
+    body.innerHTML = '<p style="color:#999;text-align:center;padding:16px 0">상대방 생년월일을 입력하고 궁합보기를 눌러주세요.</p>'
+  }
+}
+
+const _gunghapCache = {}
+async function fetchGunghapContent(idx){
+  if (_gunghapCache[idx] !== undefined) return _gunghapCache[idx]
+  const res = await fetch(
+    `${SUPABASE_URL}/rest/v1/gunghap4_content?idx=eq.${idx}&select=content`,
+    { headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` } }
+  )
+  const data = await res.json()
+  const content = data && data.length>0 ? data[0].content : null
+  _gunghapCache[idx] = content
+  return content
+}
+
+// 점성술궁합: 2인 비교가 아니라 "내 성별+내 별자리" 기반 개인 이성운
+async function renderGunghapKsta(){
+  const body = document.getElementById('gunghap-body')
+  const genderNum = (_guikokSaju.gender === 'm') ? 1 : 2
+  const byul = getByulGunghap(_birthSolar.sm, _birthSolar.sd)
+  const idx = 'Ksta' + genderNum + String(byul).padStart(2,'0')
+  body.innerHTML = '<p style="color:#aaa;text-align:center">불러오는 중...</p>'
+  const content = await fetchGunghapContent(idx)
+  const text = content || '해당 데이터가 없습니다.'
+  body.innerHTML = `<p style="margin-bottom:10px;font-size:12px;color:#999">💞 점성술궁합 — 나의 이성운</p><p style="line-height:2">${text}</p>`
+}
+
+async function calcGunghap(){
+  const py = parseInt(document.getElementById('gunghap-p-year').value)
+  const pm = parseInt(document.getElementById('gunghap-p-month').value)
+  const pd = parseInt(document.getElementById('gunghap-p-day').value)
+  const isLunar = document.getElementById('gunghap-p-lunar').checked
+
+  if (!py || !pm || !pd) {
+    alert('상대방 생년월일을 모두 입력해주세요.')
+    return
+  }
+
+  let py2=py, pm2=pm, pd2=pd
+  if (isLunar) {
+    const conv = lunarToSolar(py, pm, pd, false)
+    if (!conv) { alert('음력 변환 오류. 날짜를 확인해주세요.'); return }
+    py2=conv.year; pm2=conv.month; pd2=conv.day
+  }
+
+  const body = document.getElementById('gunghap-body')
+  body.innerHTML = '<p style="color:#aaa;text-align:center">불러오는 중...</p>'
+
+  let idx
+  const label = GUNGHAP_LABELS[_gunghapMenu]
+  if (_gunghapMenu === 'Kjung') {
+    const X = napOhaeng(_birthSolar.sy, _birthSolar.sm, _birthSolar.sd)
+    const Y = napOhaeng(py2, pm2, pd2)
+    idx = 'Kjung' + X + Y
+  } else if (_gunghapMenu === 'Ksin') {
+    const dgMe = dayGanji(_birthSolar.sy, _birthSolar.sm, _birthSolar.sd)
+    const dgP  = dayGanji(py2, pm2, pd2)
+    idx = 'Ksin' + String(dgMe.cg+1).padStart(2,'0') + String(dgP.cg+1).padStart(2,'0')
+  } else if (_gunghapMenu === 'Kos') {
+    const X = kUsung(_birthSolar.sy)
+    const Y = kUsung(py2)
+    idx = 'Kos' + X + Y
+  }
+
+  const content = await fetchGunghapContent(idx)
+  const text = content || '해당 데이터가 없습니다.'
+  body.innerHTML = `<p style="margin-bottom:10px;font-size:12px;color:#999">💞 ${label}</p><p style="line-height:2">${text}</p>`
 }
 
 
