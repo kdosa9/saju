@@ -218,6 +218,8 @@ h1{font-size:20px;font-weight:600;margin-bottom:6px;color:#222}
   font-weight:600;cursor:pointer;
 }
 .modal-close-btn:hover{background:#4a41b0}
+@keyframes coinSpinKF{ from{transform:rotate(0deg)} to{transform:rotate(360deg)} }
+.coin-spin-anim{ animation: coinSpinKF 0.5s linear infinite }
 </style>
 </head>
 <body>
@@ -1782,65 +1784,35 @@ async function fetchJuyukContent(idx){
   return content
 }
 
-// 해당 카테고리에 대해 동전 6개를 새로 던짐 (재던지기 포함, 횟수 제한 없음)
-async function tossJuyukCategory(cat){
-  // 1단계: 원본처럼 "도는 동전" 애니메이션 먼저 보여줌
-  const body = document.getElementById('juyuk-body')
-  const spinHtml = Array(6).fill(0).map(()=>
-    `<img src="${COIN_SPIN}" alt="던지는 중" style="width:32px;height:32px">`
-  ).join('')
-  body.innerHTML = `
-    <div style="display:flex;justify-content:center;gap:6px;margin-bottom:14px">${spinHtml}</div>
-    <p style="text-align:center;color:#999;font-size:13px">동전을 던지는 중...</p>`
+const JUYUK_HYO_NAMES = ['초효','이효','삼효','사효','오효','상효']
+const _juyukProgress = {}   // { cat: [0/1, 0/1, ...] } - 진행 중인(아직 6개 안 채워진) 던지기 기록
 
-  await new Promise(r => setTimeout(r, 550))
-
-  // 2단계: 결과 확정
-  const flips=[]
-  for(let i=0;i<6;i++) flips.push(Math.random()<0.5 ? 1:0)  // 1=양(fcoin), 0=음(bcoin)
-
-  const hawae   = 8 - (flips[0]*4 + flips[1]*2 + flips[2]*1)   // 하괘: 초효~삼효
-  const sangwae = 8 - (flips[3]*4 + flips[4]*2 + flips[5]*1)   // 상괘: 사효~상효
-  const hexNum  = (sangwae-1)*8 + hawae
-
-  _juyukState[cat] = { hexNum, sangwae, hawae, flips }
-  await renderJuyukTab(cat)
-}
-
-// 카테고리 탭 화면 렌더링: 아직 안 던졌으면 던지기 화면, 던졌으면 결과+다시던지기 버튼
+// 카테고리 탭 화면 렌더링: 완성된 결과가 있으면 결과, 없으면(진행중 포함) 던지기 화면
 async function renderJuyukTab(cat){
-  const body = document.getElementById('juyuk-body')
-  const label = JUYUK_CATEGORY_NAMES[cat]
   const state = _juyukState[cat]
-
   if(!state){
-    const idleSpinHtml = Array(6).fill(0).map(()=>
-      `<img src="${COIN_SPIN}" alt="동전" style="width:28px;height:28px;opacity:0.7">`
-    ).join('')
-    body.innerHTML = `
-      <div style="display:flex;justify-content:center;gap:6px;margin-bottom:16px">${idleSpinHtml}</div>
-      <p style="color:#777;font-size:13px;line-height:1.7;margin-bottom:18px;text-align:center">
-        <strong>${label}</strong> — 마음속으로 묻고 싶은 것을 떠올리며<br>동전 6개를 던져 괘를 얻습니다.
-      </p>
-      <div style="text-align:center">
-        <button class="fortune-btn" onclick="tossJuyukCategory('${cat}')" style="max-width:220px;margin:0 auto">🪙 동전 던지기</button>
-      </div>`
+    renderJuyukTossUI(cat)
     return
   }
 
-  const coinsHtml = state.flips.map(v =>
-    `<img src="${v ? COIN_FRONT : COIN_BACK}" alt="${v ? '양' : '음'}" title="${v ? '양' : '음'}" style="width:32px;height:32px">`
+  const body = document.getElementById('juyuk-body')
+  const label = JUYUK_CATEGORY_NAMES[cat]
+  const coinsHtml = state.flips.map((v,i) =>
+    `<div style="display:flex;flex-direction:column;align-items:center;gap:3px">
+      <img src="${v ? COIN_FRONT : COIN_BACK}" alt="${v?'양':'음'}" title="${v?'양':'음'}" style="width:32px;height:32px">
+      <span style="font-size:9px;color:#bbb">${JUYUK_HYO_NAMES[i]}</span>
+    </div>`
   ).join('')
 
   body.innerHTML = `
-    <div style="display:flex;justify-content:center;gap:6px;margin-bottom:14px">${coinsHtml}</div>
+    <div style="display:flex;justify-content:center;gap:8px;margin-bottom:14px;flex-wrap:wrap">${coinsHtml}</div>
     <div style="text-align:center;font-size:15px;font-weight:700;color:#333;margin-bottom:12px">
       상괘 ${state.sangwae} · 하괘 ${state.hawae} (${state.hexNum}번 괘)
     </div>
     <p style="margin-bottom:10px;font-size:12px;color:#999;text-align:center">🪙 주역점 — ${label}</p>
     <p id="juyuk-content-slot" style="color:#aaa;text-align:center">불러오는 중...</p>
     <div style="text-align:center;margin-top:16px">
-      <button class="ju-tab" onclick="tossJuyukCategory('${cat}')" style="border-color:#999;color:#999">🔄 다시 던지기</button>
+      <button class="ju-tab" onclick="retryJuyukCategory('${cat}')" style="border-color:#999;color:#999">🔄 다시 던지기</button>
     </div>`
 
   const idx = 'JU'+String(state.hexNum).padStart(2,'0')+cat
@@ -1850,6 +1822,79 @@ async function renderJuyukTab(cat){
   // 로딩 중 다른 탭으로 넘어갔거나 재던지기 했다면 slot이 이미 사라졌을 수 있음 → 그 경우 조용히 무시
   if (slot) slot.outerHTML = `<p style="line-height:2;color:#333">${text}</p>`
 }
+
+// 진행 중인(또는 아직 시작 안 한) 던지기 화면 — 동전 1개씩 순서대로 클릭해서 채워나감
+function renderJuyukTossUI(cat){
+  const body = document.getElementById('juyuk-body')
+  const label = JUYUK_CATEGORY_NAMES[cat]
+  const progress = _juyukProgress[cat] || []
+
+  const slotsHtml = JUYUK_HYO_NAMES.map((posName, i) => {
+    if (i < progress.length) {
+      const v = progress[i]
+      return `<div style="display:flex;flex-direction:column;align-items:center;gap:4px">
+        <img src="${v?COIN_FRONT:COIN_BACK}" alt="${v?'양':'음'}" style="width:36px;height:36px">
+        <span style="font-size:10px;color:#999">${posName}</span>
+      </div>`
+    } else if (i === progress.length) {
+      return `<div style="display:flex;flex-direction:column;align-items:center;gap:4px">
+        <img id="juyuk-active-coin" src="${COIN_SPIN}" alt="던지기" class="coin-spin-anim"
+          onclick="flipJuyukCoin('${cat}')" style="width:46px;height:46px;cursor:pointer">
+        <span style="font-size:10px;color:#a83264;font-weight:700">${posName} · 눌러서 던지기</span>
+      </div>`
+    } else {
+      return `<div style="display:flex;flex-direction:column;align-items:center;gap:4px;opacity:0.25">
+        <img src="${COIN_SPIN}" alt="" style="width:36px;height:36px">
+        <span style="font-size:10px;color:#ccc">${posName}</span>
+      </div>`
+    }
+  }).join('')
+
+  body.innerHTML = `
+    <p style="text-align:center;font-size:13px;color:#777;margin-bottom:18px;line-height:1.7">
+      <strong>${label}</strong> — 동전을 하나씩 눌러 괘를 완성합니다 (${progress.length}/6)<br>
+      <span style="font-size:12px;color:#aaa">마음속으로 묻고 싶은 것을 떠올리며 눌러주세요</span>
+    </p>
+    <div style="display:flex;justify-content:center;gap:10px;flex-wrap:wrap">${slotsHtml}</div>`
+}
+
+// 동전 1개 클릭 → 회전 → 착지(양/음 확정) → 쌓기 → 6개 다 채워지면 결과 계산
+async function flipJuyukCoin(cat){
+  const coinEl = document.getElementById('juyuk-active-coin')
+  if (!coinEl || coinEl.dataset.locked === '1') return
+  coinEl.dataset.locked = '1'
+  coinEl.style.cursor = 'default'
+
+  await new Promise(r => setTimeout(r, 500))   // 회전 유지 시간(원본처럼 도는 모습을 보여줌)
+
+  const v = Math.random() < 0.5 ? 1 : 0   // 1=양(fcoin), 0=음(bcoin)
+  coinEl.src = v ? COIN_FRONT : COIN_BACK
+  coinEl.classList.remove('coin-spin-anim')
+
+  await new Promise(r => setTimeout(r, 450))   // 착지된 모습을 잠깐 보여줌
+
+  if (!_juyukProgress[cat]) _juyukProgress[cat] = []
+  _juyukProgress[cat].push(v)
+
+  if (_juyukProgress[cat].length === 6) {
+    const flips = _juyukProgress[cat]
+    const hawae   = 8 - (flips[0]*4 + flips[1]*2 + flips[2]*1)   // 하괘: 초효~삼효
+    const sangwae = 8 - (flips[3]*4 + flips[4]*2 + flips[5]*1)   // 상괘: 사효~상효
+    const hexNum  = (sangwae-1)*8 + hawae
+    _juyukState[cat] = { hexNum, sangwae, hawae, flips }
+    delete _juyukProgress[cat]
+    await renderJuyukTab(cat)
+  } else {
+    renderJuyukTossUI(cat)
+  }
+}
+
+function retryJuyukCategory(cat){
+  delete _juyukState[cat]
+  delete _juyukProgress[cat]
+  renderJuyukTab(cat)
+}
+
 
 // ── 당사주 (dangsaju_content) — 원본: dang_logic.asp ──────────────────
 // Gan2num(천간→1~10)/Gi2num(지지→1~12)은 0-based 사주값에 +1 하면 됨
