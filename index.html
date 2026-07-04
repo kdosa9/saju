@@ -72,7 +72,7 @@ h1{font-size:20px;font-weight:600;margin-bottom:6px;color:#222;display:none}
 .result-area{margin-top:24px}
 .pillar-grid{
   display:grid;grid-template-columns:repeat(4,1fr);gap:2px;margin-bottom:20px;
-  background:#333;border:2px solid #333;border-radius:12px;overflow:hidden;direction:rtl;
+  background:#b5651d;border:2px solid #b5651d;border-radius:12px;overflow:hidden;direction:rtl;
 }
 .pg-label{background:#efe9db;color:#555;font-size:11px;text-align:center;padding:7px 4px;direction:ltr}
 .pg-cell{background:#fff;text-align:center;padding:12px 4px;direction:ltr}
@@ -160,25 +160,25 @@ h1{font-size:20px;font-weight:600;margin-bottom:6px;color:#222;display:none}
 .fortune-btn:hover{background:linear-gradient(135deg,#a93226,#cb4335);box-shadow:0 4px 16px rgba(192,57,43,0.35)}
 .btn-row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
 /* 대운 바로 아래, 하얀 카드형 결과 바로가기 그리드 — 모바일/PC 공통 */
-.result-tool-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:2px;margin:12px 0 4px;background:#333;border:2px solid #333;border-radius:12px;overflow:hidden}
+.result-tool-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:2px;margin:12px 0 4px;background:#e9e3d5;border:1px solid #e9e3d5;border-radius:12px;overflow:hidden}
 .result-tools-wrap{max-width:680px;margin:0 auto;padding:0}
+.result-tool-card{
+  display:block;text-align:left;border:none;border-radius:0;
+  padding:14px 12px;cursor:pointer;font-family:inherit;transition:filter .15s;
+}
+.result-tool-card:active{filter:brightness(0.96)}
+.result-tool-icon{
+  width:34px;height:34px;border-radius:8px;display:flex;align-items:center;justify-content:center;
+  font-size:16px;margin-bottom:8px;background:rgba(255,255,255,0.75);
+}
+.result-tool-title{font-size:13.5px;font-weight:700;color:#222;margin-bottom:4px}
+.result-tool-desc{font-size:11px;color:#666;line-height:1.5}
+.result-tool-card.daily-dup{display:none}
 @media (min-width:1024px){
   .result-tools-wrap{max-width:1320px;margin:0 auto;padding:0 40px}
   .result-tool-grid{grid-template-columns:repeat(3,1fr);gap:2px}
   .result-tool-card.daily-dup{display:block}
 }
-.result-tool-card{
-  display:block;text-align:left;background:#fff;border:none;border-radius:0;
-  padding:14px 12px;cursor:pointer;font-family:inherit;transition:background .15s;
-}
-.result-tool-card:active{background:#faf6ef}
-.result-tool-icon{
-  width:34px;height:34px;border-radius:8px;display:flex;align-items:center;justify-content:center;
-  font-size:16px;margin-bottom:8px;
-}
-.result-tool-title{font-size:13.5px;font-weight:700;color:#222;margin-bottom:4px}
-.result-tool-desc{font-size:11px;color:#777;line-height:1.5}
-.result-tool-card.daily-dup{display:none}
 .jm-tab{padding:5px 11px;border:1.5px solid #b8860b;border-radius:14px;background:#fff;color:#b8860b;font-size:12px;font-weight:600;cursor:pointer;font-family:inherit;transition:all 0.15s}
 .jm-tab.active,.jm-tab:hover{background:#b8860b;color:#fff}
 .jp-tab{padding:5px 11px;border:1.5px solid #1a6b5c;border-radius:14px;background:#fff;color:#1a6b5c;font-size:12px;font-weight:600;cursor:pointer;font-family:inherit;transition:all 0.15s}
@@ -294,7 +294,7 @@ h1{font-size:20px;font-weight:600;margin-bottom:6px;color:#222;display:none}
 .side-fact-dot{width:5px;height:5px;border-radius:50%;background:var(--cinnabar);flex-shrink:0;margin-top:7px}
 .side-tool-list{display:flex;flex-direction:column;gap:4px}
 .side-tool-list-desktop{display:none}
-.side-quick-cards{display:grid;grid-template-columns:repeat(2,1fr);gap:2px;background:#333;border:2px solid #333;border-radius:12px;overflow:hidden}
+.side-quick-cards{display:grid;grid-template-columns:repeat(2,1fr);gap:2px;background:#e9e3d5;border:1px solid #e9e3d5;border-radius:12px;overflow:hidden}
 .side-quick-cards .result-tool-card{padding:12px 10px}
 .side-quick-cards .result-tool-icon{margin-bottom:6px}
 .side-quick-cards .result-tool-title{font-size:12.5px}
@@ -336,32 +336,29 @@ h1{font-size:20px;font-weight:600;margin-bottom:6px;color:#222;display:none}
 
   /* ── 히어로 ── */
   .hero{
-    display:flex;align-items:center;justify-content:center;gap:64px;
-    padding:64px 40px 56px;
+    display:flex;align-items:stretch;justify-content:center;gap:48px;
+    padding:48px 40px;
     background:
       repeating-linear-gradient(135deg,rgba(255,255,255,0.5) 0px,rgba(255,255,255,0.5) 2px,transparent 2px,transparent 14px),
       linear-gradient(180deg,#f7f2ea,var(--cream));
     border-bottom:1px solid var(--hairline);
   }
+  .hero-art{flex-shrink:0;width:260px;border-radius:14px;overflow:hidden;box-shadow:0 8px 24px rgba(0,0,0,0.18)}
+  .hero-art img{width:100%;height:100%;object-fit:cover;display:block}
+  .hero-right{display:flex;flex-direction:column;justify-content:center;gap:26px;max-width:440px}
   .hero-copy{max-width:440px}
   .hero-eyebrow{font-size:13px;color:var(--cinnabar);font-weight:700;letter-spacing:2px;margin-bottom:14px}
-  .hero-title{font-family:'Noto Serif KR',serif;font-size:38px;line-height:1.35;color:var(--ink);font-weight:700;margin-bottom:18px}
+  .hero-title{font-family:'Noto Serif KR',serif;font-size:34px;line-height:1.35;color:var(--ink);font-weight:700;margin-bottom:16px}
   .hero-title em{font-style:normal;color:var(--cinnabar)}
-  .hero-desc{font-size:15px;line-height:1.8;color:var(--ink-soft);margin-bottom:28px}
-  .hero-cta{
-    display:inline-block;padding:14px 30px;background:var(--cinnabar);color:#fff;
-    border:none;border-radius:6px;font-size:15px;font-weight:700;cursor:pointer;
-    text-decoration:none;box-shadow:0 4px 14px rgba(192,57,43,0.28);transition:transform .15s;
-  }
-  .hero-cta:hover{transform:translateY(-2px)}
+  .hero-desc{font-size:14px;line-height:1.8;color:var(--ink-soft)}
   /* 시그니처 요소: 실제 명식표를 예고하는 4주 도장 그래픽 */
   .hero-stamps{display:flex;gap:14px;flex-shrink:0}
   .hero-stamp-col{display:flex;flex-direction:column;align-items:center;gap:10px}
   .hero-stamp{
-    width:64px;height:76px;border-radius:6px;background:var(--paper);
+    width:60px;height:70px;border-radius:6px;background:var(--paper);
     border:1px solid var(--hairline);box-shadow:0 3px 10px rgba(0,0,0,0.06);
     display:flex;align-items:center;justify-content:center;
-    font-family:'Noto Serif KR',serif;font-size:30px;font-weight:900;color:var(--ink);
+    font-family:'Noto Serif KR',serif;font-size:28px;font-weight:900;color:var(--ink);
   }
   .hero-stamp-col:nth-child(1) .hero-stamp{color:var(--cinnabar)}
   .hero-stamp-col:nth-child(2) .hero-stamp{color:var(--ochre)}
@@ -433,20 +430,25 @@ h1{font-size:20px;font-weight:600;margin-bottom:6px;color:#222;display:none}
 
 <!-- ===== PC 전용: 히어로 ===== -->
 <div class="hero" id="top">
-  <div class="hero-copy">
-    <div class="hero-eyebrow">정밀 절기 계산 · 실시간 데이터</div>
-    <h2 class="hero-title">태어난 순간의 하늘을<br><em>여덟 글자</em>로 읽다</h2>
-    <p class="hero-desc">
-      생년월일시 하나면 사주팔자, 대운, 십신부터<br>
-      자평명리·주역점·귀곡산명술까지 아홉 가지 방식으로 풀어드립니다.<br>
-      동경시 30분 보정과 천문 계산 기반 절기표로 정확하게.
-    </p>
+  <div class="hero-art">
+    <img src="hero-card.jpg" alt="중천건 重天乾 — 주역 64괘">
   </div>
-  <div class="hero-stamps">
-    <div class="hero-stamp-col"><div class="hero-stamp">年</div><span class="hero-stamp-label">년주</span></div>
-    <div class="hero-stamp-col"><div class="hero-stamp">月</div><span class="hero-stamp-label">월주</span></div>
-    <div class="hero-stamp-col"><div class="hero-stamp">日</div><span class="hero-stamp-label">일주</span></div>
-    <div class="hero-stamp-col"><div class="hero-stamp">時</div><span class="hero-stamp-label">시주</span></div>
+  <div class="hero-right">
+    <div class="hero-stamps">
+      <div class="hero-stamp-col"><div class="hero-stamp">年</div><span class="hero-stamp-label">년주</span></div>
+      <div class="hero-stamp-col"><div class="hero-stamp">月</div><span class="hero-stamp-label">월주</span></div>
+      <div class="hero-stamp-col"><div class="hero-stamp">日</div><span class="hero-stamp-label">일주</span></div>
+      <div class="hero-stamp-col"><div class="hero-stamp">時</div><span class="hero-stamp-label">시주</span></div>
+    </div>
+    <div class="hero-copy">
+      <div class="hero-eyebrow">정밀 절기 계산 · 실시간 데이터</div>
+      <h2 class="hero-title">태어난 순간의 하늘을<br><em>여덟 글자</em>로 읽다</h2>
+      <p class="hero-desc">
+        생년월일시 하나면 사주팔자, 대운, 십신부터<br>
+        자평명리·주역점·귀곡산명술까지 아홉 가지 방식으로 풀어드립니다.<br>
+        동경시 30분 보정과 천문 계산 기반 절기표로 정확하게.
+      </p>
+    </div>
   </div>
 </div>
 
@@ -463,20 +465,20 @@ h1{font-size:20px;font-weight:600;margin-bottom:6px;color:#222;display:none}
   </div>
   <!-- 모바일 전용: 나머지 4개는 대운 아래 큰 그리드에 있는 것과 같은 카드 스타일로 여기 표시 -->
   <div class="side-quick-cards">
-    <button class="result-tool-card" onclick="showFortune()">
-      <div class="result-tool-icon" style="background:#fdecea">☀️</div>
+    <button class="result-tool-card" onclick="showFortune()" style="background:#fdecea">
+      <div class="result-tool-icon">☀️</div>
       <div class="result-tool-title">오늘의 운세</div>
     </button>
-    <button class="result-tool-card" onclick="toggleBio()">
-      <div class="result-tool-icon" style="background:#e6f3ef">🌿</div>
+    <button class="result-tool-card" onclick="toggleBio()" style="background:#e6f3ef">
+      <div class="result-tool-icon">🌿</div>
       <div class="result-tool-title">바이오리듬</div>
     </button>
-    <button class="result-tool-card" onclick="showDream()">
-      <div class="result-tool-icon" style="background:#e7edf3">🌙</div>
+    <button class="result-tool-card" onclick="showDream()" style="background:#e7edf3">
+      <div class="result-tool-icon">🌙</div>
       <div class="result-tool-title">꿈해몽</div>
     </button>
-    <button class="result-tool-card" onclick="showJuyuk()">
-      <div class="result-tool-icon" style="background:#eae8fb">📜</div>
+    <button class="result-tool-card" onclick="showJuyuk()" style="background:#e3e8f5">
+      <div class="result-tool-icon">📜</div>
       <div class="result-tool-title">주역동전점</div>
     </button>
   </div>
@@ -610,64 +612,64 @@ h1{font-size:20px;font-weight:600;margin-bottom:6px;color:#222;display:none}
 <div id="result-tools-wrap" class="result-tools-wrap" style="display:none">
   <div class="section-title">더 자세히 보기</div>
   <div class="result-tool-grid">
-    <button class="result-tool-card" onclick="showFortune()" id="extra-tools">
-      <div class="result-tool-icon" style="background:#fdecea">☀️</div>
+    <button class="result-tool-card" onclick="showFortune()" id="extra-tools" style="background:#fdecea">
+      <div class="result-tool-icon">☀️</div>
       <div class="result-tool-title">오늘의 운세</div>
       <div class="result-tool-desc">일진과 사주를 대조해 오늘 하루의 흐름을 짚어드립니다.</div>
     </button>
-    <button class="result-tool-card" onclick="showPersonality()">
-      <div class="result-tool-icon" style="background:#eae8fb">🎬</div>
+    <button class="result-tool-card" onclick="showPersonality()" style="background:#eae8fb">
+      <div class="result-tool-icon">🎬</div>
       <div class="result-tool-title">나의 영화캐릭터</div>
       <div class="result-tool-desc">사주 기질을 영화 캐릭터에 빗대어 재미있게 풀어드립니다.</div>
     </button>
-    <button class="result-tool-card" onclick="showJapyung()">
-      <div class="result-tool-icon" style="background:#e6f3ef">📚</div>
+    <button class="result-tool-card" onclick="showJapyung()" style="background:#e6f3ef">
+      <div class="result-tool-icon">📚</div>
       <div class="result-tool-title">자평진로운</div>
       <div class="result-tool-desc">십신과 오행 균형으로 적성과 진로 방향을 분석합니다.</div>
     </button>
-    <button class="result-tool-card" onclick="showJuyuk()">
-      <div class="result-tool-icon" style="background:#eae8fb">📜</div>
+    <button class="result-tool-card" onclick="showJuyuk()" style="background:#e3e8f5">
+      <div class="result-tool-icon">📜</div>
       <div class="result-tool-title">주역동전점</div>
       <div class="result-tool-desc">동전을 던져 얻은 괘로 지금 상황의 조언을 구합니다.</div>
     </button>
-    <button class="result-tool-card" onclick="showDangsaju()">
-      <div class="result-tool-icon" style="background:#f5ead9">🎋</div>
+    <button class="result-tool-card" onclick="showDangsaju()" style="background:#f5ead9">
+      <div class="result-tool-icon">🎋</div>
       <div class="result-tool-title">당사주</div>
       <div class="result-tool-desc">태어난 별자리를 기준으로 한 전통 민간 사주풀이입니다.</div>
     </button>
-    <button class="result-tool-card" onclick="showTojung()">
-      <div class="result-tool-icon" style="background:#f3e6ef">🎍</div>
+    <button class="result-tool-card" onclick="showTojung()" style="background:#f3e6ef">
+      <div class="result-tool-icon">🎍</div>
       <div class="result-tool-title">토정비결</div>
       <div class="result-tool-desc">한 해의 흐름을 월별로 상세하게 풀어보는 정통 토정비결.</div>
     </button>
-    <button class="result-tool-card" onclick="showDream()">
-      <div class="result-tool-icon" style="background:#e7edf3">🌙</div>
+    <button class="result-tool-card" onclick="showDream()" style="background:#e7edf3">
+      <div class="result-tool-icon">🌙</div>
       <div class="result-tool-title">꿈해몽</div>
       <div class="result-tool-desc">꿈에 등장한 상징을 사주와 함께 해석해드립니다.</div>
     </button>
-    <button class="result-tool-card" onclick="showGunghap()">
-      <div class="result-tool-icon" style="background:#f7e5ec">💞</div>
+    <button class="result-tool-card" onclick="showGunghap()" style="background:#f7e5ec">
+      <div class="result-tool-icon">💞</div>
       <div class="result-tool-title">궁합</div>
       <div class="result-tool-desc">두 사람의 사주를 비교해 궁합과 상성을 살펴봅니다.</div>
     </button>
-    <button class="result-tool-card" onclick="showGuikok()">
-      <div class="result-tool-icon" style="background:#f2e4d8">☯</div>
+    <button class="result-tool-card" onclick="showGuikok()" style="background:#f2e4d8">
+      <div class="result-tool-icon">☯</div>
       <div class="result-tool-title">귀곡산명술</div>
       <div class="result-tool-desc">귀곡자의 산명술로 여덟 갈래의 인생 국면을 짚어드립니다.</div>
     </button>
-    <button class="result-tool-card" onclick="showJami()">
-      <div class="result-tool-icon" style="background:#f6e3e3">🀄</div>
+    <button class="result-tool-card" onclick="showJami()" style="background:#f6e3e3">
+      <div class="result-tool-icon">🀄</div>
       <div class="result-tool-title">자미두수</div>
       <div class="result-tool-desc">중국 정통 점성술로 12궁의 별자리 배치를 풀이합니다.</div>
     </button>
     <!-- PC(3열)에서만 표시되는 채움 카드 — 10개를 3열로 나누면 마지막 줄이 비어 보여서 2개를 채워 넣음 -->
-    <button class="result-tool-card daily-dup" onclick="showFortune()">
-      <div class="result-tool-icon" style="background:#fdecea">☀️</div>
+    <button class="result-tool-card daily-dup" onclick="showFortune()" style="background:#fdecea">
+      <div class="result-tool-icon">☀️</div>
       <div class="result-tool-title">오늘의 운세</div>
       <div class="result-tool-desc">일진과 사주를 대조해 오늘 하루의 흐름을 짚어드립니다.</div>
     </button>
-    <button class="result-tool-card daily-dup" onclick="showJuyuk()">
-      <div class="result-tool-icon" style="background:#eae8fb">📜</div>
+    <button class="result-tool-card daily-dup" onclick="showJuyuk()" style="background:#e3e8f5">
+      <div class="result-tool-icon">📜</div>
       <div class="result-tool-title">주역동전점</div>
       <div class="result-tool-desc">동전을 던져 얻은 괘로 지금 상황의 조언을 구합니다.</div>
     </button>
