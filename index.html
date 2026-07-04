@@ -242,43 +242,61 @@ h1{font-size:20px;font-weight:600;margin-bottom:6px;color:#222}
    PC(데스크톱) 전용 레이아웃 — 1024px 이상에서만 적용
    기존 모바일 UI(.container 등)는 절대 변경하지 않음
    ============================================================ */
-@media (min-width:1024px){
-  :root{
-    --cream:#f5f0e8; --paper:#fff; --ink:#222; --ink-soft:#666;
-    --cinnabar:#c0392b; --ochre:#b5651d; --indigo:#3d3a7a; --hairline:#e8e6df;
-  }
-  body{padding:0}
+:root{
+  --cream:#f5f0e8; --paper:#fff; --ink:#222; --ink-soft:#666;
+  --cinnabar:#c0392b; --ochre:#b5651d; --indigo:#3d3a7a; --hairline:#e8e6df;
+}
 
-  /* ── 상단 고정 헤더 ── */
-  .site-header{
-    position:sticky;top:0;z-index:500;
-    display:flex;align-items:center;justify-content:space-between;
-    padding:0 24px;height:72px;gap:24px;
-    background:rgba(245,240,232,0.96);backdrop-filter:blur(8px);
-    border-bottom:1px solid var(--hairline);
-  }
-  .site-brand{display:flex;align-items:center;gap:8px;text-decoration:none;flex-shrink:0}
-  .site-brand-stamp{
-    width:30px;height:30px;border-radius:4px;background:var(--cinnabar);
-    color:#fdf6ee;display:flex;align-items:center;justify-content:center;
-    font-family:'Noto Serif KR',serif;font-weight:900;font-size:14px;
-    box-shadow:0 1px 3px rgba(0,0,0,0.2);
-  }
-  .site-brand-word{font-family:'Noto Serif KR',serif;font-weight:700;font-size:17px;color:var(--ink);white-space:nowrap}
-  .site-brand-word span{color:var(--cinnabar)}
-  .site-nav{display:flex;gap:8px;overflow-x:auto;scrollbar-width:none}
-  .site-nav::-webkit-scrollbar{display:none}
-  .site-nav a{
-    font-size:14px;font-weight:700;color:var(--ink);text-decoration:none;white-space:nowrap;
-    padding:9px 15px;border:1.5px solid var(--hairline);border-radius:8px;
-    background:#fff;transition:all .15s;
-  }
-  .site-nav a:hover{border-color:var(--cinnabar);color:var(--cinnabar);background:#fdf3f1}
-  .site-nav-cta{
-    padding:9px 20px;background:var(--ink);color:#fdf6ee!important;border-radius:20px;
-    font-weight:600!important;
-  }
-  .site-nav-cta:hover{background:var(--cinnabar)!important}
+/* ── 상단 헤더: 로고 줄 + 연결된 탭 메뉴 줄 — 화면 크기와 상관없이 항상 표시 ── */
+.site-header{
+  position:sticky;top:0;z-index:500;
+  background:rgba(245,240,232,0.97);backdrop-filter:blur(8px);
+  border-bottom:1px solid var(--hairline);
+}
+.site-header-top{display:flex;align-items:center;padding:10px 16px}
+.site-brand{display:flex;align-items:center;gap:8px;text-decoration:none;flex-shrink:0}
+.site-brand-stamp{width:32px;height:32px;border-radius:8px;flex-shrink:0;box-shadow:0 1px 3px rgba(0,0,0,0.2);object-fit:cover}
+.site-brand-word{font-family:'Noto Serif KR',serif;font-weight:700;font-size:16px;color:var(--ink);white-space:nowrap}
+.site-brand-word span{color:var(--cinnabar)}
+
+.site-nav{
+  display:flex;overflow-x:auto;scrollbar-width:none;
+  background:linear-gradient(90deg,#8e2a1f,#c0392b);
+}
+.site-nav::-webkit-scrollbar{display:none}
+.site-nav a{
+  font-size:13px;font-weight:700;color:#fff;text-decoration:none;white-space:nowrap;flex-shrink:0;
+  padding:13px 16px;border-right:1px solid rgba(255,255,255,0.18);transition:background .15s,color .15s;
+}
+.site-nav a:hover{background:rgba(255,255,255,0.18)}
+.site-nav a:active{background:#fff;color:var(--cinnabar)}
+
+/* ── 사이드 패널 (왼쪽 '매일 보는 운세'는 모바일에도 노출, 오른쪽은 PC 전용으로 숨김 처리됨) ── */
+.side-panel{
+  background:var(--paper);border:1px solid var(--hairline);
+  border-radius:14px;padding:20px;margin:14px 16px;
+}
+.side-title{font-family:'Noto Serif KR',serif;font-size:14px;font-weight:700;color:var(--ink);margin-bottom:14px;padding-bottom:10px;border-bottom:1px solid var(--hairline)}
+.side-fact{display:flex;gap:10px;font-size:13px;line-height:1.7;color:var(--ink-soft);margin-bottom:14px}
+.side-fact:last-child{margin-bottom:0}
+.side-fact-dot{width:5px;height:5px;border-radius:50%;background:var(--cinnabar);flex-shrink:0;margin-top:7px}
+.side-tool-list{display:flex;flex-direction:column;gap:4px}
+.side-tool-item{
+  display:flex;align-items:center;gap:10px;padding:9px 10px;border-radius:8px;
+  font-size:13px;color:var(--ink);text-decoration:none;font-weight:500;transition:background .15s;
+}
+.side-tool-item:hover{background:var(--cream)}
+.side-tool-dot{width:8px;height:8px;border-radius:2px;flex-shrink:0}
+
+@media (min-width:1024px){
+  .site-header-top{padding:12px 24px}
+  .site-brand-stamp{width:38px;height:38px}
+  .site-brand-word{font-size:18px}
+  .site-nav a{font-size:14px;padding:15px 22px}
+}
+
+@media (min-width:1024px){
+  body{padding:0}
 
   /* ── 꿈해몽 검색창 (헤더 바로 아래, 오른쪽 정렬) ── */
   .dream-search-bar{
@@ -340,40 +358,7 @@ h1{font-size:20px;font-weight:600;margin-bottom:6px;color:#222}
     gap:28px;max-width:1320px;margin:40px auto;padding:0 40px;align-items:start;
   }
   .page-shell .container{margin:0;box-shadow:0 4px 24px rgba(0,0,0,0.06)}
-  .side-panel{
-    position:sticky;top:88px;background:var(--paper);border:1px solid var(--hairline);
-    border-radius:14px;padding:20px;
-  }
-  .side-panel + .side-panel{margin-top:20px}
-  .side-title{font-family:'Noto Serif KR',serif;font-size:14px;font-weight:700;color:var(--ink);margin-bottom:14px;padding-bottom:10px;border-bottom:1px solid var(--hairline)}
-  .side-fact{display:flex;gap:10px;font-size:13px;line-height:1.7;color:var(--ink-soft);margin-bottom:14px}
-  .side-fact:last-child{margin-bottom:0}
-  .side-fact-dot{width:5px;height:5px;border-radius:50%;background:var(--cinnabar);flex-shrink:0;margin-top:7px}
-  .side-tool-list{display:flex;flex-direction:column;gap:4px}
-  .side-tool-item{
-    display:flex;align-items:center;gap:10px;padding:9px 10px;border-radius:8px;
-    font-size:13px;color:var(--ink);text-decoration:none;font-weight:500;transition:background .15s;
-  }
-  .side-tool-item:hover{background:var(--cream)}
-  .side-tool-dot{width:8px;height:8px;border-radius:2px;flex-shrink:0}
-
-  /* ── 서비스 소개 그리드 (본문 하단, 풀와이드) ── */
-  .showcase{max-width:1320px;margin:0 auto 64px;padding:0 40px}
-  .showcase-head{text-align:center;margin-bottom:36px}
-  .showcase-eyebrow{font-size:12px;color:var(--cinnabar);font-weight:700;letter-spacing:2px;margin-bottom:8px}
-  .showcase-title{font-family:'Noto Serif KR',serif;font-size:26px;color:var(--ink);font-weight:700}
-  .showcase-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
-  .showcase-card{
-    display:block;background:var(--paper);border:1px solid var(--hairline);border-radius:14px;
-    padding:22px;text-decoration:none;transition:transform .15s,box-shadow .15s;
-  }
-  .showcase-card:hover{transform:translateY(-3px);box-shadow:0 8px 22px rgba(0,0,0,0.08)}
-  .showcase-icon{
-    width:42px;height:42px;border-radius:10px;display:flex;align-items:center;justify-content:center;
-    font-size:20px;margin-bottom:14px;
-  }
-  .showcase-card-title{font-size:15px;font-weight:700;color:var(--ink);margin-bottom:6px}
-  .showcase-card-desc{font-size:12.5px;color:var(--ink-soft);line-height:1.6}
+  .side-panel{position:sticky;top:100px;margin:0}
 
   /* ── 푸터 ── */
   .site-footer{
@@ -387,7 +372,7 @@ h1{font-size:20px;font-weight:600;margin-bottom:6px;color:#222}
   .page-shell .container > h1{display:none}
 }
 @media (max-width:1023px){
-  .site-header,.hero,.showcase,.side-panel,.site-footer,.dream-search-bar{display:none}
+  .hero,.site-footer,.dream-search-bar,.side-right{display:none}
 }
 </style>
 </head>
@@ -395,10 +380,12 @@ h1{font-size:20px;font-weight:600;margin-bottom:6px;color:#222}
 
 <!-- ===== PC 전용: 상단 헤더 (1024px 미만에서는 CSS로 숨김) ===== -->
 <header class="site-header">
-  <a href="#top" class="site-brand">
-    <span class="site-brand-stamp">火</span>
-    <span class="site-brand-word"><span>화신</span> 사주명리학</span>
-  </a>
+  <div class="site-header-top">
+    <a href="#top" class="site-brand">
+      <img src="hwashin-logo.png" alt="화신" class="site-brand-stamp">
+      <span class="site-brand-word"><span>화신</span> 사주명리학</span>
+    </a>
+  </div>
   <nav class="site-nav">
     <a href="javascript:void(0)" onclick="showFortune()">오늘의 운세</a>
     <a href="javascript:void(0)" onclick="toggleBio()">바이오리듬</a>
@@ -447,7 +434,7 @@ h1{font-size:20px;font-weight:600;margin-bottom:6px;color:#222}
 <!-- ===== PC 전용: 3단 그리드 시작 (좌 사이드바 / 기존 모바일 컨테이너 / 우 사이드바) ===== -->
 <div class="page-shell">
 
-<aside class="side-panel">
+<aside class="side-panel side-left">
   <div class="side-title" style="font-size:16px">매일 보는 운세</div>
   <div class="side-tool-list">
     <a href="javascript:void(0)" onclick="showFortune()" class="side-tool-item" style="font-size:15px;padding:13px 10px;font-weight:600"><span class="side-tool-dot" style="background:#c0392b;width:10px;height:10px"></span>오늘의 운세</a>
@@ -478,7 +465,7 @@ h1{font-size:20px;font-weight:600;margin-bottom:6px;color:#222}
 
 <div style="border-bottom:1.5px solid #e8e6df;margin-bottom:18px"></div>
 
-<div class="section-title" id="calc-form">입력 방식</div>
+<div id="calc-form"></div>
 
 <!-- 저장된 프로필 바 (localStorage 기반, 저장된 프로필이 있을 때만 표시) -->
 <div id="profile-bar" style="display:none;margin-bottom:14px;position:relative">
@@ -916,7 +903,7 @@ h1{font-size:20px;font-weight:600;margin-bottom:6px;color:#222}
 </div>
 <!-- /.container -->
 
-<aside class="side-panel">
+<aside class="side-panel side-right">
   <div class="side-title">화신이 계산하는 법</div>
   <div class="side-fact"><span class="side-fact-dot"></span>VSOP87 천문 계산 기반 절기표로 1900~2030년 전 구간 정밀 반영</div>
   <div class="side-fact"><span class="side-fact-dot"></span>동경시(KST) 30분 보정을 적용한 시주 판정</div>
@@ -926,61 +913,6 @@ h1{font-size:20px;font-weight:600;margin-bottom:6px;color:#222}
 
 </div>
 <!-- /.page-shell -->
-
-<!-- ===== PC 전용: 서비스 소개 그리드 ===== -->
-<section class="showcase" id="showcase">
-  <div class="showcase-head">
-    <div class="showcase-eyebrow">FORTUNE MENU</div>
-    <h3 class="showcase-title">화신의 9가지 풀이 방식</h3>
-  </div>
-  <div class="showcase-grid">
-    <a href="#calc-form" class="showcase-card">
-      <div class="showcase-icon" style="background:#fdecea">☀️</div>
-      <div class="showcase-card-title">오늘의 운세</div>
-      <div class="showcase-card-desc">일진과 사주를 대조해 오늘 하루의 흐름을 짚어드립니다.</div>
-    </a>
-    <a href="#calc-form" class="showcase-card">
-      <div class="showcase-icon" style="background:#e6f3ef">📚</div>
-      <div class="showcase-card-title">자평명리 진로운</div>
-      <div class="showcase-card-desc">십신과 오행 균형으로 적성과 진로 방향을 분석합니다.</div>
-    </a>
-    <a href="#calc-form" class="showcase-card">
-      <div class="showcase-icon" style="background:#eae8fb">🪙</div>
-      <div class="showcase-card-title">주역동전점</div>
-      <div class="showcase-card-desc">동전을 던져 얻은 괘로 지금 상황의 조언을 구합니다.</div>
-    </a>
-    <a href="#calc-form" class="showcase-card">
-      <div class="showcase-icon" style="background:#f5ead9">🎋</div>
-      <div class="showcase-card-title">당사주</div>
-      <div class="showcase-card-desc">태어난 별자리를 기준으로 한 전통 민간 사주풀이입니다.</div>
-    </a>
-    <a href="#calc-form" class="showcase-card">
-      <div class="showcase-icon" style="background:#f3e6ef">🎍</div>
-      <div class="showcase-card-title">프리미엄 토정비결</div>
-      <div class="showcase-card-desc">한 해의 흐름을 월별로 상세하게 풀어보는 정통 토정비결.</div>
-    </a>
-    <a href="#calc-form" class="showcase-card">
-      <div class="showcase-icon" style="background:#e7edf3">🌙</div>
-      <div class="showcase-card-title">꿈해몽</div>
-      <div class="showcase-card-desc">꿈에 등장한 상징을 사주와 함께 해석해드립니다.</div>
-    </a>
-    <a href="#calc-form" class="showcase-card">
-      <div class="showcase-icon" style="background:#f7e5ec">💞</div>
-      <div class="showcase-card-title">궁합</div>
-      <div class="showcase-card-desc">두 사람의 사주를 비교해 궁합과 상성을 살펴봅니다.</div>
-    </a>
-    <a href="#calc-form" class="showcase-card">
-      <div class="showcase-icon" style="background:#f2e4d8">☯</div>
-      <div class="showcase-card-title">귀곡산명술</div>
-      <div class="showcase-card-desc">귀곡자의 산명술로 여덟 갈래의 인생 국면을 짚어드립니다.</div>
-    </a>
-    <a href="#calc-form" class="showcase-card">
-      <div class="showcase-icon" style="background:#f6e3e3">🀄</div>
-      <div class="showcase-card-title">자미두수</div>
-      <div class="showcase-card-desc">중국 정통 점성술로 12궁의 별자리 배치를 풀이합니다.</div>
-    </a>
-  </div>
-</section>
 
 <footer class="site-footer">
   <span>© 2026 화신 사주명리학 솔루션</span>
