@@ -158,6 +158,11 @@ h1{font-size:20px;font-weight:600;margin-bottom:6px;color:#222}
 .btn-row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
 /* 대운 바로 아래, 하얀 카드형 결과 바로가기 그리드 — 모바일/PC 공통 */
 .result-tool-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin:12px 0 4px}
+.result-tools-wrap{padding:0 16px}
+@media (min-width:1024px){
+  .result-tools-wrap{max-width:1320px;margin:0 auto;padding:0 40px}
+  .result-tool-grid{grid-template-columns:repeat(3,1fr);gap:16px}
+}
 .result-tool-card{
   display:block;text-align:left;background:#fff;border:1px solid #ece4d8;border-radius:14px;
   padding:16px;cursor:pointer;font-family:inherit;transition:transform .15s,box-shadow .15s;
@@ -260,7 +265,7 @@ h1{font-size:20px;font-weight:600;margin-bottom:6px;color:#222}
 .site-brand-word span{color:var(--cinnabar)}
 
 .site-nav{
-  display:flex;overflow-x:auto;scrollbar-width:none;
+  display:flex;justify-content:center;overflow-x:auto;scrollbar-width:none;
   background:linear-gradient(90deg,#8e2a1f,#c0392b);
 }
 .site-nav::-webkit-scrollbar{display:none}
@@ -421,7 +426,6 @@ h1{font-size:20px;font-weight:600;margin-bottom:6px;color:#222}
       자평명리·주역점·귀곡산명술까지 아홉 가지 방식으로 풀어드립니다.<br>
       동경시 30분 보정과 천문 계산 기반 절기표로 정확하게.
     </p>
-    <a href="#calc-form" class="hero-cta">지금 내 사주 확인하기 →</a>
   </div>
   <div class="hero-stamps">
     <div class="hero-stamp-col"><div class="hero-stamp">年</div><span class="hero-stamp-label">년주</span></div>
@@ -544,6 +548,32 @@ h1{font-size:20px;font-weight:600;margin-bottom:6px;color:#222}
   <div class="divider"></div>
 
   <!-- 9가지 풀이방식 + 오늘의 운세 + 바이오리듬 = 11개, 대운 바로 아래 카드형으로 배치 (실제 결과로 바로 연결) -->
+</div>
+<div class="note">
+  ※ 시주: 동경시(KST) 30분 보정 적용 — 각 시 경계 +30분 (예: 해시 21:30~23:29)<br>
+  ※ 절기 입절일: VSOP87 천문계산 기반 KST 정밀값 (1900~2030 전 구간)<br>
+  ※ 일주 기준: 1900년 1월 1일 = 갑술일 (60갑자 index 10)<br>
+  ※ 음력 변환 범위: 1900~2030년
+</div>
+</div>
+<!-- /.container -->
+
+
+<aside class="side-panel side-right">
+  <div class="side-title" style="font-size:16px">화신 인연 궁합</div>
+  <div class="side-tool-list">
+    <a href="javascript:void(0)" onclick="openGunghapTab('Kjung')" class="side-tool-item" style="font-size:15px;padding:13px 10px;font-weight:600"><span class="side-tool-dot" style="background:#a83264;width:10px;height:10px"></span>정통궁합</a>
+    <a href="javascript:void(0)" onclick="openGunghapTab('Ksin')" class="side-tool-item" style="font-size:15px;padding:13px 10px;font-weight:600"><span class="side-tool-dot" style="background:#c0392b;width:10px;height:10px"></span>신세대궁합</a>
+    <a href="javascript:void(0)" onclick="openGunghapTab('Kos')" class="side-tool-item" style="font-size:15px;padding:13px 10px;font-weight:600"><span class="side-tool-dot" style="background:#8e44ad;width:10px;height:10px"></span>오성술궁합</a>
+    <a href="javascript:void(0)" onclick="openGunghapTab('Ksta')" class="side-tool-item" style="font-size:15px;padding:13px 10px;font-weight:600"><span class="side-tool-dot" style="background:#2c4a6b;width:10px;height:10px"></span>나의 점성술 인연</a>
+  </div>
+</aside>
+
+</div>
+<!-- /.page-shell -->
+
+<!-- 대운 아래, 전체 폭에 걸치는 11개 카드형 결과 바로가기 그리드 -->
+<div id="result-tools-wrap" class="result-tools-wrap" style="display:none">
   <div class="section-title">더 자세히 보기</div>
   <div class="result-tool-grid">
     <button class="result-tool-card" onclick="showFortune()" id="extra-tools">
@@ -603,21 +633,31 @@ h1{font-size:20px;font-weight:600;margin-bottom:6px;color:#222}
     </button>
   </div>
 
-  <!-- 바이오리듬 패널 -->
-  <div id="bio-panel" class="bio-panel">
-    <div class="bio-panel-title" id="bio-panel-title">바이오리듬 — 14일 흐름</div>
-    <div class="bio-legend">
-      <div class="bio-legend-item"><span class="bio-legend-line" style="background:#1baf7a"></span>신체</div>
-      <div class="bio-legend-item"><span class="bio-legend-line" style="background:#e34948"></span>감성</div>
-      <div class="bio-legend-item"><span class="bio-legend-line" style="background:#5c52c8"></span>지성</div>
+</div>
+
+<!-- 바이오리듬 모달 -->
+<div id="bio-modal" class="modal-overlay" style="display:none" onclick="closeBioOutside(event)">
+  <div class="modal-box" style="max-width:520px">
+    <div class="modal-header">
+      <div class="modal-title-row">
+        <span class="modal-title" id="bio-panel-title">🌿 바이오리듬 — 14일 흐름</span>
+      </div>
+      <button class="modal-close" onclick="closeBio()">✕</button>
     </div>
-    <div class="bio-chart-wrap">
-      <canvas id="bio-chart" role="img" aria-label="바이오리듬 14일 곡선 그래프"></canvas>
-    </div>
-    <div class="bio-today-label" id="bio-today-label"></div>
-    <div class="bio-text-card">
-      <div class="bio-text-scores" id="bio-text-scores"></div>
-      <div class="bio-text-content" id="bio-text-content"></div>
+    <div class="modal-body" style="padding:16px 20px">
+      <div class="bio-legend">
+        <div class="bio-legend-item"><span class="bio-legend-line" style="background:#1baf7a"></span>신체</div>
+        <div class="bio-legend-item"><span class="bio-legend-line" style="background:#e34948"></span>감성</div>
+        <div class="bio-legend-item"><span class="bio-legend-line" style="background:#5c52c8"></span>지성</div>
+      </div>
+      <div class="bio-chart-wrap">
+        <canvas id="bio-chart" role="img" aria-label="바이오리듬 14일 곡선 그래프"></canvas>
+      </div>
+      <div class="bio-today-label" id="bio-today-label"></div>
+      <div class="bio-text-card">
+        <div class="bio-text-scores" id="bio-text-scores"></div>
+        <div class="bio-text-content" id="bio-text-content"></div>
+      </div>
     </div>
   </div>
 </div>
@@ -833,7 +873,7 @@ h1{font-size:20px;font-weight:600;margin-bottom:6px;color:#222}
       <button class="gh-tab active" onclick="selectGunghap('Kjung')">정통궁합</button>
       <button class="gh-tab" onclick="selectGunghap('Ksin')">신세대궁합</button>
       <button class="gh-tab" onclick="selectGunghap('Kos')">오성술궁합</button>
-      <button class="gh-tab" onclick="selectGunghap('Ksta')">점성술궁합</button>
+      <button class="gh-tab" onclick="selectGunghap('Ksta')">나의 점성술 인연</button>
     </div>
 
     <!-- 상대방 정보 입력 (정통/신세대/오성술 궁합에서만 표시) -->
@@ -894,25 +934,6 @@ h1{font-size:20px;font-weight:600;margin-bottom:6px;color:#222}
     </div>
   </div>
 </div>
-<div class="note">
-  ※ 시주: 동경시(KST) 30분 보정 적용 — 각 시 경계 +30분 (예: 해시 21:30~23:29)<br>
-  ※ 절기 입절일: VSOP87 천문계산 기반 KST 정밀값 (1900~2030 전 구간)<br>
-  ※ 일주 기준: 1900년 1월 1일 = 갑술일 (60갑자 index 10)<br>
-  ※ 음력 변환 범위: 1900~2030년
-</div>
-</div>
-<!-- /.container -->
-
-<aside class="side-panel side-right">
-  <div class="side-title">화신이 계산하는 법</div>
-  <div class="side-fact"><span class="side-fact-dot"></span>VSOP87 천문 계산 기반 절기표로 1900~2030년 전 구간 정밀 반영</div>
-  <div class="side-fact"><span class="side-fact-dot"></span>동경시(KST) 30분 보정을 적용한 시주 판정</div>
-  <div class="side-fact"><span class="side-fact-dot"></span>대운·십신까지 자동 산출되는 명식표 제공</div>
-  <div class="side-fact"><span class="side-fact-dot"></span>음력 변환 및 윤달 여부까지 함께 계산</div>
-</aside>
-
-</div>
-<!-- /.page-shell -->
 
 <footer class="site-footer">
   <span>© 2026 화신 사주명리학 솔루션</span>
@@ -1092,9 +1113,25 @@ function switchProfile(id){
 
 function deleteProfile(id){
   const store = loadProfileStore()
+  const target = store.profiles.find(p=>p.id===id)
+  const wasDefault = target && target.isDefault
   store.profiles = store.profiles.filter(x=>x.id!==id)
+  if(wasDefault && store.profiles.length) store.profiles[0].isDefault = true
   if(store.activeId===id) store.activeId = (store.profiles.find(p=>p.isDefault)||store.profiles[0])?.id || null
   saveProfileStore(store)
+
+  if(!store.profiles.length){
+    // 저장된 프로필이 하나도 안 남았으면 폼을 비우고 새로 입력할 수 있게 함
+    document.getElementById('nickname').value=''
+    document.getElementById('year').value=''
+    document.getElementById('month').value=''
+    document.getElementById('day').value=''
+    document.getElementById('result-area').style.display='none'
+    document.getElementById('result-tools-wrap').style.display='none'
+  } else if(store.activeId===null || !document.getElementById('nickname').value){
+    const active = store.profiles.find(p=>p.id===store.activeId)
+    if(active){ applyProfileToForm(active); calculate() }
+  }
   renderProfileBar()
 }
 
@@ -1112,6 +1149,7 @@ function newTempProfile(){
   document.getElementById('month').value=''
   document.getElementById('day').value=''
   document.getElementById('result-area').style.display='none'
+  document.getElementById('result-tools-wrap').style.display='none'
   document.getElementById('profile-dropdown').style.display='none'
   document.getElementById('nickname').focus()
 }
@@ -1128,10 +1166,12 @@ function renderProfileBar(){
   bar.style.display='block'
   const active = store.profiles.find(p=>p.id===store.activeId) || store.profiles[0]
   document.getElementById('profile-current-label').textContent = active ? active.nickname : '프로필'
-  document.getElementById('profile-dropdown-list').innerHTML = store.profiles.map(p => `
+  document.getElementById('profile-dropdown-list').innerHTML = `
+    <div style="font-size:11px;color:#999;padding:4px 10px 8px">이름을 누르면 정보를 불러와 수정할 수 있어요</div>
+    ` + store.profiles.map(p => `
     <div style="display:flex;align-items:center;justify-content:space-between;padding:8px 10px;border-radius:6px;${p.id===store.activeId?'background:#faf3ee':''}">
       <span style="cursor:pointer;font-size:13px;color:#333" onclick="switchProfile('${p.id}')">${p.nickname}${p.isDefault?' <span style="color:#999;font-size:11px">(기본)</span>':''}</span>
-      ${p.isDefault?'':`<button type="button" onclick="deleteProfile('${p.id}')" style="border:none;background:none;color:#c0392b;font-size:12px;cursor:pointer">삭제</button>`}
+      <button type="button" onclick="deleteProfile('${p.id}')" style="border:none;background:none;color:#c0392b;font-size:12px;cursor:pointer">삭제</button>
     </div>`).join('')
 }
 
@@ -1713,6 +1753,7 @@ function calculate(){
     </div>`}).join('')
 
   document.getElementById('result-area').style.display='block'
+  document.getElementById('result-tools-wrap').style.display='block'
 
   // 귀곡산명술용 사주 데이터 저장
   _guikokSaju = { yg, mg, dg, gender }
@@ -1731,7 +1772,7 @@ function calculate(){
   // 바이오리듬용 생년월일 저장
   _birthYear=sy; _birthMonth=sm; _birthDay=sd
   _bioPanelOpen=false
-  document.getElementById('bio-panel').style.display='none'
+  document.getElementById('bio-modal').style.display='none'
 
   // 닉네임이 입력돼 있으면 이 정보를 프로필로 자동 저장/갱신 (localStorage)
   saveCurrentAsProfile()
@@ -2748,7 +2789,7 @@ function getByulGunghap(m, d){
   return 10   // 그 외(12/23~1/20) = 염소자리
 }
 
-const GUNGHAP_LABELS = { Kjung:'정통궁합', Ksin:'신세대궁합', Kos:'오성술궁합', Ksta:'점성술궁합' }
+const GUNGHAP_LABELS = { Kjung:'정통궁합', Ksin:'신세대궁합', Kos:'오성술궁합', Ksta:'나의 점성술 인연' }
 let _gunghapMenu = 'Kjung'
 
 function showGunghap(){
@@ -2772,6 +2813,22 @@ function selectGunghap(menu){
   _gunghapMenu = menu
   document.querySelectorAll('#gunghap-modal .gh-tab').forEach(b => b.classList.remove('active'))
   event.target.classList.add('active')
+  renderGunghapTab()
+}
+
+// 사이드바 등에서 특정 궁합 종류로 바로 진입 (event.target에 의존하지 않고 탭 인덱스로 활성화)
+function openGunghapTab(menu){
+  if (!_birthSolar) {
+    alert('먼저 사주팔자를 확인하세요.')
+    return
+  }
+  document.getElementById('gunghap-modal').style.display = 'flex'
+  _gunghapMenu = menu
+  const order = ['Kjung','Ksin','Kos','Ksta']
+  const tabs = document.querySelectorAll('#gunghap-modal .gh-tab')
+  tabs.forEach(b => b.classList.remove('active'))
+  const idx = order.indexOf(menu)
+  if (tabs[idx]) tabs[idx].classList.add('active')
   renderGunghapTab()
 }
 
@@ -2809,7 +2866,7 @@ async function renderGunghapKsta(){
   body.innerHTML = '<p style="color:#aaa;text-align:center">불러오는 중...</p>'
   const content = await fetchGunghapContent(idx)
   const text = content || '해당 데이터가 없습니다.'
-  body.innerHTML = `<p style="margin-bottom:10px;font-size:12px;color:#999">💞 점성술궁합 — 나의 이성운</p><p style="line-height:2">${text}</p>`
+  body.innerHTML = `<p style="margin-bottom:10px;font-size:12px;color:#999">💞 나의 점성술 인연 — 나의 이성운</p><p style="line-height:2">${text}</p>`
 }
 
 async function calcGunghap(){
@@ -2869,10 +2926,14 @@ function getBioKey(b,e,i) { return 'B'+b+e+i }
 
 function toggleBio() {
   if (_birthYear === null) return
-  const panel = document.getElementById('bio-panel')
-  _bioPanelOpen = !_bioPanelOpen
-  if (_bioPanelOpen) { panel.style.display='block'; renderBioChart() }
-  else panel.style.display='none'
+  document.getElementById('bio-modal').style.display = 'flex'
+  renderBioChart()
+}
+function closeBio(){
+  document.getElementById('bio-modal').style.display = 'none'
+}
+function closeBioOutside(e){
+  if (e.target === document.getElementById('bio-modal')) closeBio()
 }
 
 const _bioCache = {}
