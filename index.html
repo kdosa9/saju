@@ -109,6 +109,16 @@ h1{font-size:20px;font-weight:600;margin-bottom:6px;color:#222;display:none}
 .info-badge{font-size:12px;padding:4px 10px;border-radius:6px;border:1px solid #e8e6df;color:#333;font-weight:600;background:#f7f6f2}
 .error-msg{font-size:13px;color:#c0392b;margin-top:4px;min-height:0}
 .error-msg:empty{display:none}
+
+/* 생일 미입력 안내 팝업 — alert 대체 (사이트 주소 표시 없음) */
+.birth-notice{
+  position:fixed;top:18px;left:50%;transform:translate(-50%,-16px);
+  background:#c0392b;color:#fff;font-size:14px;font-weight:700;
+  padding:12px 22px;border-radius:24px;box-shadow:0 8px 24px rgba(0,0,0,0.25);
+  opacity:0;pointer-events:none;transition:opacity .25s, transform .25s;z-index:9999;
+  max-width:90vw;text-align:center;
+}
+.birth-notice.show{opacity:1;transform:translate(-50%,0)}
 .leap-row{margin-bottom:12px}
 .leap-row label{font-size:13px;color:#111;display:flex;align-items:center;gap:6px;cursor:pointer;font-weight:500}
 .note{font-size:11px;color:#bbb;margin-top:14px;line-height:1.7}
@@ -308,6 +318,7 @@ h1{font-size:20px;font-weight:600;margin-bottom:6px;color:#222;display:none}
 }
 .site-nav a:hover{background:rgba(255,255,255,0.18)}
 .site-nav a:active{background:#fff;color:var(--cinnabar)}
+.nav-drop{display:none}
 
 /* ── 사이드 패널 (왼쪽 '매일 보는 운세'는 모바일에도 노출, 오른쪽은 PC 전용으로 숨김 처리됨) ── */
 .side-panel{
@@ -329,6 +340,7 @@ h1{font-size:20px;font-weight:600;margin-bottom:6px;color:#222;display:none}
   font-size:13px;color:var(--ink);text-decoration:none;font-weight:500;transition:background .15s;
 }
 .side-tool-item:hover{background-color:var(--cream)}
+.side-tool-ico{width:20px;text-align:center;flex-shrink:0;font-size:16px;line-height:1}
 .side-tool-dot{width:8px;height:8px;border-radius:2px;flex-shrink:0}
 
 @media (min-width:1024px){
@@ -341,13 +353,33 @@ h1{font-size:20px;font-weight:600;margin-bottom:6px;color:#222;display:none}
 @media (min-width:1024px){
   body{padding:0}
 
+  /* ── 상단 메뉴 hover 드롭다운 (주황 계열) ── */
+  .site-nav{overflow:visible}
+  .site-nav .nav-item{position:relative;flex-shrink:0}
+  .site-nav .nav-item > a{display:block}
+  .nav-drop{
+    position:absolute;top:100%;left:0;min-width:150px;
+    background:#fff6ec;border:1px solid #f2c390;border-top:3px solid #e67e22;
+    border-radius:0 0 10px 10px;box-shadow:0 10px 24px rgba(0,0,0,0.16);
+    padding:6px 0;z-index:80;
+  }
+  .nav-item:hover .nav-drop{display:block}
+  .nav-item:hover > a{background:rgba(255,255,255,0.18)}
+  .nav-drop a{
+    display:block;color:#8a4b12;font-size:13px;font-weight:600;
+    padding:9px 18px;border-right:none;white-space:nowrap;
+  }
+  .nav-drop a:hover{background:#ffe4c2;color:#c0392b}
+  .nav-drop-wide{min-width:230px;grid-template-columns:1fr 1fr}
+  .nav-item:hover .nav-drop-wide{display:grid}
+
   /* 꿈해몽 검색창 — PC에서는 오른쪽 정렬, 고정폭 */
   .dream-search-bar{justify-content:flex-end;padding:10px 40px}
   .dream-search-box{width:380px}
 
   /* ── 히어로 ── */
   .hero{
-    display:flex;align-items:stretch;justify-content:center;gap:48px;
+    display:flex;align-items:stretch;justify-content:center;gap:32px;
     padding:48px 40px;
     background:
       repeating-linear-gradient(135deg,rgba(255,255,255,0.5) 0px,rgba(255,255,255,0.5) 2px,transparent 2px,transparent 14px),
@@ -355,6 +387,15 @@ h1{font-size:20px;font-weight:600;margin-bottom:6px;color:#222;display:none}
     border-bottom:1px solid var(--hairline);
   }
   .hero-art{flex-shrink:0;width:390px;border-radius:14px;overflow:hidden;box-shadow:0 8px 24px rgba(0,0,0,0.18)}
+  /* 히어로 카드 왼쪽: 주역 동전점 6메뉴 — 카드 높이에 맞춰 6등분, 무지개(빨강 제외) 파스텔 */
+  .hero-juyuk{display:flex;flex-direction:column;gap:6px;width:118px;flex-shrink:0}
+  .hero-juyuk a{
+    flex:1;display:flex;align-items:center;justify-content:center;
+    border:2px solid #d8d3c5;border-radius:12px;
+    font-size:14px;font-weight:700;text-decoration:none;
+    transition:transform .12s, box-shadow .12s;
+  }
+  .hero-juyuk a:hover{transform:translateY(-2px);box-shadow:0 4px 10px rgba(0,0,0,0.10)}
   .hero-art img{width:100%;height:100%;object-fit:cover;display:block}
   .hero-right{display:flex;flex-direction:column;justify-content:center;gap:26px;max-width:440px}
   .hero-copy{max-width:440px}
@@ -392,8 +433,8 @@ h1{font-size:20px;font-weight:600;margin-bottom:6px;color:#222;display:none}
   /* ── 사이드 패널 꾸밈 (PC 전용) ─────────────────────────
      매일 보는 운세: 쪽빛 타이틀 + 나침반·시계 선화 워터마크
      화신 인연 궁합: 주홍 타이틀 + 하트·연인 선화 워터마크 */
-  .side-left .side-title{color:#2c4a6b;border-bottom:2px solid rgba(44,74,107,0.22)}
-  .side-right .side-title{color:#c0392b;border-bottom:2px solid rgba(192,57,43,0.22)}
+  .side-left .side-title{color:#2c4a6b;background:#ddebf7;border-bottom:none;border-radius:9px;padding:10px 12px}
+  .side-right .side-title{color:#c0392b;background:#fde4c8;border-bottom:none;border-radius:9px;padding:10px 12px}
   .side-left{
     background-color:var(--paper);
     background-image:url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20viewBox%3D%270%200%20100%20100%27%3E%3Cg%20fill%3D%27none%27%20stroke%3D%27%232c4a6b%27%20stroke-width%3D%272%27%20opacity%3D%270.10%27%3E%3Ccircle%20cx%3D%2750%27%20cy%3D%2750%27%20r%3D%2744%27%2F%3E%3Ccircle%20cx%3D%2750%27%20cy%3D%2750%27%20r%3D%2733%27%2F%3E%3Cpath%20d%3D%27M50%206v9M50%2085v9M6%2050h9M85%2050h9%27%2F%3E%3Cpath%20d%3D%27M50%2023%2060%2050%2050%2077%2040%2050Z%27%2F%3E%3Cpath%20d%3D%27M50%2023%2040%2050h20Z%27%20fill%3D%27%232c4a6b%27%20stroke%3D%27none%27%20opacity%3D%270.5%27%2F%3E%3Ccircle%20cx%3D%2750%27%20cy%3D%2750%27%20r%3D%273.5%27%20fill%3D%27%232c4a6b%27%20stroke%3D%27none%27%2F%3E%3C%2Fg%3E%3C%2Fsvg%3E"),url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20viewBox%3D%270%200%20100%20100%27%3E%3Cg%20fill%3D%27none%27%20stroke%3D%27%232c4a6b%27%20stroke-width%3D%272.5%27%20opacity%3D%270.09%27%3E%3Ccircle%20cx%3D%2750%27%20cy%3D%2750%27%20r%3D%2742%27%2F%3E%3Cpath%20d%3D%27M50%2012v8M50%2080v8M12%2050h8M80%2050h8%27%2F%3E%3Cpath%20d%3D%27M50%2050V28M50%2050l16%2011%27%20stroke-linecap%3D%27round%27%2F%3E%3Ccircle%20cx%3D%2750%27%20cy%3D%2750%27%20r%3D%273%27%20fill%3D%27%232c4a6b%27%20stroke%3D%27none%27%2F%3E%3C%2Fg%3E%3C%2Fsvg%3E");
@@ -407,17 +448,6 @@ h1{font-size:20px;font-weight:600;margin-bottom:6px;color:#222;display:none}
     background-repeat:no-repeat,no-repeat;
     background-position:right -18px bottom -14px, left -10px top 42px;
     background-size:170px 134px, 96px 72px;
-  }
-  .side-left .side-tool-list-desktop .side-tool-item{
-    background-image:url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20viewBox%3D%270%200%20100%20100%27%3E%3Cg%20fill%3D%27none%27%20stroke%3D%27%232c4a6b%27%20stroke-width%3D%272%27%20opacity%3D%270.20%27%3E%3Ccircle%20cx%3D%2750%27%20cy%3D%2750%27%20r%3D%2744%27%2F%3E%3Ccircle%20cx%3D%2750%27%20cy%3D%2750%27%20r%3D%2733%27%2F%3E%3Cpath%20d%3D%27M50%206v9M50%2085v9M6%2050h9M85%2050h9%27%2F%3E%3Cpath%20d%3D%27M50%2023%2060%2050%2050%2077%2040%2050Z%27%2F%3E%3Cpath%20d%3D%27M50%2023%2040%2050h20Z%27%20fill%3D%27%232c4a6b%27%20stroke%3D%27none%27%20opacity%3D%270.5%27%2F%3E%3Ccircle%20cx%3D%2750%27%20cy%3D%2750%27%20r%3D%273.5%27%20fill%3D%27%232c4a6b%27%20stroke%3D%27none%27%2F%3E%3C%2Fg%3E%3C%2Fsvg%3E");
-    background-repeat:no-repeat;background-position:right 10px center;background-size:20px 20px;
-  }
-  .side-left .side-tool-list-desktop .side-tool-item:nth-child(even){
-    background-image:url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20viewBox%3D%270%200%20100%20100%27%3E%3Cg%20fill%3D%27none%27%20stroke%3D%27%232c4a6b%27%20stroke-width%3D%272.5%27%20opacity%3D%270.20%27%3E%3Ccircle%20cx%3D%2750%27%20cy%3D%2750%27%20r%3D%2742%27%2F%3E%3Cpath%20d%3D%27M50%2012v8M50%2080v8M12%2050h8M80%2050h8%27%2F%3E%3Cpath%20d%3D%27M50%2050V28M50%2050l16%2011%27%20stroke-linecap%3D%27round%27%2F%3E%3Ccircle%20cx%3D%2750%27%20cy%3D%2750%27%20r%3D%273%27%20fill%3D%27%232c4a6b%27%20stroke%3D%27none%27%2F%3E%3C%2Fg%3E%3C%2Fsvg%3E");
-  }
-  .side-right .side-tool-item{
-    background-image:url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20viewBox%3D%270%200%20100%20100%27%3E%3Cpath%20d%3D%27M50%2084C22%2063%2014%2046%2023%2035c8-9%2021-7%2027%203%206-10%2019-12%2027-3%209%2011%201%2028-27%2049Z%27%20fill%3D%27none%27%20stroke%3D%27%23a83264%27%20stroke-width%3D%274%27%20opacity%3D%270.22%27%2F%3E%3C%2Fsvg%3E");
-    background-repeat:no-repeat;background-position:right 10px center;background-size:20px 20px;
   }
 
   /* ── 푸터 ── */
@@ -452,14 +482,85 @@ h1{font-size:20px;font-weight:600;margin-bottom:6px;color:#222;display:none}
     <a href="javascript:void(0)" onclick="showFortune()">오늘의 운세</a>
     <a href="javascript:void(0)" onclick="toggleBio()">바이오리듬</a>
     <a href="javascript:void(0)" onclick="showPersonality()">나의 영화캐릭터</a>
-    <a href="javascript:void(0)" onclick="showJapyung()">자평진로운</a>
-    <a href="javascript:void(0)" onclick="showJuyuk()">주역동전점</a>
-    <a href="javascript:void(0)" onclick="showDangsaju()">당사주</a>
-    <a href="javascript:void(0)" onclick="showTojung()">토정비결</a>
+    <div class="nav-item">
+      <a href="javascript:void(0)" onclick="showJapyung()">자평진로운 ▾</a>
+      <div class="nav-drop">
+        <a href="javascript:void(0)" onclick="navJapyung('zajuk')">적성운</a>
+        <a href="javascript:void(0)" onclick="navJapyung('zajin')">진학운</a>
+        <a href="javascript:void(0)" onclick="navJapyung('zachui')">취업운</a>
+      </div>
+    </div>
+    <div class="nav-item">
+      <a href="javascript:void(0)" onclick="showJuyuk()">주역동전점 ▾</a>
+      <div class="nav-drop">
+        <a href="javascript:void(0)" onclick="openJuyukAt('04')">운명점</a>
+        <a href="javascript:void(0)" onclick="openJuyukAt('02')">재물점</a>
+        <a href="javascript:void(0)" onclick="openJuyukAt('03')">연애점</a>
+        <a href="javascript:void(0)" onclick="openJuyukAt('05')">여행점</a>
+        <a href="javascript:void(0)" onclick="openJuyukAt('06')">학업점</a>
+        <a href="javascript:void(0)" onclick="openJuyukAt('07')">건강점</a>
+      </div>
+    </div>
+    <div class="nav-item">
+      <a href="javascript:void(0)" onclick="showDangsaju()">당사주 ▾</a>
+      <div class="nav-drop nav-drop-wide">
+        <a href="javascript:void(0)" onclick="navDangsaju('Djun')">전생록</a>
+        <a href="javascript:void(0)" onclick="navDangsaju('Dcho')">초년운</a>
+        <a href="javascript:void(0)" onclick="navDangsaju('Djung')">중년운</a>
+        <a href="javascript:void(0)" onclick="navDangsaju('Dmal')">말년운</a>
+        <a href="javascript:void(0)" onclick="navDangsaju('Dchong')">총운</a>
+        <a href="javascript:void(0)" onclick="navDangsaju('Djob')">직업운</a>
+        <a href="javascript:void(0)" onclick="navDangsaju('Dbubu')">부부궁</a>
+        <a href="javascript:void(0)" onclick="navDangsaju('Dhealth')">건강운</a>
+      </div>
+    </div>
+    <div class="nav-item">
+      <a href="javascript:void(0)" onclick="showTojung()">토정비결 ▾</a>
+      <div class="nav-drop">
+        <a href="javascript:void(0)" onclick="navTojung('money')">재물운</a>
+        <a href="javascript:void(0)" onclick="navTojung('love')">연애운</a>
+      </div>
+    </div>
     <a href="javascript:void(0)" onclick="showDream()">꿈해몽</a>
-    <a href="javascript:void(0)" onclick="showGunghap()">궁합</a>
-    <a href="javascript:void(0)" onclick="showGuikok()">귀곡산명술</a>
-    <a href="javascript:void(0)" onclick="showJami()">자미두수</a>
+    <div class="nav-item">
+      <a href="javascript:void(0)" onclick="showGunghap()">궁합 ▾</a>
+      <div class="nav-drop">
+        <a href="javascript:void(0)" onclick="openGunghapTab('Kjung')">정통궁합</a>
+        <a href="javascript:void(0)" onclick="openGunghapTab('Ksin')">신세대궁합</a>
+        <a href="javascript:void(0)" onclick="openGunghapTab('Kos')">오성술궁합</a>
+        <a href="javascript:void(0)" onclick="openGunghapTab('Ksta')">나의 점성술 인연</a>
+      </div>
+    </div>
+    <div class="nav-item">
+      <a href="javascript:void(0)" onclick="showGuikok()">귀곡산명술 ▾</a>
+      <div class="nav-drop nav-drop-wide">
+        <a href="javascript:void(0)" onclick="navGuikok('Character')">성격</a>
+        <a href="javascript:void(0)" onclick="navGuikok('Parent')">부모</a>
+        <a href="javascript:void(0)" onclick="navGuikok('Child')">자식</a>
+        <a href="javascript:void(0)" onclick="navGuikok('Partner')">배우자</a>
+        <a href="javascript:void(0)" onclick="navGuikok('Business')">직업</a>
+        <a href="javascript:void(0)" onclick="navGuikok('Beginning')">초년운</a>
+        <a href="javascript:void(0)" onclick="navGuikok('Middle')">중년운</a>
+        <a href="javascript:void(0)" onclick="navGuikok('Old')">말년운</a>
+      </div>
+    </div>
+    <div class="nav-item">
+      <a href="javascript:void(0)" onclick="showJami()">자미두수 ▾</a>
+      <div class="nav-drop nav-drop-wide">
+        <a href="javascript:void(0)" onclick="navJami('성격')">성격</a>
+        <a href="javascript:void(0)" onclick="navJami('형제')">형제운</a>
+        <a href="javascript:void(0)" onclick="navJami('부부')">부부운</a>
+        <a href="javascript:void(0)" onclick="navJami('자녀')">자녀운</a>
+        <a href="javascript:void(0)" onclick="navJami('재물')">재물운</a>
+        <a href="javascript:void(0)" onclick="navJami('질병')">질병운</a>
+        <a href="javascript:void(0)" onclick="navJami('이동')">이동운</a>
+        <a href="javascript:void(0)" onclick="navJami('우정')">우정운</a>
+        <a href="javascript:void(0)" onclick="navJami('관록')">관록운</a>
+        <a href="javascript:void(0)" onclick="navJami('주택')">주택운</a>
+        <a href="javascript:void(0)" onclick="navJami('복덕')">복덕운</a>
+        <a href="javascript:void(0)" onclick="navJami('부모')">부모운</a>
+      </div>
+    </div>
   </nav>
 </header>
 
@@ -476,6 +577,15 @@ h1{font-size:20px;font-weight:600;margin-bottom:6px;color:#222;display:none}
 
 <!-- ===== PC 전용: 히어로 ===== -->
 <div class="hero" id="top">
+  <!-- 주역 동전점 바로가기 — 어떤 항목을 눌러도 디폴트(운명점)에서 시작 -->
+  <div class="hero-juyuk">
+    <a href="javascript:void(0)" onclick="showJuyuk()" style="background:#ffe3c8;color:#8a4b12">운명점</a>
+    <a href="javascript:void(0)" onclick="showJuyuk()" style="background:#fdf3c4;color:#7a6410">재물점</a>
+    <a href="javascript:void(0)" onclick="showJuyuk()" style="background:#d8efd5;color:#1a6b3a">연애점</a>
+    <a href="javascript:void(0)" onclick="showJuyuk()" style="background:#d6e8f7;color:#2c4a6b">여행점</a>
+    <a href="javascript:void(0)" onclick="showJuyuk()" style="background:#dcdcf2;color:#3d3a7a">학업점</a>
+    <a href="javascript:void(0)" onclick="showJuyuk()" style="background:#ead9f2;color:#6b3a8e">건강점</a>
+  </div>
   <div class="hero-art">
     <img src="hero-card.jpg" alt="중천건 重天乾 — 주역 64괘">
   </div>
@@ -504,10 +614,10 @@ h1{font-size:20px;font-weight:600;margin-bottom:6px;color:#222;display:none}
 <aside class="side-panel side-left">
   <div class="side-title" style="font-size:16px">매일 보는 운세</div>
   <div class="side-tool-list side-tool-list-desktop">
-    <a href="javascript:void(0)" onclick="showFortune()" class="side-tool-item" style="font-size:15px;padding:13px 10px;font-weight:600"><span class="side-tool-dot" style="background:#c0392b;width:10px;height:10px"></span>오늘의 운세</a>
-    <a href="javascript:void(0)" onclick="toggleBio()" class="side-tool-item" style="font-size:15px;padding:13px 10px;font-weight:600"><span class="side-tool-dot" style="background:#1a7a4a;width:10px;height:10px"></span>바이오리듬</a>
-    <a href="javascript:void(0)" onclick="showDream()" class="side-tool-item" style="font-size:15px;padding:13px 10px;font-weight:600"><span class="side-tool-dot" style="background:#2c4a6b;width:10px;height:10px"></span>꿈해몽</a>
-    <a href="javascript:void(0)" onclick="showJuyuk()" class="side-tool-item" style="font-size:15px;padding:13px 10px;font-weight:600"><span class="side-tool-dot" style="background:#3d3a7a;width:10px;height:10px"></span>주역동전점</a>
+    <a href="javascript:void(0)" onclick="showFortune()" class="side-tool-item" style="font-size:15px;padding:13px 10px;font-weight:600"><span class="side-tool-ico">🧭</span>오늘의 운세</a>
+    <a href="javascript:void(0)" onclick="toggleBio()" class="side-tool-item" style="font-size:15px;padding:13px 10px;font-weight:600"><span class="side-tool-ico">🧭</span>바이오리듬</a>
+    <a href="javascript:void(0)" onclick="showDream()" class="side-tool-item" style="font-size:15px;padding:13px 10px;font-weight:600"><span class="side-tool-ico">🧭</span>꿈해몽</a>
+    <a href="javascript:void(0)" onclick="showJuyuk()" class="side-tool-item" style="font-size:15px;padding:13px 10px;font-weight:600"><span class="side-tool-ico">🧭</span>주역동전점</a>
   </div>
   <!-- 모바일 전용: 나머지 4개는 대운 아래 큰 그리드에 있는 것과 같은 카드 스타일로 여기 표시 -->
   <div class="side-quick-cards">
@@ -646,10 +756,10 @@ h1{font-size:20px;font-weight:600;margin-bottom:6px;color:#222;display:none}
 <aside class="side-panel side-right">
   <div class="side-title" style="font-size:16px">화신 인연 궁합</div>
   <div class="side-tool-list">
-    <a href="javascript:void(0)" onclick="openGunghapTab('Kjung')" class="side-tool-item" style="font-size:15px;padding:13px 10px;font-weight:600"><span class="side-tool-dot" style="background:#a83264;width:10px;height:10px"></span>정통궁합</a>
-    <a href="javascript:void(0)" onclick="openGunghapTab('Ksin')" class="side-tool-item" style="font-size:15px;padding:13px 10px;font-weight:600"><span class="side-tool-dot" style="background:#c0392b;width:10px;height:10px"></span>신세대궁합</a>
-    <a href="javascript:void(0)" onclick="openGunghapTab('Kos')" class="side-tool-item" style="font-size:15px;padding:13px 10px;font-weight:600"><span class="side-tool-dot" style="background:#8e44ad;width:10px;height:10px"></span>오성술궁합</a>
-    <a href="javascript:void(0)" onclick="openGunghapTab('Ksta')" class="side-tool-item" style="font-size:15px;padding:13px 10px;font-weight:600"><span class="side-tool-dot" style="background:#2c4a6b;width:10px;height:10px"></span>나의 점성술 인연</a>
+    <a href="javascript:void(0)" onclick="openGunghapTab('Kjung')" class="side-tool-item" style="font-size:15px;padding:13px 10px;font-weight:600"><span class="side-tool-ico" style="color:#d6336c">♥</span>정통궁합</a>
+    <a href="javascript:void(0)" onclick="openGunghapTab('Ksin')" class="side-tool-item" style="font-size:15px;padding:13px 10px;font-weight:600"><span class="side-tool-ico" style="color:#d6336c">♥</span>신세대궁합</a>
+    <a href="javascript:void(0)" onclick="openGunghapTab('Kos')" class="side-tool-item" style="font-size:15px;padding:13px 10px;font-weight:600"><span class="side-tool-ico" style="color:#d6336c">♥</span>오성술궁합</a>
+    <a href="javascript:void(0)" onclick="openGunghapTab('Ksta')" class="side-tool-item" style="font-size:15px;padding:13px 10px;font-weight:600"><span class="side-tool-ico" style="color:#d6336c">♥</span>나의 점성술 인연</a>
   </div>
 </aside>
 
@@ -845,10 +955,9 @@ h1{font-size:20px;font-weight:600;margin-bottom:6px;color:#222;display:none}
 
     <!-- 메뉴 탭: 항목마다 별도로 동전을 던집니다 -->
     <div style="display:flex;flex-wrap:wrap;gap:6px;padding:12px 16px 0;border-bottom:1px solid #f0ede6">
-      <button class="ju-tab active" onclick="selectJuyuk('01')">일반점</button>
+      <button class="ju-tab active" onclick="selectJuyuk('04')">운명점</button>
       <button class="ju-tab" onclick="selectJuyuk('02')">재물점</button>
       <button class="ju-tab" onclick="selectJuyuk('03')">연애점</button>
-      <button class="ju-tab" onclick="selectJuyuk('04')">소망점</button>
       <button class="ju-tab" onclick="selectJuyuk('05')">여행점</button>
       <button class="ju-tab" onclick="selectJuyuk('06')">학업점</button>
       <button class="ju-tab" onclick="selectJuyuk('07')">건강점</button>
@@ -1051,13 +1160,45 @@ let _ilganCG = null  // 일간 천간 index (오늘의 운세용)
 
 // 생일이 입력되지 않은 상태에서 메뉴를 눌렀을 때 — 안내 후 생일 입력창으로 이동
 function requireBirth(){
-  alert('생일을 입력하세요.')
+  showBirthNotice('생년월일을 입력하시면 모든 운세를 보실 수 있습니다.')
   const y = document.getElementById('year')
   if (y){
     y.scrollIntoView({ behavior:'smooth', block:'center' })
     setTimeout(() => { try{ y.focus({ preventScroll:true }) }catch(e){ y.focus() } }, 400)
   }
 }
+
+// 브라우저 기본 alert는 사이트 주소가 함께 표시되므로, 주소 없는 자체 안내 팝업을 사용
+function showBirthNotice(msg){
+  let el = document.getElementById('birth-notice')
+  if (!el){
+    el = document.createElement('div')
+    el.id = 'birth-notice'
+    el.className = 'birth-notice'
+    document.body.appendChild(el)
+  }
+  el.textContent = msg
+  el.classList.add('show')
+  clearTimeout(el._t)
+  el._t = setTimeout(() => el.classList.remove('show'), 2800)
+}
+
+// ── 상단 드롭다운 등에서 특정 모달을 열고 지정 탭으로 바로 이동 (event.target 의존 없음) ──
+function _jumpTab(showFn, modalId, tabSelector, domIndex, applyFn){
+  showFn()
+  const modal = document.getElementById(modalId)
+  if (!modal || modal.style.display !== 'flex') return   // 생일 미입력 등으로 모달이 안 열린 경우
+  const tabs = document.querySelectorAll(tabSelector)
+  tabs.forEach(b => b.classList.remove('active'))
+  if (tabs[domIndex]) tabs[domIndex].classList.add('active')
+  applyFn()
+}
+function navJapyung(k){ const o=['zajuk','zajin','zachui']; _jumpTab(showJapyung,'japyung-modal','#japyung-modal .jp-tab',o.indexOf(k),()=>{_japyungMenu=k;renderJapyung(k)}) }
+function navDangsaju(k){ const o=['Djun','Dcho','Djung','Dmal','Dchong','Djob','Dbubu','Dhealth']; _jumpTab(showDangsaju,'dangsaju-modal','#dangsaju-modal .dj-tab',o.indexOf(k),()=>{_dangsajuMenu=k;renderDangsaju(k)}) }
+function navTojung(k){ const m={money:2,love:3}; _jumpTab(showTojung,'tojung-modal','#tojung-modal .tj-tab',m[k],()=>{_tojungMenu=k;renderTojung()}) }
+function navJami(k){ const o=['성격','형제','부부','자녀','재물','질병','이동','우정','관록','주택','복덕','부모']; _jumpTab(showJami,'jami-modal','#jami-modal .jm-tab',o.indexOf(k),()=>{_jamiMenu=k;renderJami(k)}) }
+function navGuikok(k){ const o=['Character','Parent','Child','Partner','Business','Beginning','Middle','Old']; _jumpTab(showGuikok,'guikok-modal','#guikok-modal .gk-tab',o.indexOf(k),()=>{_guikokMenu=k;renderGuikok(k)}) }
+function openJuyukAt(k){ const o=['04','02','03','05','06','07']; _jumpTab(showJuyuk,'juyuk-modal','#juyuk-modal .ju-tab',o.indexOf(k),()=>{_juyukMenu=k;renderJuyukTab(k)}) }
 
 async function showPersonality() {
   if (_ilganIdx === null || _iljuJJ === null) { requireBirth(); return }
@@ -2265,13 +2406,13 @@ async function renderJapyung(menu) {
 // ── 주역점 (juyuk_daily_content) ──────────────────────────────
 // 생년월일 무관 — 동전 6회(초효~상효)로 괘를 뽑는 독립적인 점법
 // 하괘=동전1~3(초효~삼효), 상괘=동전4~6(사효~상효), 양=1 음=0
-// 총평(juyuk_coin_content)은 7항목의 '총운'과 사실상 동일해 화면에서는 생략하고
-// 7항목(일반점/재물점/연애점/소망점/여행점/학업점/건강점 — DB category값은 총운/재물운/연애운/소망/여행운/학업운/건강운)만 사용하기로 확정.
+// 총운(01)은 별도 메뉴 없이 모든 항목 결과의 앞부분에 먼저 표시하고, 한 줄 띄운 뒤 선택 항목 데이터를 이어서 표시.
+// 메뉴 6종: 운명점(구 소망점, 04)이 첫 번째 디폴트, 이어서 재물점/연애점/여행점/학업점/건강점.
 // ※ 항목마다 별도로 동전을 던짐(질문 하나 = 던지기 한 번). 던진 결과는 모달 내에서 기억되며,
 //   "다시 던지기"를 누르기 전까지는 탭을 오가도 같은 결과가 다시 표시됨. 던지기 횟수 제한 없음.
-let _juyukMenu = '01'
+let _juyukMenu = '04'
 const _juyukState = {}  // { '01': {hexNum, sangwae, hawae, flips}, ... } - 카테고리별 독립 저장
-const JUYUK_CATEGORY_NAMES = {'01':'일반점','02':'재물점','03':'연애점','04':'소망점','05':'여행점','06':'학업점','07':'건강점'}
+const JUYUK_CATEGORY_NAMES = {'01':'총운','02':'재물점','03':'연애점','04':'운명점','05':'여행점','06':'학업점','07':'건강점'}
 
 // 원본 사이트의 동전 이미지 3종 (base64 내장 — 별도 이미지 파일 업로드 불필요)
 // 원본 로직: coin.src = 'anicoin.gif'(던지기 전, 도는 애니메이션) → 클릭 후 hyo ? fcoin(양) : bcoin(음)
@@ -2289,11 +2430,11 @@ function closeJuyuk(){
   resetJuyukAll()
 }
 
-// 모달을 닫으면 모든 카테고리의 점괘·진행 상태를 지우고 첫 탭(일반점)으로 되돌림
+// 모달을 닫으면 모든 카테고리의 점괘·진행 상태를 지우고 첫 탭(운명점)으로 되돌림
 function resetJuyukAll(){
   for (const k in _juyukState) delete _juyukState[k]
   for (const k in _juyukProgress) delete _juyukProgress[k]
-  _juyukMenu = '01'
+  _juyukMenu = '04'
   const tabs = document.querySelectorAll('#juyuk-modal .ju-tab')
   tabs.forEach((b,i) => b.classList.toggle('active', i === 0))
 }
@@ -2377,9 +2518,16 @@ async function renderJuyukTab(cat){
       <button class="ju-tab" onclick="retryJuyukCategory('${cat}')" style="border-color:#666;color:#666">🔄 다시 던지기</button>
     </div>`
 
-  const idx = 'JU'+String(state.hexNum).padStart(2,'0')+cat
-  const content = await fetchJuyukContent(idx)
-  const text = content || '해당 데이터가 없습니다.'
+  // 총운(01) 데이터를 먼저 보여주고, 한 줄 띄운 뒤 선택한 항목의 데이터를 이어서 표시
+  const pad = String(state.hexNum).padStart(2,'0')
+  const [chong, own] = await Promise.all([
+    fetchJuyukContent('JU'+pad+'01'),
+    fetchJuyukContent('JU'+pad+cat)
+  ])
+  let text = ''
+  if (chong) text += chong
+  if (own) text += (text ? '\n\n' : '') + own
+  if (!text) text = '해당 데이터가 없습니다.'
   const slot = document.getElementById('juyuk-content-slot')
   // 로딩 중 다른 탭으로 넘어갔거나 재던지기 했다면 slot이 이미 사라졌을 수 있음 → 그 경우 조용히 무시
   if (slot) slot.outerHTML = `<p style="line-height:1.9;color:#333;margin:2px 0 0;white-space:pre-wrap">${text}</p>`
@@ -2406,8 +2554,13 @@ function renderJuyukTossUI(cat){
     return `<div class="jy-slot jy-slot-empty"></div>`
   }).join('')
 
+  const intro2 = cat === '04'
+    ? '오늘의 운세, 지금의 전반적인 운세를 알고 싶으면 운명점에서 시작하세요. 운명점에서, 오늘의 운세 혹은 특정일이나 특정시기의 운을 물어도 됩니다.'
+    : '마음속으로 알고 싶은 문제에 대해 구체적으로 생각하면서 동전을 던져주세요.'
+
   body.innerHTML = `
-    <p style="text-align:center;font-size:13px;color:#222;font-weight:700;margin:0 0 6px;line-height:1.5">동전을 한 번씩 총 6번 던져 괘를 완성합니다. 마음속으로 묻고 싶은 것을 떠올리며 눌러 주세요</p>
+    <p style="text-align:center;font-size:13px;color:#222;font-weight:700;margin:0;line-height:1.5">동전을 한 번씩 총 6번 던져 괘를 완성합니다. 메뉴를 선택하고 동전을 던져주세요.</p>
+    <p style="text-align:center;font-size:12px;color:#555;font-weight:600;margin:2px 0 6px;line-height:1.55">${intro2}</p>
     <div style="display:flex;align-items:flex-start;justify-content:center;gap:26px">
       <div style="display:flex;flex-direction:column;align-items:center;gap:10px;min-width:110px">
         <img id="juyuk-active-coin" src="${COIN_SPIN}" alt="던지기"
