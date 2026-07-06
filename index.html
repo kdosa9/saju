@@ -2518,7 +2518,7 @@ async function renderJuyukTab(cat){
       <button class="ju-tab" onclick="retryJuyukCategory('${cat}')" style="border-color:#666;color:#666">🔄 다시 던지기</button>
     </div>`
 
-  // 총운(01) 데이터를 먼저 보여주고, 한 줄 띄운 뒤 선택한 항목의 데이터를 이어서 표시
+  // 총운(01) 데이터를 먼저 보여주고, 줄만 바꿔(빈 줄 없이) 선택한 항목의 데이터를 이어서 표시
   const pad = String(state.hexNum).padStart(2,'0')
   const [chong, own] = await Promise.all([
     fetchJuyukContent('JU'+pad+'01'),
@@ -2526,7 +2526,7 @@ async function renderJuyukTab(cat){
   ])
   let text = ''
   if (chong) text += chong
-  if (own) text += (text ? '\n\n' : '') + own
+  if (own) text += (text ? '\n' : '') + own
   if (!text) text = '해당 데이터가 없습니다.'
   const slot = document.getElementById('juyuk-content-slot')
   // 로딩 중 다른 탭으로 넘어갔거나 재던지기 했다면 slot이 이미 사라졌을 수 있음 → 그 경우 조용히 무시
