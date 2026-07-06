@@ -19,6 +19,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@700;900&display=swap" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/gh/moonspam/NanumSquare@master/nanumsquare.css" rel="stylesheet">
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:'Malgun Gothic','Apple SD Gothic Neo',sans-serif;background-color:#f5f0e8;background-image:repeating-linear-gradient(135deg,rgba(255,255,255,0.55) 0px,rgba(255,255,255,0.55) 2px,transparent 2px,transparent 14px);color:#222;min-height:100vh;padding:10px}
@@ -30,14 +31,14 @@ h1{font-size:20px;font-weight:600;margin-bottom:6px;color:#222;display:none}
   background:#fdf6ee;border-radius:10px;padding:10px 14px;
   margin-bottom:18px;border:1px solid #f0e6d3;flex-wrap:wrap;gap:8px}
 .iljin-box{display:flex;align-items:center;gap:10px}
-.iljin-label{font-size:11px;color:#888;font-weight:500}
+.iljin-label{font-size:12px;color:#333;font-weight:700}
 .iljin-value{display:flex;align-items:baseline;gap:4px}
-.iljin-hanja{font-size:22px;font-weight:900;line-height:1;-webkit-text-stroke:0.4px currentColor}
+.iljin-hanja{font-size:15px;font-weight:700;line-height:1;-webkit-text-stroke:0.3px currentColor}
 .iljin-hangul{font-size:22px;font-weight:900;line-height:1}
-.iljin-paren{font-size:14px;color:#888;font-weight:400}
+.iljin-paren{font-size:14px;color:#555;font-weight:500}
 .iljin-dot{width:1px;height:22px;background:#e0d8d0;margin:0 4px}
 .visitor-box{display:flex;align-items:center;gap:6px}
-.visitor-label{font-size:11px;color:#888}
+.visitor-label{font-size:12px;color:#333;font-weight:700}
 .visitor-count{font-size:13px;font-weight:700;color:#c0392b}
 .section-title{font-size:13px;color:#111;margin-bottom:8px;font-weight:600}
 .input-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px}
@@ -59,7 +60,7 @@ h1{font-size:20px;font-weight:600;margin-bottom:6px;color:#222;display:none}
 .bio-legend-item{display:flex;align-items:center;gap:5px;font-size:12px;color:#555}
 .bio-legend-line{width:22px;height:3px;border-radius:2px;display:inline-block}
 .bio-chart-wrap{position:relative;width:100%;height:190px}
-.bio-today-label{font-size:11px;color:#888;text-align:center;margin-top:2px}
+.bio-today-label{font-size:11px;color:#555;font-weight:600;text-align:center;margin-top:2px}
 .bio-text-card{margin-top:8px;background:#fff;border:1px solid #d5ead9;border-radius:10px;padding:13px 14px}
 .bio-text-scores{display:flex;gap:8px;margin-bottom:10px;flex-wrap:wrap}
 .bio-score-badge{font-size:11px;font-weight:700;padding:3px 9px;border-radius:12px;border:1.5px solid transparent}
@@ -69,12 +70,12 @@ h1{font-size:20px;font-weight:600;margin-bottom:6px;color:#222;display:none}
 .bio-text-content{font-size:13px;line-height:1.85;color:#333}
 .calc-btn{width:100%;height:42px;background:#5c52c8;border:none;border-radius:10px;font-size:15px;color:#fff;cursor:pointer;margin-top:6px;font-family:inherit;font-weight:500}
 .calc-btn:hover{background:#4a41b0}
-.result-area{margin-top:24px}
+.result-area{margin-top:8px}
 .pillar-grid{
   display:grid;grid-template-columns:repeat(4,1fr);gap:2px;margin-bottom:20px;
   background:#b5651d;border:2px solid #b5651d;border-radius:12px;overflow:hidden;direction:rtl;
 }
-.pg-label{background:#efe9db;color:#555;font-size:11px;text-align:center;padding:7px 4px;direction:ltr}
+.pg-label{background:#efe9db;color:#333;font-weight:600;font-size:11px;text-align:center;padding:7px 4px;direction:ltr}
 .pg-cell{background:#fff;text-align:center;padding:12px 4px;direction:ltr}
 .pillar-hangul{font-size:26px;font-weight:900;line-height:1.2}
 .pillar-hanja{font-size:11px;color:#222;margin-top:3px;font-weight:500}
@@ -91,7 +92,7 @@ h1{font-size:20px;font-weight:600;margin-bottom:6px;color:#222;display:none}
   border:1.5px solid transparent;
 }
 .pillar-divider{height:1px;background:#f0ede6;margin:10px 0}
-.ilju-label{font-size:10px;color:#bbb;margin-top:6px;font-style:italic}
+.ilju-label{font-size:10px;color:#555;margin-top:6px;font-style:italic}
 .divider{height:1px;background:#f0ede6;margin:16px 0}
 .daeun-title{font-size:13px;color:#111;margin-bottom:10px;font-weight:600}
 .daeun-scroll{display:flex;flex-direction:row-reverse;justify-content:flex-start;gap:6px;overflow-x:auto;padding-bottom:6px}
@@ -99,12 +100,13 @@ h1{font-size:20px;font-weight:600;margin-bottom:6px;color:#222;display:none}
 .daeun-scroll::-webkit-scrollbar-thumb{background:#ddd;border-radius:2px}
 .daeun-card{flex:0 0 66px;background:#fff;border:2px solid #d8d3c5;border-radius:10px;padding:10px 6px;text-align:center}
 .daeun-card.current{border:3px solid #c0392b !important;box-shadow:0 0 0 1px #c0392b;background:#fffdf5}
-.daeun-age{font-size:11px;color:#555;margin-bottom:4px}
+.daeun-age{font-size:11px;color:#333;font-weight:600;margin-bottom:4px}
 .daeun-hangul{font-size:18px;font-weight:900;line-height:1.2}
 .daeun-hanja-small{font-size:10px;color:#222;margin-top:2px;font-weight:500}
 .info-row{display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap}
-.info-badge{font-size:12px;padding:4px 10px;border-radius:6px;border:1px solid #e8e6df;color:#888;background:#f7f6f2}
-.error-msg{font-size:13px;color:#c0392b;margin-top:8px;min-height:18px}
+.info-badge{font-size:12px;padding:4px 10px;border-radius:6px;border:1px solid #e8e6df;color:#333;font-weight:600;background:#f7f6f2}
+.error-msg{font-size:13px;color:#c0392b;margin-top:4px;min-height:0}
+.error-msg:empty{display:none}
 .leap-row{margin-bottom:12px}
 .leap-row label{font-size:13px;color:#111;display:flex;align-items:center;gap:6px;cursor:pointer;font-weight:500}
 .note{font-size:11px;color:#bbb;margin-top:14px;line-height:1.7}
@@ -123,7 +125,7 @@ h1{font-size:20px;font-weight:600;margin-bottom:6px;color:#222;display:none}
 .install-banner-icon{font-size:28px;flex-shrink:0}
 .install-banner-text{flex:1}
 .install-banner-title{font-size:14px;font-weight:700;color:#222;margin-bottom:2px}
-.install-banner-sub{font-size:12px;color:#888}
+.install-banner-sub{font-size:12px;color:#555}
 .install-banner-btn{
   background:#c0392b;border:none;border-radius:8px;
   color:#fff;font-size:13px;font-weight:600;
@@ -162,6 +164,7 @@ h1{font-size:20px;font-weight:600;margin-bottom:6px;color:#222;display:none}
 /* 대운 바로 아래, 하얀 카드형 결과 바로가기 그리드 — 모바일/PC 공통 */
 .result-tool-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:2px;margin:12px 0 4px;background:#e9e3d5;border:1px solid #e9e3d5;border-radius:12px;overflow:hidden}
 .result-tools-wrap{max-width:680px;margin:0 auto;padding:0}
+.result-tools-wrap .section-title{font-family:'NanumSquare',sans-serif;font-weight:800;font-size:15px;color:#222}
 .result-tool-card{
   display:block;text-align:left;border:none;border-radius:0;
   padding:14px 12px;cursor:pointer;font-family:inherit;transition:filter .15s;
@@ -255,9 +258,30 @@ h1{font-size:20px;font-weight:600;margin-bottom:6px;color:#222;display:none}
    기존 모바일 UI(.container 등)는 절대 변경하지 않음
    ============================================================ */
 :root{
-  --cream:#f5f0e8; --paper:#fff; --ink:#222; --ink-soft:#666;
+  --cream:#f5f0e8; --paper:#fff; --ink:#222; --ink-soft:#4a4a4a;
   --cinnabar:#c0392b; --ochre:#b5651d; --indigo:#3d3a7a; --hairline:#e8e6df;
+  /* 희미한 글자 진하게: #666 → #4a4a4a */
 }
+
+/* ── 꿈해몽 검색바 — 모바일: 기존 메인 메뉴바 자리에 전체 폭으로 표시 / PC: 오른쪽 정렬(아래 미디어쿼리) ── */
+.dream-search-bar{
+  display:flex;justify-content:center;padding:8px 12px;
+  background:var(--cream);border-bottom:1px solid var(--hairline);
+}
+.dream-search-box{
+  display:flex;align-items:center;gap:8px;background:#fff;
+  border:1px solid var(--hairline);border-radius:24px;padding:8px 14px;
+  width:100%;max-width:680px;box-shadow:0 2px 8px rgba(0,0,0,0.04);
+}
+.dream-search-icon{font-size:15px;flex-shrink:0}
+.dream-search-label{font-size:14px;font-weight:800;color:#222;flex-shrink:0;font-family:'NanumSquare',sans-serif}
+.dream-search-box input{border:none;outline:none;flex:1;min-width:0;font-size:13px;font-family:inherit;color:var(--ink);background:transparent;font-weight:600}
+.dream-search-box input::placeholder{color:#777;font-weight:500}
+.dream-search-box button{
+  border:none;background:var(--indigo);color:#fff;border-radius:16px;
+  padding:7px 16px;font-size:12px;font-weight:700;cursor:pointer;flex-shrink:0;
+}
+.dream-search-box button:hover{background:#2f2c60}
 
 /* ── 상단 헤더: 로고 줄 + 연결된 탭 메뉴 줄 — 화면 크기와 상관없이 항상 표시 ── */
 .site-header{
@@ -268,7 +292,7 @@ h1{font-size:20px;font-weight:600;margin-bottom:6px;color:#222;display:none}
 .site-header-top{display:flex;align-items:center;padding:10px 16px}
 .site-brand{display:flex;align-items:center;gap:8px;text-decoration:none;flex-shrink:0}
 .site-brand-stamp{width:32px;height:32px;border-radius:8px;flex-shrink:0;box-shadow:0 1px 3px rgba(0,0,0,0.2);object-fit:cover}
-.site-brand-word{font-family:'Noto Serif KR',serif;font-weight:700;font-size:16px;color:var(--ink);white-space:nowrap}
+.site-brand-word{font-family:'NanumSquare','Noto Serif KR',sans-serif;font-weight:800;font-size:18px;color:var(--ink);white-space:nowrap}
 .site-brand-word span{color:var(--cinnabar)}
 
 .site-nav{
@@ -288,7 +312,7 @@ h1{font-size:20px;font-weight:600;margin-bottom:6px;color:#222;display:none}
   background:var(--paper);border:2px solid #d8d3c5;
   border-radius:14px;padding:14px 12px;margin:10px auto;max-width:680px;
 }
-.side-title{font-family:'Noto Serif KR',serif;font-size:14px;font-weight:700;color:var(--ink);margin-bottom:14px;padding-bottom:10px;border-bottom:1px solid var(--hairline)}
+.side-title{font-family:'NanumSquare',sans-serif;font-size:14px;font-weight:700;color:var(--ink);margin-bottom:14px;padding-bottom:10px;border-bottom:1px solid var(--hairline)}
 .side-fact{display:flex;gap:10px;font-size:13px;line-height:1.7;color:var(--ink-soft);margin-bottom:14px}
 .side-fact:last-child{margin-bottom:0}
 .side-fact-dot{width:5px;height:5px;border-radius:50%;background:var(--cinnabar);flex-shrink:0;margin-top:7px}
@@ -308,31 +332,16 @@ h1{font-size:20px;font-weight:600;margin-bottom:6px;color:#222;display:none}
 @media (min-width:1024px){
   .site-header-top{padding:12px 24px}
   .site-brand-stamp{width:38px;height:38px}
-  .site-brand-word{font-size:18px}
+  .site-brand-word{font-size:20px}
   .site-nav a{font-size:14px;padding:15px 22px}
 }
 
 @media (min-width:1024px){
   body{padding:0}
 
-  /* ── 꿈해몽 검색창 (헤더 바로 아래, 오른쪽 정렬) ── */
-  .dream-search-bar{
-    display:flex;justify-content:flex-end;padding:10px 40px;
-    background:var(--cream);border-bottom:1px solid var(--hairline);
-  }
-  .dream-search-box{
-    display:flex;align-items:center;gap:8px;background:#fff;
-    border:1px solid var(--hairline);border-radius:24px;padding:9px 18px;
-    width:340px;box-shadow:0 2px 8px rgba(0,0,0,0.04);
-  }
-  .dream-search-icon{font-size:15px;flex-shrink:0}
-  .dream-search-box input{border:none;outline:none;flex:1;font-size:13px;font-family:inherit;color:var(--ink);background:transparent}
-  .dream-search-box input::placeholder{color:#aaa}
-  .dream-search-box button{
-    border:none;background:var(--indigo);color:#fff;border-radius:16px;
-    padding:7px 16px;font-size:12px;font-weight:700;cursor:pointer;flex-shrink:0;
-  }
-  .dream-search-box button:hover{background:#2f2c60}
+  /* 꿈해몽 검색창 — PC에서는 오른쪽 정렬, 고정폭 */
+  .dream-search-bar{justify-content:flex-end;padding:10px 40px}
+  .dream-search-box{width:380px}
 
   /* ── 히어로 ── */
   .hero{
@@ -388,8 +397,9 @@ h1{font-size:20px;font-weight:600;margin-bottom:6px;color:#222;display:none}
   .page-shell .container > h1{display:none}
 }
 @media (max-width:1023px){
-  .hero,.site-footer,.dream-search-bar,.side-right{display:none}
-  .site-nav{justify-content:flex-start}
+  .hero,.site-footer,.side-right{display:none}
+  /* 모바일: 좌우 스크롤되는 메인 메뉴바는 숨김 — 그 자리에 꿈해몽 검색바가 표시됨 */
+  .site-nav{display:none}
 }
 </style>
 </head>
@@ -418,11 +428,12 @@ h1{font-size:20px;font-weight:600;margin-bottom:6px;color:#222;display:none}
   </nav>
 </header>
 
-<!-- ===== PC 전용: 꿈해몽 검색창 (메인 메뉴 바로 아래, 오른쪽) ===== -->
+<!-- ===== 꿈해몽 검색창 — 모바일: 메인 메뉴바 자리에 전체 폭 / PC: 메뉴 아래 오른쪽 정렬 ===== -->
 <div class="dream-search-bar">
   <div class="dream-search-box">
     <span class="dream-search-icon">🔍</span>
-    <input type="text" id="top-dream-search" placeholder="꿈에 나온 내용을 검색해보세요 (예: 뱀, 물, 돈)"
+    <span class="dream-search-label">꿈해몽</span>
+    <input type="text" id="top-dream-search" placeholder="꿈 내용 검색 (예: 뱀, 물, 돈)"
       onkeydown="if(event.key==='Enter') runTopDreamSearch()">
     <button onclick="runTopDreamSearch()">검색</button>
   </div>
@@ -493,8 +504,8 @@ h1{font-size:20px;font-weight:600;margin-bottom:6px;color:#222;display:none}
   <div class="iljin-box">
     <span class="iljin-label">오늘의 일진</span>
     <div class="iljin-value">
-      <span class="iljin-hanja" id="iljin-cg" style="color:#444"></span><span class="iljin-hanja" id="iljin-jj" style="color:#444"></span>
-      <span class="iljin-paren">(</span><span class="iljin-hangul" id="iljin-cg-h"></span><span class="iljin-hangul" id="iljin-jj-h"></span><span class="iljin-paren">)</span>
+      <span class="iljin-hangul" id="iljin-cg-h"></span><span class="iljin-hangul" id="iljin-jj-h"></span>
+      <span class="iljin-paren">(</span><span class="iljin-hanja" id="iljin-cg" style="color:#444"></span><span class="iljin-hanja" id="iljin-jj" style="color:#444"></span><span class="iljin-paren">)</span>
     </div>
   </div>
   <div class="visitor-box">
@@ -511,7 +522,7 @@ h1{font-size:20px;font-weight:600;margin-bottom:6px;color:#222;display:none}
 <div id="profile-bar" style="display:none;margin-bottom:14px;position:relative">
   <div onclick="toggleProfileDropdown()" style="display:flex;align-items:center;justify-content:space-between;padding:10px 14px;background:#faf6ef;border:1px solid #ece4d8;border-radius:10px;cursor:pointer">
     <span style="font-size:13px;color:#333"><b id="profile-current-label" style="color:#a83264">-</b> 보는 중</span>
-    <span style="font-size:12px;color:#999">전환 ▾</span>
+    <span style="font-size:12px;color:#555;font-weight:700">전환 ▾</span>
   </div>
   <div id="profile-dropdown" style="display:none;position:absolute;top:calc(100% + 4px);left:0;right:0;background:#fff;border:1px solid #ece4d8;border-radius:10px;box-shadow:0 6px 20px rgba(0,0,0,0.1);padding:8px;z-index:50">
     <div id="profile-dropdown-list"></div>
@@ -545,7 +556,7 @@ h1{font-size:20px;font-weight:600;margin-bottom:6px;color:#222;display:none}
 
 <div class="input-grid" style="align-items:end">
   <div class="input-group">
-    <label>태어난 시간 <span style="font-size:11px;color:#888;font-weight:400">(동경시 30분 보정)</span></label>
+    <label>태어난 시간 <span style="font-size:11px;color:#555;font-weight:500">(동경시 30분 보정)</span></label>
     <select id="hour">
       <option value="0">자시 (23:30~01:29)</option>
       <option value="1">축시 (01:30~03:29)</option>
@@ -585,12 +596,14 @@ h1{font-size:20px;font-weight:600;margin-bottom:6px;color:#222;display:none}
 
   <!-- 9가지 풀이방식 + 오늘의 운세 + 바이오리듬 = 11개, 대운 바로 아래 카드형으로 배치 (실제 결과로 바로 연결) -->
 </div>
+<!-- 당구장(※) 설명 — 화면에서 숨김 처리 (원문 백업: note-backup.txt / 복원하려면 이 주석만 제거)
 <div class="note">
   ※ 시주: 동경시(KST) 30분 보정 적용 — 각 시 경계 +30분 (예: 해시 21:30~23:29)<br>
   ※ 절기 입절일: VSOP87 천문계산 기반 KST 정밀값 (1900~2030 전 구간)<br>
   ※ 일주 기준: 1900년 1월 1일 = 갑술일 (60갑자 index 10)<br>
   ※ 음력 변환 범위: 1900~2030년
 </div>
+-->
 </div>
 <!-- /.container -->
 
@@ -610,7 +623,7 @@ h1{font-size:20px;font-weight:600;margin-bottom:6px;color:#222;display:none}
 
 <!-- 대운 아래, 전체 폭에 걸치는 11개 카드형 결과 바로가기 그리드 -->
 <div id="result-tools-wrap" class="result-tools-wrap" style="display:none">
-  <div class="section-title">더 자세히 보기</div>
+  <div class="section-title">학설별 운세 보기</div>
   <div class="result-tool-grid">
     <button class="result-tool-card" onclick="showFortune()" id="extra-tools" style="background:#fdecea">
       <div class="result-tool-icon">☀️</div>
@@ -806,7 +819,7 @@ h1{font-size:20px;font-weight:600;margin-bottom:6px;color:#222;display:none}
       <button class="ju-tab" onclick="selectJuyuk('07')">건강점</button>
     </div>
 
-    <div id="juyuk-body" class="modal-body" style="padding:20px"></div>
+    <div id="juyuk-body" class="modal-body" style="padding:10px 16px 12px;white-space:normal"></div>
 
     <div class="modal-footer">
       <button class="modal-close-btn" onclick="closeJuyuk()">닫기</button>
@@ -920,7 +933,7 @@ h1{font-size:20px;font-weight:600;margin-bottom:6px;color:#222;display:none}
 
     <!-- 상대방 정보 입력 (정통/신세대/오성술 궁합에서만 표시) -->
     <div id="gunghap-partner-form" style="padding:12px 16px 0">
-      <p style="font-size:12px;color:#999;margin-bottom:6px">상대방 생년월일을 입력하세요 (양력 기준, 음력이면 체크)</p>
+      <p style="font-size:12px;color:#555;font-weight:600;margin-bottom:6px">상대방 생년월일을 입력하세요 (양력 기준, 음력이면 체크)</p>
       <div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap">
         <input id="gunghap-p-year" type="number" placeholder="년" style="width:72px;padding:6px;border:1px solid #ddd;border-radius:6px;font-family:inherit">
         <input id="gunghap-p-month" type="number" placeholder="월" style="width:52px;padding:6px;border:1px solid #ddd;border-radius:6px;font-family:inherit">
@@ -1001,8 +1014,18 @@ let _ilganIdx = null
 let _iljuJJ = null
 let _ilganCG = null  // 일간 천간 index (오늘의 운세용)
 
+// 생일이 입력되지 않은 상태에서 메뉴를 눌렀을 때 — 안내 후 생일 입력창으로 이동
+function requireBirth(){
+  alert('생일을 입력하세요.')
+  const y = document.getElementById('year')
+  if (y){
+    y.scrollIntoView({ behavior:'smooth', block:'center' })
+    setTimeout(() => { try{ y.focus({ preventScroll:true }) }catch(e){ y.focus() } }, 400)
+  }
+}
+
 async function showPersonality() {
-  if (_ilganIdx === null || _iljuJJ === null) return
+  if (_ilganIdx === null || _iljuJJ === null) { requireBirth(); return }
   const sipshinName = getSipshinJiji(_ilganIdx, _iljuJJ)
   const sc = SIPSHIN_STYLE[sipshinName] || { bg:'#f5f5f5', color:'#888', border:'#ddd' }
 
@@ -1021,7 +1044,7 @@ async function showPersonality() {
 }
 
 async function showFortune() {
-  if (_ilganCG === null) return
+  if (_ilganCG === null) { requireBirth(); return }
 
   // 오늘 일진 계산 (KST 기준)
   // 한국시간(KST) 기준 오늘 날짜 — 로컬/온라인 모두 정확
@@ -1041,7 +1064,7 @@ async function showFortune() {
 
   document.getElementById('modal-sipshin-badge').textContent = ''
   document.getElementById('modal-sipshin-badge').style.cssText = 'display:none'
-  document.getElementById('modal-title').textContent = `오늘의 운세 (${CG[todayDG.cg]}${JJ[todayDG.jj]}일)`
+  document.getElementById('modal-title').textContent = `오늘의 운세 — ${CGH[todayDG.cg]}${JJH[todayDG.jj]}(${CG[todayDG.cg]}${JJ[todayDG.jj]})일`
   document.getElementById('modal-body').innerHTML = '<p style="color:#aaa;text-align:center">불러오는 중...</p>'
   document.getElementById('personality-modal').style.display = 'flex'
   document.body.style.overflow = 'hidden'
@@ -2017,7 +2040,7 @@ async function fetchJamiContent(idx, category){
 
 function showJami(){
   if(!_jamiIdx){
-    alert('먼저 사주팔자를 확인하세요.')
+    requireBirth()
     return
   }
   document.getElementById('jami-modal').style.display='flex'
@@ -2048,13 +2071,13 @@ async function renderJami(cat){
   const content=await fetchJamiContent(_jamiIdx, cat)
   const text=content||'준비 중입니다.'
   body.innerHTML=
-    `<p style="margin-bottom:10px;font-size:12px;color:#999">🀄 중국정통점성술 — ${label}</p>`+
+    `<p style="margin-bottom:10px;font-size:12px;color:#666;font-weight:600">🀄 중국정통점성술 — ${label}</p>`+
     `<p style="line-height:2">${text}</p>`
 }
 
 function showGuikok() {
   if (!_guikokSaju) {
-    alert('먼저 사주팔자를 확인하세요.')
+    requireBirth()
     return
   }
   document.getElementById('guikok-modal').style.display = 'flex'
@@ -2129,7 +2152,7 @@ async function renderGuikok(menu) {
   const content = await fetchGuikokContent(menu, idx)
   const text = content || '해당 데이터가 없습니다.'
   document.getElementById('guikok-body').innerHTML =
-    `<p style="margin-bottom:10px;font-size:12px;color:#999">☯ 귀곡산명술 — ${menuNames[menu]}</p>` +
+    `<p style="margin-bottom:10px;font-size:12px;color:#666;font-weight:600">☯ 귀곡산명술 — ${menuNames[menu]}</p>` +
     `<p style="line-height:2">${text}</p>`
 }
 
@@ -2139,7 +2162,7 @@ let _japyungMenu = 'zajuk'
 
 function showJapyung() {
   if (!_guikokSaju) {
-    alert('먼저 사주팔자를 확인하세요.')
+    requireBirth()
     return
   }
   document.getElementById('japyung-modal').style.display = 'flex'
@@ -2200,7 +2223,7 @@ async function renderJapyung(menu) {
   const content = await fetchJapyungContent(idx)
   const text = content || '해당 데이터가 없습니다.'
   document.getElementById('japyung-body').innerHTML =
-    `<p style="margin-bottom:10px;font-size:12px;color:#999">📚 자평명리 — ${menuNames[menu]}</p>` +
+    `<p style="margin-bottom:10px;font-size:12px;color:#666;font-weight:600">📚 자평명리 — ${menuNames[menu]}</p>` +
     `<p style="line-height:2">${text}</p>`
 }
 
@@ -2228,6 +2251,16 @@ function showJuyuk(){
 
 function closeJuyuk(){
   document.getElementById('juyuk-modal').style.display='none'
+  resetJuyukAll()
+}
+
+// 모달을 닫으면 모든 카테고리의 점괘·진행 상태를 지우고 첫 탭(일반점)으로 되돌림
+function resetJuyukAll(){
+  for (const k in _juyukState) delete _juyukState[k]
+  for (const k in _juyukProgress) delete _juyukProgress[k]
+  _juyukMenu = '01'
+  const tabs = document.querySelectorAll('#juyuk-modal .ju-tab')
+  tabs.forEach((b,i) => b.classList.toggle('active', i === 0))
 }
 
 function closeJuyukOutside(e){
@@ -2295,18 +2328,18 @@ async function renderJuyukTab(cat){
     `<div style="display:flex;align-items:center;gap:12px">
       <img src="${v ? COIN_FRONT : COIN_BACK}" alt="${v?'양':'음'}" style="width:36px;height:36px;flex-shrink:0">
       ${hyoBarHtml(v)}
-      <span style="font-size:11px;color:#bbb">${JUYUK_HYO_NAMES[i]}</span>
+      <span style="font-size:11px;color:#555;font-weight:600">${JUYUK_HYO_NAMES[i]}</span>
     </div>`
   ).join('')
 
   const hexName = HEXAGRAM_NAMES[state.hexNum] || ''
 
   body.innerHTML = `
-    <div style="display:flex;flex-direction:column-reverse;align-items:center;gap:6px;margin-bottom:2px">${coinsHtml}</div>
-    <p style="text-align:center;font-size:14px;font-weight:700;color:#a83264;margin:6px 0 2px">점괘명: ${hexName}</p>
-    <p id="juyuk-content-slot" style="color:#aaa;text-align:center;margin-top:2px">불러오는 중...</p>
-    <div style="text-align:center;margin-top:14px">
-      <button class="ju-tab" onclick="retryJuyukCategory('${cat}')" style="border-color:#999;color:#999">🔄 다시 던지기</button>
+    <div style="display:flex;flex-direction:column-reverse;align-items:center;gap:3px;margin:0">${coinsHtml}</div>
+    <p style="text-align:center;font-size:14px;font-weight:700;color:#a83264;margin:4px 0 0">점괘명: ${hexName}</p>
+    <p id="juyuk-content-slot" style="color:#888;text-align:center;margin:2px 0 0">불러오는 중...</p>
+    <div style="text-align:center;margin-top:8px">
+      <button class="ju-tab" onclick="retryJuyukCategory('${cat}')" style="border-color:#666;color:#666">🔄 다시 던지기</button>
     </div>`
 
   const idx = 'JU'+String(state.hexNum).padStart(2,'0')+cat
@@ -2314,7 +2347,7 @@ async function renderJuyukTab(cat){
   const text = content || '해당 데이터가 없습니다.'
   const slot = document.getElementById('juyuk-content-slot')
   // 로딩 중 다른 탭으로 넘어갔거나 재던지기 했다면 slot이 이미 사라졌을 수 있음 → 그 경우 조용히 무시
-  if (slot) slot.outerHTML = `<p style="line-height:1.9;color:#333;margin-top:2px">${text}</p>`
+  if (slot) slot.outerHTML = `<p style="line-height:1.9;color:#333;margin:2px 0 0;white-space:pre-wrap">${text}</p>`
 }
 
 // 진행 중인(또는 아직 시작 안 한) 던지기 화면
@@ -2332,22 +2365,20 @@ function renderJuyukTossUI(cat){
       return `<div class="jy-slot">
         <img src="${v?COIN_FRONT:COIN_BACK}" alt="${v?'양':'음'}" style="width:26px;height:26px;flex-shrink:0">
         ${hyoBarHtml(v)}
-        <span style="font-size:11px;color:#999;width:24px">${name}</span>
+        <span style="font-size:11px;color:#555;font-weight:600;width:24px">${name}</span>
       </div>`
     }
     return `<div class="jy-slot jy-slot-empty"></div>`
   }).join('')
 
   body.innerHTML = `
-    <p style="text-align:center;font-size:13px;color:#222;font-weight:700;margin:0 0 10px;line-height:1.5">
-      동전을 한 번씩 총 6번 던져 괘를 완성합니다.<br>마음속으로 묻고 싶은 것을 떠올리며 눌러 주세요
-    </p>
+    <p style="text-align:center;font-size:13px;color:#222;font-weight:700;margin:0 0 6px;line-height:1.5">동전을 한 번씩 총 6번 던져 괘를 완성합니다. 마음속으로 묻고 싶은 것을 떠올리며 눌러 주세요</p>
     <div style="display:flex;align-items:flex-start;justify-content:center;gap:26px">
       <div style="display:flex;flex-direction:column;align-items:center;gap:10px;min-width:110px">
         <img id="juyuk-active-coin" src="${COIN_SPIN}" alt="던지기"
           onclick="flipJuyukCoin('${cat}')" style="width:90px;height:90px;cursor:pointer">
         <span style="font-size:13px;color:#a83264;font-weight:700;text-align:center">${nextIdx+1}번째 · ${posName}<br>눌러서 던지기</span>
-        <span style="font-size:11px;color:#999">${nextIdx}/6</span>
+        <span style="font-size:11px;color:#555;font-weight:600">${nextIdx}/6</span>
       </div>
       <div class="jy-stack">${slotsHtml}</div>
     </div>`
@@ -2453,7 +2484,7 @@ const DANGSAJU_LABELS = { Djun:'전생록', Dcho:'초년운', Djung:'중년운',
 
 function showDangsaju(){
   if (!_dangsajuIdx) {
-    alert('먼저 사주팔자를 확인하세요.')
+    requireBirth()
     return
   }
   document.getElementById('dangsaju-modal').style.display = 'flex'
@@ -2497,7 +2528,7 @@ async function renderDangsaju(key){
   const content = await fetchDangsajuContent(idx)
   const text = content || '해당 데이터가 없습니다.'
   document.getElementById('dangsaju-body').innerHTML =
-    `<p style="margin-bottom:10px;font-size:12px;color:#999">🎋 당사주 — ${label}</p>` +
+    `<p style="margin-bottom:10px;font-size:12px;color:#666;font-weight:600">🎋 당사주 — ${label}</p>` +
     `<p style="line-height:2">${text}</p>`
 }
 
@@ -2589,7 +2620,7 @@ function calcTojung(target_year, sy, sm, sd){
 
 function showTojung(){
   if (!_birthSolar) {
-    alert('먼저 사주팔자를 확인하세요.')
+    requireBirth()
     return
   }
   document.getElementById('tojung-modal').style.display = 'flex'
@@ -2654,7 +2685,7 @@ async function renderTojung(){
   const content = await fetchTojungContent(table, _tojungResult.idx)
   const text = content || '해당 데이터가 없습니다.'
   body.innerHTML =
-    `<p style="margin-bottom:10px;font-size:12px;color:#999">🎍 프리미엄토정비결 — ${_tojungYear}년 ${label} (${_tojungResult.age}세)</p>` +
+    `<p style="margin-bottom:10px;font-size:12px;color:#666;font-weight:600">🎍 프리미엄토정비결 — ${_tojungYear}년 ${label} (${_tojungResult.age}세)</p>` +
     `<p style="line-height:2">${text}</p>`
 }
 
@@ -2825,7 +2856,7 @@ let _gunghapMenu = 'Kjung'
 
 function showGunghap(){
   if (!_birthSolar) {
-    alert('먼저 사주팔자를 확인하세요.')
+    requireBirth()
     return
   }
   document.getElementById('gunghap-modal').style.display = 'flex'
@@ -2850,7 +2881,7 @@ function selectGunghap(menu){
 // 사이드바 등에서 특정 궁합 종류로 바로 진입 (event.target에 의존하지 않고 탭 인덱스로 활성화)
 function openGunghapTab(menu){
   if (!_birthSolar) {
-    alert('먼저 사주팔자를 확인하세요.')
+    requireBirth()
     return
   }
   document.getElementById('gunghap-modal').style.display = 'flex'
@@ -2897,7 +2928,7 @@ async function renderGunghapKsta(){
   body.innerHTML = '<p style="color:#aaa;text-align:center">불러오는 중...</p>'
   const content = await fetchGunghapContent(idx)
   const text = content || '해당 데이터가 없습니다.'
-  body.innerHTML = `<p style="margin-bottom:10px;font-size:12px;color:#999">💞 나의 점성술 인연 — 나의 이성운</p><p style="line-height:2">${text}</p>`
+  body.innerHTML = `<p style="margin-bottom:10px;font-size:12px;color:#666;font-weight:600">💞 나의 점성술 인연 — 나의 이성운</p><p style="line-height:2">${text}</p>`
 }
 
 async function calcGunghap(){
@@ -2939,7 +2970,7 @@ async function calcGunghap(){
 
   const content = await fetchGunghapContent(idx)
   const text = content || '해당 데이터가 없습니다.'
-  body.innerHTML = `<p style="margin-bottom:10px;font-size:12px;color:#999">💞 ${label}</p><p style="line-height:2">${text}</p>`
+  body.innerHTML = `<p style="margin-bottom:10px;font-size:12px;color:#666;font-weight:600">💞 ${label}</p><p style="line-height:2">${text}</p>`
 }
 
 
@@ -2956,7 +2987,7 @@ function getDaysBetween(y1,m1,d1,y2,m2,d2) {
 function getBioKey(b,e,i) { return 'B'+b+e+i }
 
 function toggleBio() {
-  if (_birthYear === null) return
+  if (_birthYear === null) { requireBirth(); return }
   document.getElementById('bio-modal').style.display = 'flex'
   renderBioChart()
 }
