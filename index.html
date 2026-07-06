@@ -379,9 +379,11 @@ h1{font-size:20px;font-weight:600;margin-bottom:6px;color:#222;display:none}
 
   /* ── 3단 그리드(좌 사이드바 / 본문 / 우 사이드바) ── */
   .page-shell{
-    display:grid;grid-template-columns:250px minmax(680px,720px) 250px;
+    display:grid;grid-template-columns:250px minmax(0,720px) 250px;
     gap:14px;max-width:1290px;margin:40px auto;padding:0 32px;align-items:start;
   }
+  /* 그리드 자식이 내용물 최소폭 때문에 못 줄어드는 것 방지 — 좌우 간격 항상 일정하게 유지 */
+  .page-shell > *{min-width:0}
   .page-shell .container{margin:0;box-shadow:0 4px 24px rgba(0,0,0,0.06)}
   .side-panel{position:sticky;top:100px;margin:0}
   .side-tool-list-desktop{display:flex}
