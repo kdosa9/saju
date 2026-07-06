@@ -328,7 +328,7 @@ h1{font-size:20px;font-weight:600;margin-bottom:6px;color:#222;display:none}
   display:flex;align-items:center;gap:10px;padding:9px 10px;border-radius:8px;
   font-size:13px;color:var(--ink);text-decoration:none;font-weight:500;transition:background .15s;
 }
-.side-tool-item:hover{background:var(--cream)}
+.side-tool-item:hover{background-color:var(--cream)}
 .side-tool-dot{width:8px;height:8px;border-radius:2px;flex-shrink:0}
 
 @media (min-width:1024px){
@@ -379,13 +379,44 @@ h1{font-size:20px;font-weight:600;margin-bottom:6px;color:#222;display:none}
 
   /* ── 3단 그리드(좌 사이드바 / 본문 / 우 사이드바) ── */
   .page-shell{
-    display:grid;grid-template-columns:240px minmax(680px,720px) 280px;
-    gap:28px;max-width:1320px;margin:40px auto;padding:0 40px;align-items:start;
+    display:grid;grid-template-columns:250px minmax(680px,720px) 250px;
+    gap:14px;max-width:1290px;margin:40px auto;padding:0 32px;align-items:start;
   }
   .page-shell .container{margin:0;box-shadow:0 4px 24px rgba(0,0,0,0.06)}
   .side-panel{position:sticky;top:100px;margin:0}
   .side-tool-list-desktop{display:flex}
   .side-quick-cards{display:none}
+
+  /* ── 사이드 패널 꾸밈 (PC 전용) ─────────────────────────
+     매일 보는 운세: 쪽빛 타이틀 + 나침반·시계 선화 워터마크
+     화신 인연 궁합: 주홍 타이틀 + 하트·연인 선화 워터마크 */
+  .side-left .side-title{color:#2c4a6b;border-bottom:2px solid rgba(44,74,107,0.22)}
+  .side-right .side-title{color:#c0392b;border-bottom:2px solid rgba(192,57,43,0.22)}
+  .side-left{
+    background-color:var(--paper);
+    background-image:url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20viewBox%3D%270%200%20100%20100%27%3E%3Cg%20fill%3D%27none%27%20stroke%3D%27%232c4a6b%27%20stroke-width%3D%272%27%20opacity%3D%270.10%27%3E%3Ccircle%20cx%3D%2750%27%20cy%3D%2750%27%20r%3D%2744%27%2F%3E%3Ccircle%20cx%3D%2750%27%20cy%3D%2750%27%20r%3D%2733%27%2F%3E%3Cpath%20d%3D%27M50%206v9M50%2085v9M6%2050h9M85%2050h9%27%2F%3E%3Cpath%20d%3D%27M50%2023%2060%2050%2050%2077%2040%2050Z%27%2F%3E%3Cpath%20d%3D%27M50%2023%2040%2050h20Z%27%20fill%3D%27%232c4a6b%27%20stroke%3D%27none%27%20opacity%3D%270.5%27%2F%3E%3Ccircle%20cx%3D%2750%27%20cy%3D%2750%27%20r%3D%273.5%27%20fill%3D%27%232c4a6b%27%20stroke%3D%27none%27%2F%3E%3C%2Fg%3E%3C%2Fsvg%3E"),url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20viewBox%3D%270%200%20100%20100%27%3E%3Cg%20fill%3D%27none%27%20stroke%3D%27%232c4a6b%27%20stroke-width%3D%272.5%27%20opacity%3D%270.09%27%3E%3Ccircle%20cx%3D%2750%27%20cy%3D%2750%27%20r%3D%2742%27%2F%3E%3Cpath%20d%3D%27M50%2012v8M50%2080v8M12%2050h8M80%2050h8%27%2F%3E%3Cpath%20d%3D%27M50%2050V28M50%2050l16%2011%27%20stroke-linecap%3D%27round%27%2F%3E%3Ccircle%20cx%3D%2750%27%20cy%3D%2750%27%20r%3D%273%27%20fill%3D%27%232c4a6b%27%20stroke%3D%27none%27%2F%3E%3C%2Fg%3E%3C%2Fsvg%3E");
+    background-repeat:no-repeat,no-repeat;
+    background-position:right -30px bottom -30px, left -14px top 40px;
+    background-size:160px 160px, 64px 64px;
+  }
+  .side-right{
+    background-color:var(--paper);
+    background-image:url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20viewBox%3D%270%200%20140%20110%27%3E%3Cg%20fill%3D%27none%27%20stroke%3D%27%23a83264%27%20stroke-width%3D%272.5%27%20opacity%3D%270.10%27%3E%3Cpath%20d%3D%27M62%2096C28%2072%2018%2052%2029%2039c9-11%2024-9%2033%203%209-12%2024-14%2033-3%2011%2013%201%2033-33%2057Z%27%2F%3E%3Cpath%20d%3D%27M112%2044c-14-10-18-19-13-25%204-5%2010-4%2013%201%203-5%209-6%2013-1%205%206%201%2015-13%2025Z%27%20stroke-width%3D%272%27%2F%3E%3C%2Fg%3E%3C%2Fsvg%3E"),url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20viewBox%3D%270%200%20120%2090%27%3E%3Cg%20fill%3D%27none%27%20stroke%3D%27%23a83264%27%20stroke-width%3D%272.2%27%20opacity%3D%270.10%27%3E%3Ccircle%20cx%3D%2738%27%20cy%3D%2730%27%20r%3D%2713%27%2F%3E%3Ccircle%20cx%3D%2782%27%20cy%3D%2730%27%20r%3D%2713%27%2F%3E%3Cpath%20d%3D%27M16%2084c3-19%2012-28%2022-28%206%200%2011%203%2015%208%204-5%209-8%2015-8%2010%200%2019%209%2022%2028%27%2F%3E%3Cpath%20d%3D%27M60%2016c-5-4-6-8-4-10.5%201.6-2%204-1.6%204%20.5%200-2.1%202.4-2.5%204-.5%202%202.5%201%206.5-4%2010.5Z%27%20fill%3D%27%23a83264%27%20stroke%3D%27none%27%20opacity%3D%270.6%27%2F%3E%3C%2Fg%3E%3C%2Fsvg%3E");
+    background-repeat:no-repeat,no-repeat;
+    background-position:right -18px bottom -14px, left -10px top 42px;
+    background-size:170px 134px, 96px 72px;
+  }
+  .side-left .side-tool-list-desktop .side-tool-item{
+    background-image:url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20viewBox%3D%270%200%20100%20100%27%3E%3Cg%20fill%3D%27none%27%20stroke%3D%27%232c4a6b%27%20stroke-width%3D%272%27%20opacity%3D%270.20%27%3E%3Ccircle%20cx%3D%2750%27%20cy%3D%2750%27%20r%3D%2744%27%2F%3E%3Ccircle%20cx%3D%2750%27%20cy%3D%2750%27%20r%3D%2733%27%2F%3E%3Cpath%20d%3D%27M50%206v9M50%2085v9M6%2050h9M85%2050h9%27%2F%3E%3Cpath%20d%3D%27M50%2023%2060%2050%2050%2077%2040%2050Z%27%2F%3E%3Cpath%20d%3D%27M50%2023%2040%2050h20Z%27%20fill%3D%27%232c4a6b%27%20stroke%3D%27none%27%20opacity%3D%270.5%27%2F%3E%3Ccircle%20cx%3D%2750%27%20cy%3D%2750%27%20r%3D%273.5%27%20fill%3D%27%232c4a6b%27%20stroke%3D%27none%27%2F%3E%3C%2Fg%3E%3C%2Fsvg%3E");
+    background-repeat:no-repeat;background-position:right 10px center;background-size:20px 20px;
+  }
+  .side-left .side-tool-list-desktop .side-tool-item:nth-child(even){
+    background-image:url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20viewBox%3D%270%200%20100%20100%27%3E%3Cg%20fill%3D%27none%27%20stroke%3D%27%232c4a6b%27%20stroke-width%3D%272.5%27%20opacity%3D%270.20%27%3E%3Ccircle%20cx%3D%2750%27%20cy%3D%2750%27%20r%3D%2742%27%2F%3E%3Cpath%20d%3D%27M50%2012v8M50%2080v8M12%2050h8M80%2050h8%27%2F%3E%3Cpath%20d%3D%27M50%2050V28M50%2050l16%2011%27%20stroke-linecap%3D%27round%27%2F%3E%3Ccircle%20cx%3D%2750%27%20cy%3D%2750%27%20r%3D%273%27%20fill%3D%27%232c4a6b%27%20stroke%3D%27none%27%2F%3E%3C%2Fg%3E%3C%2Fsvg%3E");
+  }
+  .side-right .side-tool-item{
+    background-image:url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20viewBox%3D%270%200%20100%20100%27%3E%3Cpath%20d%3D%27M50%2084C22%2063%2014%2046%2023%2035c8-9%2021-7%2027%203%206-10%2019-12%2027-3%209%2011%201%2028-27%2049Z%27%20fill%3D%27none%27%20stroke%3D%27%23a83264%27%20stroke-width%3D%274%27%20opacity%3D%270.22%27%2F%3E%3C%2Fsvg%3E");
+    background-repeat:no-repeat;background-position:right 10px center;background-size:20px 20px;
+  }
 
   /* ── 푸터 ── */
   .site-footer{
