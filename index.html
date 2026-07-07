@@ -1143,10 +1143,11 @@ h1{font-size:20px;font-weight:600;margin-bottom:6px;color:#222;display:none}
 // ── Supabase 설정 ────────────────────────────────────────────────
 const SUPABASE_URL = 'https://aiyvmsvabyxzhmcajisw.supabase.co'
 const SUPABASE_KEY = 'sb_publishable_Ae06sNgRpUPVJwvf0WqIpw_nnhs7K71'
+const CONTENT_API = SUPABASE_URL + '/functions/v1/content'  // 콘텐츠 조회는 Edge Function 경유
 
 async function fetchFortuneData(sipshin) {
   const res = await fetch(
-    `${SUPABASE_URL}/rest/v1/fortune_content?sipshin=eq.${encodeURIComponent(sipshin)}&select=personality,unse_morning,unse_evening`,
+    `${CONTENT_API}?type=fortune&sipshin=${encodeURIComponent(sipshin)}`,
     { headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` } }
   )
   const data = await res.json()
@@ -2205,7 +2206,7 @@ async function fetchJamiContent(idx, category){
   const cacheKey = idx+'_'+category
   if(_jamiCache[cacheKey] !== undefined) return _jamiCache[cacheKey]
   const res = await fetch(
-    `${SUPABASE_URL}/rest/v1/jamidoosu_content?idx=eq.${encodeURIComponent(idx)}&category=eq.${encodeURIComponent(category)}&select=content`,
+    `${CONTENT_API}?type=jamidoosu&idx=${encodeURIComponent(idx)}&category=${encodeURIComponent(category)}`,
     { headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` } }
   )
   const data = await res.json()
@@ -2280,7 +2281,7 @@ async function fetchGuikokContent(menu, idx){
   const cacheKey = menu+'_'+idx
   if(_guikokCache[cacheKey] !== undefined) return _guikokCache[cacheKey]
   const res = await fetch(
-    `${SUPABASE_URL}/rest/v1/guikok_content?menu=eq.${encodeURIComponent(menu)}&idx=eq.${idx}&select=content`,
+    `${CONTENT_API}?type=guikok&menu=${encodeURIComponent(menu)}&idx=${encodeURIComponent(idx)}`,
     { headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` } }
   )
   const data = await res.json()
@@ -2364,7 +2365,7 @@ const _japyungCache = {}
 async function fetchJapyungContent(idx){
   if(_japyungCache[idx] !== undefined) return _japyungCache[idx]
   const res = await fetch(
-    `${SUPABASE_URL}/rest/v1/japyung_content?idx=eq.${idx}&select=content`,
+    `${CONTENT_API}?type=japyung&idx=${encodeURIComponent(idx)}`,
     { headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` } }
   )
   const data = await res.json()
@@ -2454,7 +2455,7 @@ const _juyukCache={}
 async function fetchJuyukContent(idx){
   if(_juyukCache[idx]!==undefined) return _juyukCache[idx]
   const res = await fetch(
-    `${SUPABASE_URL}/rest/v1/juyuk_daily_content?idx=eq.${idx}&select=content`,
+    `${CONTENT_API}?type=juyuk&idx=${encodeURIComponent(idx)}`,
     { headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` } }
   )
   const data = await res.json()
@@ -2698,7 +2699,7 @@ const _dangsajuCache = {}
 async function fetchDangsajuContent(idx){
   if (_dangsajuCache[idx] !== undefined) return _dangsajuCache[idx]
   const res = await fetch(
-    `${SUPABASE_URL}/rest/v1/dangsaju_content?idx=eq.${idx}&select=content`,
+    `${CONTENT_API}?type=dangsaju&idx=${encodeURIComponent(idx)}`,
     { headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` } }
   )
   const data = await res.json()
@@ -2849,7 +2850,7 @@ async function fetchTojungContent(table, idx){
   const cacheKey = table + '_' + idx
   if (_tojungCache[cacheKey] !== undefined) return _tojungCache[cacheKey]
   const res = await fetch(
-    `${SUPABASE_URL}/rest/v1/${table}?idx=eq.${idx}&select=content`,
+    `${CONTENT_API}?type=tojung&sub=${table === 'tmoney_content' ? 'money' : 'love'}&idx=${encodeURIComponent(idx)}`,
     { headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` } }
   )
   const data = await res.json()
@@ -2929,7 +2930,7 @@ async function searchDream(){
   const body = document.getElementById('dream-body')
   body.innerHTML = '<p style="color:#aaa;text-align:center">검색 중...</p>'
   const res = await fetch(
-    `${SUPABASE_URL}/rest/v1/dream_content?title=ilike.*${encodeURIComponent(kw)}*&select=idx,title&order=idx&limit=50`,
+    `${CONTENT_API}?type=dream_search&kw=${encodeURIComponent(kw)}`,
     { headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` } }
   )
   const data = await res.json()
@@ -2951,9 +2952,8 @@ async function browseDreamTheme(){
   if (!code) return
   const body = document.getElementById('dream-body')
   body.innerHTML = '<p style="color:#aaa;text-align:center">불러오는 중...</p>'
-  const filter = code.includes(',') ? `theme_code=in.(${code})` : `theme_code=eq.${code}`
   const res = await fetch(
-    `${SUPABASE_URL}/rest/v1/dream_content?${filter}&select=idx,title&order=idx`,
+    `${CONTENT_API}?type=dream_theme&code=${encodeURIComponent(code)}`,
     { headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` } }
   )
   const data = await res.json()
@@ -2987,7 +2987,7 @@ async function viewDreamDetail(idx){
   let item = _dreamDetailCache[idx]
   if (!item) {
     const res = await fetch(
-      `${SUPABASE_URL}/rest/v1/dream_content?idx=eq.${idx}&select=title,content`,
+      `${CONTENT_API}?type=dream_detail&idx=${encodeURIComponent(idx)}`,
       { headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` } }
     )
     const data = await res.json()
@@ -3098,7 +3098,7 @@ const _gunghapCache = {}
 async function fetchGunghapContent(idx){
   if (_gunghapCache[idx] !== undefined) return _gunghapCache[idx]
   const res = await fetch(
-    `${SUPABASE_URL}/rest/v1/gunghap4_content?idx=eq.${idx}&select=content`,
+    `${CONTENT_API}?type=gunghap4&idx=${encodeURIComponent(idx)}`,
     { headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` } }
   )
   const data = await res.json()
@@ -3190,7 +3190,7 @@ const _bioCache = {}
 async function fetchBioContent(bioKey){
   if(_bioCache[bioKey] !== undefined) return _bioCache[bioKey]
   const res = await fetch(
-    `${SUPABASE_URL}/rest/v1/bio_content?bio_key=eq.${encodeURIComponent(bioKey)}&select=content`,
+    `${CONTENT_API}?type=bio&key=${encodeURIComponent(bioKey)}`,
     { headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` } }
   )
   const data = await res.json()
