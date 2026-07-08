@@ -1145,13 +1145,24 @@ const SUPABASE_URL = 'https://aiyvmsvabyxzhmcajisw.supabase.co'
 const SUPABASE_KEY = 'sb_publishable_Ae06sNgRpUPVJwvf0WqIpw_nnhs7K71'
 const CONTENT_API = SUPABASE_URL + '/functions/v1/content'  // 콘텐츠 조회는 Edge Function 경유
 
+// 콘텐츠 API 공통 호출.
+// 성공하면 배열을 반환하고, 오류(요청 제한 429, 서버 오류, 네트워크 끊김 등)면 null을 반환.
+// 중요: null(오류)은 절대 캐시하면 안 됨 — 캐시하면 일시 오류가 세션 내내 "데이터 없음"으로 굳어짐.
+async function fetchContentRows(query){
+  try{
+    const res = await fetch(`${CONTENT_API}?${query}`,
+      { headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` } })
+    if (!res.ok) return null
+    const data = await res.json()
+    return Array.isArray(data) ? data : null
+  }catch(e){
+    return null
+  }
+}
+
 async function fetchFortuneData(sipshin) {
-  const res = await fetch(
-    `${CONTENT_API}?type=fortune&sipshin=${encodeURIComponent(sipshin)}`,
-    { headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` } }
-  )
-  const data = await res.json()
-  return data && data.length > 0 ? data[0] : null
+  const rows = await fetchContentRows(`type=fortune&sipshin=${encodeURIComponent(sipshin)}`)
+  return rows && rows.length > 0 ? rows[0] : null
 }
 
 // 성격 모달 관련 변수
@@ -2205,12 +2216,9 @@ const _jamiCache = {}
 async function fetchJamiContent(idx, category){
   const cacheKey = idx+'_'+category
   if(_jamiCache[cacheKey] !== undefined) return _jamiCache[cacheKey]
-  const res = await fetch(
-    `${CONTENT_API}?type=jamidoosu&idx=${encodeURIComponent(idx)}&category=${encodeURIComponent(category)}`,
-    { headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` } }
-  )
-  const data = await res.json()
-  const content = data && data.length>0 ? data[0].content : null
+  const rows = await fetchContentRows(`type=jamidoosu&idx=${encodeURIComponent(idx)}&category=${encodeURIComponent(category)}`)
+  if (rows === null) return null   // 일시 오류 — 캐시하지 않고 다음에 재시도
+  const content = rows.length>0 ? rows[0].content : null
   _jamiCache[cacheKey]=content
   return content
 }
@@ -2280,12 +2288,9 @@ const _guikokCache = {}
 async function fetchGuikokContent(menu, idx){
   const cacheKey = menu+'_'+idx
   if(_guikokCache[cacheKey] !== undefined) return _guikokCache[cacheKey]
-  const res = await fetch(
-    `${CONTENT_API}?type=guikok&menu=${encodeURIComponent(menu)}&idx=${encodeURIComponent(idx)}`,
-    { headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` } }
-  )
-  const data = await res.json()
-  const content = data && data.length>0 ? data[0].content : null
+  const rows = await fetchContentRows(`type=guikok&menu=${encodeURIComponent(menu)}&idx=${encodeURIComponent(idx)}`)
+  if (rows === null) return null   // 일시 오류 — 캐시하지 않고 다음에 재시도
+  const content = rows.length>0 ? rows[0].content : null
   _guikokCache[cacheKey]=content
   return content
 }
@@ -2364,12 +2369,9 @@ function selectJapyung(menu) {
 const _japyungCache = {}
 async function fetchJapyungContent(idx){
   if(_japyungCache[idx] !== undefined) return _japyungCache[idx]
-  const res = await fetch(
-    `${CONTENT_API}?type=japyung&idx=${encodeURIComponent(idx)}`,
-    { headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` } }
-  )
-  const data = await res.json()
-  const content = data && data.length>0 ? data[0].content : null
+  const rows = await fetchContentRows(`type=japyung&idx=${encodeURIComponent(idx)}`)
+  if (rows === null) return null   // 일시 오류 — 캐시하지 않고 다음에 재시도
+  const content = rows.length>0 ? rows[0].content : null
   _japyungCache[idx]=content
   return content
 }
@@ -2454,12 +2456,9 @@ function selectJuyuk(cat){
 const _juyukCache={}
 async function fetchJuyukContent(idx){
   if(_juyukCache[idx]!==undefined) return _juyukCache[idx]
-  const res = await fetch(
-    `${CONTENT_API}?type=juyuk&idx=${encodeURIComponent(idx)}`,
-    { headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` } }
-  )
-  const data = await res.json()
-  const content = data && data.length>0 ? data[0].content : null
+  const rows = await fetchContentRows(`type=juyuk&idx=${encodeURIComponent(idx)}`)
+  if (rows === null) return null   // 일시 오류 — 캐시하지 않고 다음에 재시도
+  const content = rows.length>0 ? rows[0].content : null
   _juyukCache[idx]=content
   return content
 }
@@ -2521,10 +2520,16 @@ async function renderJuyukTab(cat){
 
   // 총운(01) 데이터를 먼저 보여주고, 줄만 바꿔(빈 줄 없이) 선택한 항목의 데이터를 이어서 표시
   const pad = String(state.hexNum).padStart(2,'0')
-  const [chong, own] = await Promise.all([
+  let [chong, own] = await Promise.all([
     fetchJuyukContent('JU'+pad+'01'),
     fetchJuyukContent('JU'+pad+cat)
   ])
+  // 요청 제한 등 일시 오류로 한쪽만 비었을 수 있음 → 잠깐 뒤 1회 재시도
+  if (chong === null || own === null){
+    await new Promise(r => setTimeout(r, 700))
+    if (chong === null) chong = await fetchJuyukContent('JU'+pad+'01')
+    if (own === null)   own   = await fetchJuyukContent('JU'+pad+cat)
+  }
   let text = ''
   if (chong) text += chong
   if (own) text += (text ? '\n' : '') + own
@@ -2698,12 +2703,9 @@ function selectDangsaju(key){
 const _dangsajuCache = {}
 async function fetchDangsajuContent(idx){
   if (_dangsajuCache[idx] !== undefined) return _dangsajuCache[idx]
-  const res = await fetch(
-    `${CONTENT_API}?type=dangsaju&idx=${encodeURIComponent(idx)}`,
-    { headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` } }
-  )
-  const data = await res.json()
-  const content = data && data.length>0 ? data[0].content : null
+  const rows = await fetchContentRows(`type=dangsaju&idx=${encodeURIComponent(idx)}`)
+  if (rows === null) return null   // 일시 오류 — 캐시하지 않고 다음에 재시도
+  const content = rows.length>0 ? rows[0].content : null
   _dangsajuCache[idx] = content
   return content
 }
@@ -2849,12 +2851,9 @@ const _tojungCache = {}
 async function fetchTojungContent(table, idx){
   const cacheKey = table + '_' + idx
   if (_tojungCache[cacheKey] !== undefined) return _tojungCache[cacheKey]
-  const res = await fetch(
-    `${CONTENT_API}?type=tojung&sub=${table === 'tmoney_content' ? 'money' : 'love'}&idx=${encodeURIComponent(idx)}`,
-    { headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` } }
-  )
-  const data = await res.json()
-  const content = data && data.length>0 ? data[0].content : null
+  const rows = await fetchContentRows(`type=tojung&sub=${table === 'tmoney_content' ? 'money' : 'love'}&idx=${encodeURIComponent(idx)}`)
+  if (rows === null) return null   // 일시 오류 — 캐시하지 않고 다음에 재시도
+  const content = rows.length>0 ? rows[0].content : null
   _tojungCache[cacheKey] = content
   return content
 }
@@ -2929,11 +2928,11 @@ async function searchDream(){
   if (!kw) return
   const body = document.getElementById('dream-body')
   body.innerHTML = '<p style="color:#aaa;text-align:center">검색 중...</p>'
-  const res = await fetch(
-    `${CONTENT_API}?type=dream_search&kw=${encodeURIComponent(kw)}`,
-    { headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` } }
-  )
-  const data = await res.json()
+  const data = await fetchContentRows(`type=dream_search&kw=${encodeURIComponent(kw)}`)
+  if (data === null){
+    body.innerHTML = '<p style="color:#c0392b;text-align:center">일시적인 오류입니다. 잠시 후 다시 검색해 주세요.</p>'
+    return
+  }
   renderDreamList(data, `"${kw}" 검색 결과 ${data.length}건`)
 }
 
@@ -2952,11 +2951,11 @@ async function browseDreamTheme(){
   if (!code) return
   const body = document.getElementById('dream-body')
   body.innerHTML = '<p style="color:#aaa;text-align:center">불러오는 중...</p>'
-  const res = await fetch(
-    `${CONTENT_API}?type=dream_theme&code=${encodeURIComponent(code)}`,
-    { headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` } }
-  )
-  const data = await res.json()
+  const data = await fetchContentRows(`type=dream_theme&code=${encodeURIComponent(code)}`)
+  if (data === null){
+    body.innerHTML = '<p style="color:#c0392b;text-align:center">일시적인 오류입니다. 잠시 후 다시 시도해 주세요.</p>'
+    return
+  }
   const label = (DREAM_THEMES.find(t=>t[0]===code) || [null,''])[1]
   renderDreamList(data, `${label} (${data.length}건)`)
 }
@@ -2986,13 +2985,14 @@ async function viewDreamDetail(idx){
   body.innerHTML = '<p style="color:#aaa;text-align:center">불러오는 중...</p>'
   let item = _dreamDetailCache[idx]
   if (!item) {
-    const res = await fetch(
-      `${CONTENT_API}?type=dream_detail&idx=${encodeURIComponent(idx)}`,
-      { headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` } }
-    )
-    const data = await res.json()
-    item = (data && data.length>0) ? data[0] : {title:'', content:'해당 데이터가 없습니다.'}
-    _dreamDetailCache[idx] = item
+    const rows = await fetchContentRows(`type=dream_detail&idx=${encodeURIComponent(idx)}`)
+    if (rows === null){
+      // 일시 오류 — 캐시하지 않고 안내만 표시 (다시 누르면 재시도)
+      item = {title:'', content:'일시적인 오류입니다. 잠시 후 다시 시도해 주세요.'}
+    } else {
+      item = rows.length>0 ? rows[0] : {title:'', content:'해당 데이터가 없습니다.'}
+      _dreamDetailCache[idx] = item
+    }
   }
   body.innerHTML = `
     <button class="dm-tab" onclick="backToDreamList()" style="margin-bottom:12px">◀ 목록으로</button>
@@ -3097,12 +3097,9 @@ function renderGunghapTab(){
 const _gunghapCache = {}
 async function fetchGunghapContent(idx){
   if (_gunghapCache[idx] !== undefined) return _gunghapCache[idx]
-  const res = await fetch(
-    `${CONTENT_API}?type=gunghap4&idx=${encodeURIComponent(idx)}`,
-    { headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` } }
-  )
-  const data = await res.json()
-  const content = data && data.length>0 ? data[0].content : null
+  const rows = await fetchContentRows(`type=gunghap4&idx=${encodeURIComponent(idx)}`)
+  if (rows === null) return null   // 일시 오류 — 캐시하지 않고 다음에 재시도
+  const content = rows.length>0 ? rows[0].content : null
   _gunghapCache[idx] = content
   return content
 }
@@ -3189,12 +3186,9 @@ function closeBioOutside(e){
 const _bioCache = {}
 async function fetchBioContent(bioKey){
   if(_bioCache[bioKey] !== undefined) return _bioCache[bioKey]
-  const res = await fetch(
-    `${CONTENT_API}?type=bio&key=${encodeURIComponent(bioKey)}`,
-    { headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` } }
-  )
-  const data = await res.json()
-  const content = data && data.length>0 ? data[0].content : null
+  const rows = await fetchContentRows(`type=bio&key=${encodeURIComponent(bioKey)}`)
+  if (rows === null) return null   // 일시 오류 — 캐시하지 않고 다음에 재시도
+  const content = rows.length>0 ? rows[0].content : null
   _bioCache[bioKey]=content
   return content
 }
