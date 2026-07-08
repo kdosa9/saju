@@ -577,14 +577,14 @@ h1{font-size:20px;font-weight:600;margin-bottom:6px;color:#222;display:none}
 
 <!-- ===== PC 전용: 히어로 ===== -->
 <div class="hero" id="top">
-  <!-- 주역 동전점 바로가기 — 어떤 항목을 눌러도 디폴트(운명점)에서 시작 -->
+  <!-- 주역 동전점 바로가기 — 누른 항목의 탭이 바로 열림 -->
   <div class="hero-juyuk">
-    <a href="javascript:void(0)" onclick="showJuyuk()" style="background:#ffe3c8;color:#8a4b12">운명점</a>
-    <a href="javascript:void(0)" onclick="showJuyuk()" style="background:#fdf3c4;color:#7a6410">재물점</a>
-    <a href="javascript:void(0)" onclick="showJuyuk()" style="background:#d8efd5;color:#1a6b3a">연애점</a>
-    <a href="javascript:void(0)" onclick="showJuyuk()" style="background:#d6e8f7;color:#2c4a6b">여행점</a>
-    <a href="javascript:void(0)" onclick="showJuyuk()" style="background:#dcdcf2;color:#3d3a7a">학업점</a>
-    <a href="javascript:void(0)" onclick="showJuyuk()" style="background:#ead9f2;color:#6b3a8e">건강점</a>
+    <a href="javascript:void(0)" onclick="openJuyukAt('04')" style="background:#ffe3c8;color:#8a4b12">운명점</a>
+    <a href="javascript:void(0)" onclick="openJuyukAt('02')" style="background:#fdf3c4;color:#7a6410">재물점</a>
+    <a href="javascript:void(0)" onclick="openJuyukAt('03')" style="background:#d8efd5;color:#1a6b3a">연애점</a>
+    <a href="javascript:void(0)" onclick="openJuyukAt('05')" style="background:#d6e8f7;color:#2c4a6b">여행점</a>
+    <a href="javascript:void(0)" onclick="openJuyukAt('06')" style="background:#dcdcf2;color:#3d3a7a">학업점</a>
+    <a href="javascript:void(0)" onclick="openJuyukAt('07')" style="background:#ead9f2;color:#6b3a8e">건강점</a>
   </div>
   <div class="hero-art">
     <img src="hero-card.jpg" alt="중천건 重天乾 — 주역 64괘">
